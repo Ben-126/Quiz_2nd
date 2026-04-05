@@ -2,44 +2,21 @@
 
 Collaboration entre Ben et Dan.
 
-## Objectif
+## C'est quoi ?
 
-Créer une application mobile de révision basée sur des quiz générés par IA, alignée avec le programme scolaire de Seconde, permettant aux élèves de progresser efficacement.
+Une application mobile de révision pour les élèves de Seconde. L'IA génère des quiz personnalisés alignés avec le programme scolaire officiel, couvrant toutes les matières : Mathématiques, Français, Histoire, Géographie, SES, SVT, Physique-chimie, SNT, EMC, Anglais, Espagnol et Allemand.
 
----
+## Comment ça marche ?
 
-## Roadmap
+L'élève choisit une matière, puis un chapitre, et l'IA génère des questions (QCM, Vrai/Faux, Réponse courte). Chaque réponse est corrigée immédiatement avec une explication. Un score final est affiché à la fin du quiz.
 
-### V0 — MVP
+## Fonctionnalités clés
 
-- Navigation : Matière → Chapitre → Quiz
-- Matières disponibles : Mathématiques, Français, Histoire, Géographie, SES, SVT, Physique-chimie, SNT, EMC, Anglais, Espagnol, Allemand
-- Quiz générés par IA (QCM, Vrai/Faux, Réponse courte)
+- Quiz générés dynamiquement par IA
 - Correction immédiate avec explication
-- Score final et pourcentage de réussite
-
-### V1 — Version améliorée
-
+- Suivi de progression et statistiques
 - Adaptation de la difficulté selon les performances
-- Suivi de progression (statistiques, historique, maîtrise des chapitres)
-- Explications avancées et méthodes de résolution
-- Notifications de rappel et objectifs quotidiens
-
-### V2 — Version avancée
-
-- Mode contrôle (temps limité, notation)
-- Coach IA (chat interactif et personnalisé)
-- Gamification (XP, niveaux, badges)
-- Social (défis, classement, multijoueur)
-- Scan & correction d'exercices par IA
-- Répétition espacée intelligente
-- Fonctionnalités langues (vocal, prononciation)
-- Mode parent / professeur
-- Système de streak avec gels et récompenses
-
----
-
-## Contraintes
-
-- Contenus alignés avec le programme scolaire officiel
-- Pédagogiquement corrects et vérifiés
+- Système de streak et gamification (XP, badges, niveaux)
+- Mode contrôle (temps limité, notation réaliste)
+- Coach IA pour des explications personnalisées
+- Mode parent / professeur pour suivre les élèves
