@@ -87,6 +87,24 @@ Créer une application mobile de révision basée sur des quiz générés par IA
 
 ---
 
+##  Score partiel (réponses texte)
+- Plusieurs niveaux de résultat :
+  - ✅ Correct
+  - ⚠️ Partiellement correct (idée juste, formulation incomplète)
+  - ❌ Incorrect
+- Pondération du score selon le niveau de correction
+- Affichage visuel distinct pour chaque niveau
+
+---
+
+##  Feedback utilisateur détaillé
+- Indiquer ce qui est correct dans la réponse
+- Indiquer ce qui manque ou est inexact
+- Expliquer pourquoi la réponse est fausse (lié à la réponse de l'élève, pas seulement l'explication générique)
+- Relier l'explication à l'erreur spécifique commise
+
+---
+
 ##  Structure enrichie
 - Liaison claire :
   - Matière → Chapitre → Compétence → Quiz

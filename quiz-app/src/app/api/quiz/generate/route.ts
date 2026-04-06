@@ -84,15 +84,20 @@ Génère exactement ${QUESTIONS_PAR_QUIZ} questions de quiz sur le chapitre suiv
 Génère un mélange de types : QCM (4 options), Vrai/Faux, et Réponse courte.
 Les questions doivent être précises, pédagogiquement correctes et adaptées au niveau Seconde.
 
+RÈGLES IMPORTANTES :
+- Pour les QCM : "reponseCorrecte" doit être EXACTEMENT le texte complet de l'une des options (jamais une lettre comme A, B, C ou D).
+- Pour les réponses courtes : "reponseCorrecte" doit être la réponse canonique courte et précise (1 à 5 mots).
+- Les 4 options d'un QCM doivent être distinctes et réalistes.
+
 Réponds UNIQUEMENT avec un JSON valide, sans texte avant ou après :
 {
   "questions": [
     {
       "type": "qcm",
-      "question": "...",
-      "options": ["A", "B", "C", "D"],
-      "reponseCorrecte": "A",
-      "explication": "..."
+      "question": "Quelle est la formule de l'eau ?",
+      "options": ["CO2", "H2O", "NaCl", "O2"],
+      "reponseCorrecte": "H2O",
+      "explication": "L'eau est composée de 2 atomes d'hydrogène et 1 atome d'oxygène."
     },
     {
       "type": "vrai_faux",
