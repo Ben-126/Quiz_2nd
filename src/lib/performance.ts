@@ -1,3 +1,5 @@
+import { ajouterHistorique } from "./history";
+
 export type NiveauDifficulte = "debutant" | "intermediaire" | "avance";
 
 export interface PerformanceChapitre {
@@ -40,11 +42,16 @@ export function getPerformance(
   return data[clePerformance(matiereSlug, chapitreSlug)] ?? null;
 }
 
+export function getToutesPerformances(): Record<string, PerformanceChapitre> {
+  return getStorage();
+}
+
 export function sauvegarderPerformance(
   matiereSlug: string,
   chapitreSlug: string,
   scorePourcentage: number,
-  questionsRatees: string[]
+  questionsRatees: string[],
+  meta?: { niveau: string; matiereName: string; chapitreNom: string }
 ): void {
   const data = getStorage();
   const cle = clePerformance(matiereSlug, chapitreSlug);
@@ -66,6 +73,18 @@ export function sauvegarderPerformance(
   };
 
   saveStorage(data);
+
+  if (meta) {
+    ajouterHistorique({
+      date: new Date().toISOString(),
+      niveau: meta.niveau,
+      matiereSlug,
+      matiereName: meta.matiereName,
+      chapitreSlug,
+      chapitreNom: meta.chapitreNom,
+      score: scorePourcentage,
+    });
+  }
 }
 
 export function getNiveau(performance: PerformanceChapitre | null): NiveauDifficulte {

@@ -20,6 +20,7 @@ interface QuizRunnerProps {
   chapitreSlug: string;
   titreChapitre: string;
   niveauLycee?: string;
+  matiereName?: string;
 }
 
 interface ModeRevision {
@@ -50,7 +51,7 @@ function verifierReponseLocale(question: Question, reponseUser: string | boolean
   return u === c || u.includes(c) || c.includes(u);
 }
 
-export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, niveauLycee = "seconde" }: QuizRunnerProps) {
+export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, niveauLycee = "seconde", matiereName = "" }: QuizRunnerProps) {
   const [etat, setEtat] = useState<EtatQuiz>("chargement");
   const [questions, setQuestions] = useState<Question[]>([]);
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -195,9 +196,13 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
       .map((r) => questions[r.questionIndex]?.question ?? "")
       .filter(Boolean);
 
-    sauvegarderPerformance(matiereSlug, chapitreSlug, pourcentage, ratees);
+    sauvegarderPerformance(matiereSlug, chapitreSlug, pourcentage, ratees, {
+      niveau: niveauLycee,
+      matiereName,
+      chapitreNom: titreChapitre,
+    });
     setEtat("termine");
-  }, [questions, matiereSlug, chapitreSlug]);
+  }, [questions, matiereSlug, chapitreSlug, niveauLycee, matiereName, titreChapitre]);
 
   const handleSuivant = () => {
     if (questionIndex + 1 >= questions.length) {
