@@ -1,3 +1,6 @@
+# Worktrees
+.worktrees/
+
 # Variables d'environnement et secrets
 .env
 .env.*
