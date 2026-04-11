@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback, useRef } from "react";
-import type { Question, ReponseUtilisateur } from "@/types";
+import type { Question, ReponseUtilisateur, NiveauCorrection } from "@/types";
 import QuestionCard, { TEMPS_MAX_PAR_TYPE } from "./QuestionCard";
 import CorrectionDisplay from "./CorrectionDisplay";
 import ScoreDisplay from "./ScoreDisplay";
@@ -60,6 +60,7 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
   const [derniereReponse, setDerniereReponse] = useState<{
     reponse: string | boolean;
     correcte: boolean;
+    niveauCorrection: NiveauCorrection;
     feedback?: string;
   } | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
@@ -111,9 +112,10 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
     chargerQuiz();
   }, [chargerQuiz]);
 
-  function calculerPoints(correcte: boolean, elapsedMs: number, tempsMaxMs: number): number {
-    if (!correcte) return 0;
+  function calculerPoints(niveau: NiveauCorrection, elapsedMs: number, tempsMaxMs: number): number {
+    if (niveau === "incorrect") return 0;
     const ratio = Math.max(0, 1 - elapsedMs / tempsMaxMs);
+    if (niveau === "partiel") return Math.round(20 + ratio * 30);
     return Math.round(40 + ratio * 60);
   }
 
@@ -125,11 +127,12 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
       questionIndex,
       reponse: "",
       correcte: false,
+      niveauCorrection: "incorrect",
       tempsMs: tempsMaxMs,
       pointsObtenus: 0,
     };
     setReponses((prev) => [...prev, nouvelleReponse]);
-    setDerniereReponse({ reponse: "", correcte: false });
+    setDerniereReponse({ reponse: "", correcte: false, niveauCorrection: "incorrect" });
     setEtat("correction");
   };
 
@@ -153,38 +156,43 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
           }),
         });
 
-        let correcte: boolean;
+        let niveauCorrection: NiveauCorrection;
         let feedback: string | undefined;
 
         if (res.ok) {
           const data = await res.json();
-          correcte = Boolean(data.correcte);
+          niveauCorrection = (["correct", "partiel", "incorrect"].includes(data.niveauCorrection)
+            ? data.niveauCorrection
+            : (data.correcte ? "correct" : "incorrect")) as NiveauCorrection;
           feedback = String(data.feedback ?? "");
         } else {
-          correcte = verifierReponseLocale(question, reponse);
+          niveauCorrection = verifierReponseLocale(question, reponse) ? "correct" : "incorrect";
         }
 
-        const points = calculerPoints(correcte, elapsedMs, tempsMaxMs);
-        const nouvelleReponse: ReponseUtilisateur = { questionIndex, reponse, correcte, tempsMs: elapsedMs, pointsObtenus: points };
+        const correcte = niveauCorrection === "correct";
+        const points = calculerPoints(niveauCorrection, elapsedMs, tempsMaxMs);
+        const nouvelleReponse: ReponseUtilisateur = { questionIndex, reponse, correcte, niveauCorrection, tempsMs: elapsedMs, pointsObtenus: points };
         setReponses((prev) => [...prev, nouvelleReponse]);
-        setDerniereReponse({ reponse, correcte, feedback });
+        setDerniereReponse({ reponse, correcte, niveauCorrection, feedback });
         setEtat("correction");
       } catch {
-        const correcte = verifierReponseLocale(question, reponse);
-        const points = calculerPoints(correcte, elapsedMs, tempsMaxMs);
-        const nouvelleReponse: ReponseUtilisateur = { questionIndex, reponse, correcte, tempsMs: elapsedMs, pointsObtenus: points };
+        const ok = verifierReponseLocale(question, reponse);
+        const niveauCorrection: NiveauCorrection = ok ? "correct" : "incorrect";
+        const points = calculerPoints(niveauCorrection, elapsedMs, tempsMaxMs);
+        const nouvelleReponse: ReponseUtilisateur = { questionIndex, reponse, correcte: ok, niveauCorrection, tempsMs: elapsedMs, pointsObtenus: points };
         setReponses((prev) => [...prev, nouvelleReponse]);
-        setDerniereReponse({ reponse, correcte });
+        setDerniereReponse({ reponse, correcte: ok, niveauCorrection });
         setEtat("correction");
       }
       return;
     }
 
     const correcte = verifierReponseLocale(question, reponse);
-    const points = calculerPoints(correcte, elapsedMs, tempsMaxMs);
-    const nouvelleReponse: ReponseUtilisateur = { questionIndex, reponse, correcte, tempsMs: elapsedMs, pointsObtenus: points };
+    const niveauCorrection: NiveauCorrection = correcte ? "correct" : "incorrect";
+    const points = calculerPoints(niveauCorrection, elapsedMs, tempsMaxMs);
+    const nouvelleReponse: ReponseUtilisateur = { questionIndex, reponse, correcte, niveauCorrection, tempsMs: elapsedMs, pointsObtenus: points };
     setReponses((prev) => [...prev, nouvelleReponse]);
-    setDerniereReponse({ reponse, correcte });
+    setDerniereReponse({ reponse, correcte, niveauCorrection });
     setEtat("correction");
     debutQuestionRef.current = Date.now();
   };
@@ -334,6 +342,7 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
             question={questionCourante}
             reponseUtilisateur={derniereReponse.reponse}
             correcte={derniereReponse.correcte}
+            niveauCorrection={derniereReponse.niveauCorrection}
             feedback={derniereReponse.feedback}
             onSuivant={handleSuivant}
             estDerniere={questionIndex + 1 >= questions.length}

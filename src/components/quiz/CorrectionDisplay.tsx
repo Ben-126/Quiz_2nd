@@ -1,5 +1,5 @@
 "use client";
-import type { Question } from "@/types";
+import type { Question, NiveauCorrection } from "@/types";
 import { getParametres } from "@/lib/parametres";
 import ExplicationAvancee from "./ExplicationAvancee";
 
@@ -7,6 +7,7 @@ interface CorrectionDisplayProps {
   question: Question;
   reponseUtilisateur: string | boolean;
   correcte: boolean;
+  niveauCorrection: NiveauCorrection;
   feedback?: string;
   onSuivant: () => void;
   estDerniere: boolean;
@@ -38,10 +39,35 @@ function getLibelleBonneReponse(question: Question): string {
   return question.reponseCorrecte;
 }
 
+const NIVEAU_CONFIG = {
+  correct: {
+    border: "border-green-300",
+    bg: "bg-green-50",
+    emoji: "✅",
+    titre: "Bonne réponse !",
+    couleurTitre: "text-green-700",
+  },
+  partiel: {
+    border: "border-yellow-300",
+    bg: "bg-yellow-50",
+    emoji: "⚠️",
+    titre: "Partiellement correct",
+    couleurTitre: "text-yellow-700",
+  },
+  incorrect: {
+    border: "border-red-300",
+    bg: "bg-red-50",
+    emoji: "❌",
+    titre: "Mauvaise réponse",
+    couleurTitre: "text-red-700",
+  },
+};
+
 export default function CorrectionDisplay({
   question,
   reponseUtilisateur,
   correcte,
+  niveauCorrection,
   feedback,
   onSuivant,
   estDerniere,
@@ -49,21 +75,25 @@ export default function CorrectionDisplay({
   const libelleUser = getLibelleReponse(question, reponseUtilisateur);
   const libelleBonne = getLibelleBonneReponse(question);
   const { explicationsAvanceesOuvertes } = getParametres();
+  const config = NIVEAU_CONFIG[niveauCorrection];
 
   return (
     <div
-      className={`rounded-2xl border-2 p-5 space-y-4 ${
-        correcte ? "bg-green-50 border-green-300" : "bg-red-50 border-red-300"
-      }`}
+      className={`rounded-2xl border-2 p-5 space-y-4 ${config.bg} ${config.border}`}
       data-testid="correction-display"
     >
       <div className="flex items-center gap-3">
-        <span className="text-3xl">{correcte ? "🎉" : "😕"}</span>
+        <span className="text-3xl">{config.emoji}</span>
         <div>
-          <p className={`font-bold text-lg ${correcte ? "text-green-700" : "text-red-700"}`}>
-            {correcte ? "Bonne réponse !" : "Mauvaise réponse"}
+          <p className={`font-bold text-lg ${config.couleurTitre}`}>
+            {config.titre}
           </p>
-          {!correcte && (
+          {niveauCorrection === "partiel" && (
+            <p className="text-sm text-yellow-700 mt-0.5">
+              Ta réponse : <span className="font-medium">{libelleUser}</span>
+            </p>
+          )}
+          {niveauCorrection === "incorrect" && (
             <p className="text-sm text-gray-600 mt-0.5">
               Ta réponse : <span className="font-medium text-red-600">{libelleUser}</span>
               {" · "}
@@ -76,10 +106,29 @@ export default function CorrectionDisplay({
         </div>
       </div>
 
-      {feedback && question.type === "reponse_courte" && !correcte && (
-        <div className="bg-orange-50 rounded-xl p-3 border border-orange-200">
-          <p className="text-xs font-semibold text-orange-600 uppercase tracking-wide mb-1">Retour</p>
-          <p className="text-sm text-orange-800">{feedback}</p>
+      {feedback && question.type === "reponse_courte" && niveauCorrection !== "correct" && (
+        <div className={`rounded-xl p-3 border ${
+          niveauCorrection === "partiel"
+            ? "bg-yellow-100 border-yellow-300"
+            : "bg-orange-50 border-orange-200"
+        }`}>
+          <p className={`text-xs font-semibold uppercase tracking-wide mb-1 ${
+            niveauCorrection === "partiel" ? "text-yellow-700" : "text-orange-600"
+          }`}>
+            {niveauCorrection === "partiel" ? "Piste d'amélioration" : "Retour"}
+          </p>
+          <p className={`text-sm ${niveauCorrection === "partiel" ? "text-yellow-900" : "text-orange-800"}`}>
+            {feedback}
+          </p>
+        </div>
+      )}
+
+      {niveauCorrection === "partiel" && (
+        <div className="bg-white rounded-xl p-3 border border-yellow-200 flex items-center gap-2">
+          <span className="text-yellow-500 font-bold text-sm">+</span>
+          <p className="text-xs text-yellow-800">
+            Réponse partielle — points partiels attribués
+          </p>
         </div>
       )}
 

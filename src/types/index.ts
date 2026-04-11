@@ -58,10 +58,13 @@ export interface Quiz {
   questions: Question[];
 }
 
+export type NiveauCorrection = "correct" | "partiel" | "incorrect";
+
 export interface ReponseUtilisateur {
   questionIndex: number;
   reponse: string | boolean;
   correcte: boolean;
+  niveauCorrection: NiveauCorrection;
   tempsMs: number;
   pointsObtenus: number; // 0-100
 }

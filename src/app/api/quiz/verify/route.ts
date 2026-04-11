@@ -18,10 +18,10 @@ function normaliserSimple(s: string): string {
     .replace(/\s+/g, " ");
 }
 
-function verifierLocalReponse(reponseUser: string, reponseCorrecte: string): boolean {
+function verifierLocalReponse(reponseUser: string, reponseCorrecte: string): "correct" | "incorrect" {
   const u = normaliserSimple(reponseUser);
   const c = normaliserSimple(reponseCorrecte);
-  return u === c || u.includes(c) || c.includes(u);
+  return u === c || u.includes(c) || c.includes(u) ? "correct" : "incorrect";
 }
 
 export async function POST(req: NextRequest) {
@@ -42,10 +42,11 @@ export async function POST(req: NextRequest) {
   const apiKey = process.env.OPENAI_API_KEY;
 
   if (!apiKey) {
-    const correcte = verifierLocalReponse(reponseUser, reponseCorrecte);
+    const niveau = verifierLocalReponse(reponseUser, reponseCorrecte);
     return NextResponse.json({
-      correcte,
-      feedback: correcte
+      correcte: niveau === "correct",
+      niveauCorrection: niveau,
+      feedback: niveau === "correct"
         ? "Bonne réponse !"
         : `La réponse attendue était : « ${reponseCorrecte} »`,
     });
@@ -62,18 +63,27 @@ Réponse correcte de référence : ${reponseCorrecte}
 Explication : ${explication}
 Réponse de l'élève : ${reponseUser}
 
-Évalue si la réponse de l'élève est correcte.
-Sois tolérant sur : les fautes d'orthographe mineures, les synonymes exacts, les reformulations équivalentes.
-Sois strict sur : le sens, les concepts clés, les valeurs numériques.
+Évalue si la réponse de l'élève est correcte en utilisant 3 niveaux :
+- "correct" : réponse juste (synonymes acceptés, fautes mineures tolérées, reformulation équivalente)
+- "partiel" : idée juste mais formulation incomplète, concept clé présent mais imprécis, réponse partielle
+- "incorrect" : réponse fausse, hors sujet, ou concept clé absent
+
+Sois tolérant sur : les fautes d'orthographe mineures, les synonymes exacts.
+Sois strict sur : le sens général, les concepts clés, les valeurs numériques.
 
 Réponds UNIQUEMENT avec du JSON valide :
 {
-  "correcte": true,
+  "niveauCorrection": "correct",
   "feedback": "Très bien, tu as identifié le bon concept."
 }
 ou
 {
-  "correcte": false,
+  "niveauCorrection": "partiel",
+  "feedback": "L'idée est juste mais il manque la précision sur Y."
+}
+ou
+{
+  "niveauCorrection": "incorrect",
   "feedback": "Ta réponse évoque X mais il manque Y. La réponse attendue est : ${reponseCorrecte}."
 }`;
 
@@ -88,15 +98,20 @@ ou
     if (!jsonMatch) throw new Error("Format JSON introuvable");
 
     const result = JSON.parse(jsonMatch[0]);
+    const niveauCorrection = ["correct", "partiel", "incorrect"].includes(result.niveauCorrection)
+      ? (result.niveauCorrection as "correct" | "partiel" | "incorrect")
+      : (result.correcte ? "correct" : "incorrect");
     return NextResponse.json({
-      correcte: Boolean(result.correcte),
+      correcte: niveauCorrection === "correct",
+      niveauCorrection,
       feedback: String(result.feedback ?? ""),
     });
   } catch {
-    const correcte = verifierLocalReponse(reponseUser, reponseCorrecte);
+    const niveau = verifierLocalReponse(reponseUser, reponseCorrecte);
     return NextResponse.json({
-      correcte,
-      feedback: correcte
+      correcte: niveau === "correct",
+      niveauCorrection: niveau,
+      feedback: niveau === "correct"
         ? "Bonne réponse !"
         : `La réponse attendue était : « ${reponseCorrecte} »`,
     });
