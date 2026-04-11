@@ -668,6 +668,74 @@ const BANQUE: BanqueQuestions = {
         explication: "JavaScript est le principal langage de programmation utilisé côté client pour rendre les pages web interactives (animations, formulaires dynamiques, mises à jour sans rechargement).",
       },
     ],
+    "memoriser-et-traiter": [
+      {
+        type: "qcm",
+        question: "Qu'est-ce que l'open data ?",
+        options: ["Des données payantes accessibles aux entreprises", "Des données librement accessibles et réutilisables par tous", "Un logiciel open source", "Un type de base de données chiffrée"],
+        reponseCorrecte: "Des données librement accessibles et réutilisables par tous",
+        explication: "L'open data désigne des données mises à disposition du public, gratuitement et librement réutilisables, sans restriction de copyright ni de brevet.",
+      },
+      {
+        type: "vrai_faux",
+        question: "Le cloud computing consiste à stocker et traiter des données sur des serveurs distants accessibles via Internet.",
+        reponseCorrecte: true,
+        explication: "Le cloud computing (informatique en nuage) permet d'accéder à des ressources informatiques (stockage, calcul, logiciels) hébergées sur des serveurs distants via Internet.",
+      },
+      {
+        type: "qcm",
+        question: "Lequel de ces services est un exemple de cloud computing ?",
+        options: ["Un disque dur externe", "Google Drive", "Un clé USB", "Un CD-ROM"],
+        reponseCorrecte: "Google Drive",
+        explication: "Google Drive est un service de stockage en ligne (cloud). Les fichiers sont stockés sur des serveurs Google et accessibles depuis n'importe quel appareil connecté à Internet.",
+      },
+      {
+        type: "vrai_faux",
+        question: "Les données open data peuvent être utilisées librement à des fins commerciales.",
+        reponseCorrecte: true,
+        explication: "Les données open data sont généralement librement réutilisables, y compris à des fins commerciales, sous réserve de respecter la licence associée (souvent Licence Ouverte ou CC BY).",
+      },
+      {
+        type: "reponse_courte",
+        question: "Quel terme désigne les données mises à disposition gratuitement et librement par des organismes publics ?",
+        reponseCorrecte: "open data",
+        explication: "L'open data (données ouvertes) regroupe des données publiées librement par des institutions publiques ou privées pour favoriser la transparence et l'innovation.",
+      },
+    ],
+    "numeriser": [
+      {
+        type: "qcm",
+        question: "Qu'est-ce qu'un pixel ?",
+        options: ["Un protocole réseau", "Le plus petit élément d'une image numérique", "Un type de fichier audio", "Une unité de mesure de la mémoire"],
+        reponseCorrecte: "Le plus petit élément d'une image numérique",
+        explication: "Un pixel (picture element) est la plus petite unité d'une image numérique. Chaque pixel possède une couleur définie par des valeurs RVB (rouge, vert, bleu).",
+      },
+      {
+        type: "vrai_faux",
+        question: "En informatique, un octet est composé de 8 bits.",
+        reponseCorrecte: true,
+        explication: "Un octet (byte) est une unité d'information composée de 8 bits. Chaque bit peut valoir 0 ou 1. Un octet permet de représenter 256 valeurs différentes (2⁸).",
+      },
+      {
+        type: "qcm",
+        question: "Combien de couleurs différentes peut représenter un pixel codé sur 24 bits (8 bits par canal RVB) ?",
+        options: ["256", "65 536", "16 777 216", "4 294 967 296"],
+        reponseCorrecte: "16 777 216",
+        explication: "Avec 8 bits par canal (R, V, B), chaque canal peut prendre 256 valeurs. Au total : 256³ = 16 777 216 couleurs possibles, soit environ 16 millions de couleurs.",
+      },
+      {
+        type: "vrai_faux",
+        question: "Plus la résolution d'une image est élevée, plus le fichier est petit.",
+        reponseCorrecte: false,
+        explication: "Une résolution plus élevée signifie plus de pixels, donc plus d'informations à stocker. La taille du fichier augmente avec la résolution, sauf compression.",
+      },
+      {
+        type: "reponse_courte",
+        question: "Quel est le système de numération utilisé en informatique, basé sur les chiffres 0 et 1 ?",
+        reponseCorrecte: "binaire",
+        explication: "Le système binaire (base 2) utilise uniquement les chiffres 0 et 1. Il est fondamental en informatique car il correspond directement aux états électroniques des circuits (éteint/allumé).",
+      },
+    ],
   },
   emc: {
     "etat-de-droit": [
