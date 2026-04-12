@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback, useRef } from "react";
-import type { Question, ReponseUtilisateur, NiveauCorrection, FeedbackDetaille } from "@/types";
+import type { Question, ReponseUtilisateur, NiveauCorrection, FeedbackDetaille, Competence } from "@/types";
 import QuestionCard, { TEMPS_MAX_PAR_TYPE } from "./QuestionCard";
 import CorrectionDisplay from "./CorrectionDisplay";
 import ScoreDisplay from "./ScoreDisplay";
@@ -22,6 +22,7 @@ interface QuizRunnerProps {
   titreChapitre: string;
   niveauLycee?: string;
   matiereName?: string;
+  competences?: Competence[];
 }
 
 interface ModeRevision {
@@ -52,7 +53,7 @@ function verifierReponseLocale(question: Question, reponseUser: string | boolean
   return u === c || u.includes(c) || c.includes(u);
 }
 
-export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, niveauLycee = "seconde", matiereName = "" }: QuizRunnerProps) {
+export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, niveauLycee = "seconde", matiereName = "", competences = [] }: QuizRunnerProps) {
   const [etat, setEtat] = useState<EtatQuiz>("chargement");
   const [questions, setQuestions] = useState<Question[]>([]);
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -283,6 +284,7 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
         niveauLycee={niveauLycee}
         questionsRatees={questionsRateesQuiz}
         modeRevision={modeRevision.actif}
+        competences={competences}
         onRecommencer={() => {
           setModeRevision({ actif: false, questionsRatees: [] });
           chargerQuiz();
@@ -328,6 +330,7 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
           onTimeUp={handleTimeUp}
           disabled={false}
           showMathKeyboard={showMathKeyboard}
+          competenceLabel={competences.length > 0 ? competences[questionIndex % competences.length]?.titre : undefined}
         />
       )}
 
@@ -340,6 +343,7 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
             onAnswer={handleReponse}
             disabled={true}
             showMathKeyboard={showMathKeyboard}
+            competenceLabel={competences.length > 0 ? competences[questionIndex % competences.length]?.titre : undefined}
           />
           <CorrectionDisplay
             question={questionCourante}

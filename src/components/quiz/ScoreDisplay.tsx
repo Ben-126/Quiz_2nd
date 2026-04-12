@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import type { Competence } from "@/types";
 
 interface ScoreDisplayProps {
   score: number;
@@ -9,6 +10,7 @@ interface ScoreDisplayProps {
   niveauLycee?: string;
   questionsRatees?: string[];
   modeRevision?: boolean;
+  competences?: Competence[];
   onRecommencer: () => void;
   onReviserErreurs?: () => void;
 }
@@ -20,6 +22,7 @@ export default function ScoreDisplay({
   niveauLycee = "seconde",
   questionsRatees = [],
   modeRevision = false,
+  competences = [],
   onRecommencer,
   onReviserErreurs,
 }: ScoreDisplayProps) {
@@ -60,6 +63,24 @@ export default function ScoreDisplay({
       </div>
 
       <p className="text-gray-600 font-medium">{texte}</p>
+
+      {/* Compétences travaillées */}
+      {competences.length > 0 && (
+        <div className="text-left bg-indigo-50 border border-indigo-100 rounded-xl p-4">
+          <p className="text-xs font-semibold text-indigo-700 mb-2 flex items-center gap-1.5">
+            <span aria-hidden="true">📋</span>
+            Compétences travaillées
+          </p>
+          <ul className="space-y-1.5">
+            {competences.map((comp) => (
+              <li key={comp.id} className="flex items-center gap-2 text-sm text-indigo-800">
+                <span className="text-indigo-400 text-xs" aria-hidden="true">✓</span>
+                {comp.titre}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {modeRevision && questionsRatees.length === 0 && (
         <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-sm text-green-700 font-medium">

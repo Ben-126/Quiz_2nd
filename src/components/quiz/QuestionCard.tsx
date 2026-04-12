@@ -12,6 +12,7 @@ interface QuestionCardProps {
   disabled: boolean;
   showMathKeyboard?: boolean;
   tempsMaxMs?: number;
+  competenceLabel?: string;
 }
 
 export const TEMPS_MAX_PAR_TYPE: Record<Question["type"], number> = {
@@ -29,6 +30,7 @@ export default function QuestionCard({
   disabled,
   showMathKeyboard = false,
   tempsMaxMs,
+  competenceLabel,
 }: QuestionCardProps) {
   const [valeur, setValeur] = useState("");
   const [clavierOuvert, setClavierOuvert] = useState(false);
@@ -96,6 +98,17 @@ export default function QuestionCard({
             className={`h-full ${couleurTimer} rounded-full transition-all duration-100`}
             style={{ width: `${ratioRestant * 100}%` }}
           />
+        </div>
+      )}
+
+      {competenceLabel && (
+        <div className="flex items-center gap-1.5">
+          <span
+            className="inline-block px-2.5 py-1 text-xs font-semibold rounded-full bg-indigo-100 text-indigo-700 border border-indigo-200 leading-tight"
+            aria-label={`Compétence visée : ${competenceLabel}`}
+          >
+            🎯 {competenceLabel}
+          </span>
         </div>
       )}
 
