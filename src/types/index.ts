@@ -82,3 +82,25 @@ export interface ResultatQuiz {
 }
 
 export type ModeQuiz = "entrainement" | "controle";
+
+export interface BadgeDebloque {
+  id: string;
+  dateObtention: string; // "YYYY-MM-DD"
+}
+
+export interface ProfilGamification {
+  xpTotal: number;
+  dernierQuizDate: string | null; // "YYYY-MM-DD"
+  streakJours: number;
+  badgesDebloques: BadgeDebloque[];
+  xpDuJour: number;          // XP cumulés aujourd'hui (plafond 150)
+  quizXpDuJour: string[];    // "matiereSlug/chapitreSlug" ayant déjà rapporté XP aujourd'hui
+}
+
+export interface ResultatGamification {
+  xpGagne: number;
+  nouveauNiveau: number | null; // numéro du nouveau niveau, null si pas de level-up
+  nouveauxBadges: string[];     // IDs des badges débloqués
+  xpTotal: number;
+  niveauActuel: number;
+}
