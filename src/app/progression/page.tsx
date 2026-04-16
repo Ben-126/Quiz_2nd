@@ -6,9 +6,18 @@ import StatsMatiere from "@/components/progression/StatsMatiere";
 import GraphiqueChapitres from "@/components/progression/GraphiqueChapitres";
 import GraphiqueEvolution from "@/components/progression/GraphiqueEvolution";
 import HistoriqueQuiz from "@/components/progression/HistoriqueQuiz";
+import BadgeGrid from "@/components/gamification/BadgeGrid";
 import { NIVEAUX, type Niveau } from "@/data/programmes";
 import { getToutesPerformances, type PerformanceChapitre } from "@/lib/performance";
 import { getHistorique, type EntreeHistorique } from "@/lib/history";
+import {
+  getProfilGamification,
+  getNiveauFromXP,
+  getProgressionNiveau,
+  BADGES_GENERAUX,
+  getBadgesMatiere,
+} from "@/lib/gamification";
+import type { ProfilGamification } from "@/types";
 
 export default function ProgressionPage() {
   const [niveauActif, setNiveauActif] = useState<Niveau>("seconde");
@@ -19,10 +28,12 @@ export default function ProgressionPage() {
   const [historique, setHistorique] = useState<EntreeHistorique[]>([]);
   const [performances, setPerformances] = useState<Record<string, PerformanceChapitre>>({});
   const [mounted, setMounted] = useState(false);
+  const [profilGami, setProfilGami] = useState<ProfilGamification | null>(null);
 
   useEffect(() => {
     setHistorique(getHistorique());
     setPerformances(getToutesPerformances());
+    setProfilGami(getProfilGamification());
     setMounted(true);
   }, []);
 
@@ -64,6 +75,12 @@ export default function ProgressionPage() {
       };
     });
   }, [matiereActive, matiereActiveSlug, performances]);
+
+  const tousLesBadges = useMemo(() => {
+    const matieres = NIVEAUX.flatMap((n) => n.matieres);
+    const badgesMatiere = matieres.flatMap((m) => getBadgesMatiere(m.slug, m.nom));
+    return [...BADGES_GENERAUX, ...badgesMatiere];
+  }, []);
 
   const entreesEvolution = useMemo(() => {
     if (!chapitreActifSlug) return [];
@@ -124,6 +141,59 @@ export default function ProgressionPage() {
             </div>
           </div>
         )}
+
+        {profilGami && profilGami.xpTotal > 0 && (() => {
+          const niveau      = getNiveauFromXP(profilGami.xpTotal);
+          const progression = getProgressionNiveau(profilGami.xpTotal);
+          return (
+            <div className="bg-white rounded-2xl border border-indigo-100 shadow-sm p-5 space-y-4">
+              {/* Niveau actuel */}
+              <div className="flex items-center gap-4">
+                <div className="flex flex-col items-center justify-center w-16 h-16 rounded-2xl bg-indigo-50 border-2 border-indigo-200 shrink-0">
+                  <span className="text-2xl">{niveau.emoji}</span>
+                  <span className="text-xs font-bold text-indigo-600">Niv. {niveau.numero}</span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-baseline gap-2 mb-1">
+                    <p className="text-lg font-bold text-gray-800">{niveau.nom}</p>
+                    <p className="text-sm text-indigo-500 font-medium">{profilGami.xpTotal} XP</p>
+                  </div>
+                  {progression.xpPourMonter > 0 ? (
+                    <>
+                      <div className="w-full h-2.5 bg-indigo-100 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-indigo-500 rounded-full transition-all duration-700"
+                          style={{ width: `${progression.pourcentage}%` }}
+                        />
+                      </div>
+                      <p className="text-xs text-gray-400 mt-1">
+                        {progression.xpDansNiveau} / {progression.xpPourMonter} XP pour le niveau suivant
+                      </p>
+                    </>
+                  ) : (
+                    <p className="text-xs text-yellow-600 font-semibold mt-1">Niveau maximum atteint !</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Streak */}
+              {profilGami.streakJours > 0 && (
+                <div className="flex items-center gap-2 text-sm text-orange-600 font-medium">
+                  <span>🔥</span>
+                  <span>Série de {profilGami.streakJours} jour{profilGami.streakJours > 1 ? "s" : ""} consécutif{profilGami.streakJours > 1 ? "s" : ""}</span>
+                </div>
+              )}
+
+              {/* Badges */}
+              <div>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                  Badges — {profilGami.badgesDebloques.length} / {tousLesBadges.length} débloqués
+                </p>
+                <BadgeGrid allBadges={tousLesBadges} debloques={profilGami.badgesDebloques} />
+              </div>
+            </div>
+          );
+        })()}
 
         <div className="flex gap-2 flex-wrap" role="tablist">
           {NIVEAUX.map((n) => (
