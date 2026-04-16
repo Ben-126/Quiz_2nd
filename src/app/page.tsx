@@ -21,7 +21,7 @@ export default function HomePage() {
         <BanniereObjectif />
         <div className="text-center mb-8">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.png" alt="Révioria" className="mx-auto w-36 sm:w-44 object-contain mb-4" />
+          <img src="/logo.png" alt="Révioria" className="mx-auto w-36 sm:w-44 object-contain mb-4 mix-blend-multiply" />
           <p className="text-gray-500 text-sm sm:text-base">
             Révise avec l&apos;IA · Choisis ton niveau puis une matière pour commencer
           </p>
