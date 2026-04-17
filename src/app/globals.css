@@ -49,3 +49,11 @@ body {
 .animate-bounce-once {
   animation: bounceIn 0.4s ease-out forwards;
 }
+
+/* Points du champ mot de passe plus foncés */
+input[type="password"] {
+  color: #111827;
+}
+input[type="password"]::placeholder {
+  color: #9ca3af;
+}
