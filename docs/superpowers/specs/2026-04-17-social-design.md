@@ -178,7 +178,9 @@ src/
 ## Contraintes techniques
 
 - Supabase plan gratuit (500 MB, 50 000 utilisateurs actifs/mois) — largement suffisant
-- Auth Supabase (email/password)
+- **100 % client-side** : toute l'app utilise `"use client"`, aucun Server Component ni middleware Next.js
+- Auth Supabase via `@supabase/supabase-js` (client JS pur) — le token de session est stocké dans `localStorage` par Supabase, pas dans des cookies httpOnly serveur
+- Protection des pages sociales : vérification de session côté client dans chaque composant (redirect si non connecté)
 - Pas de temps réel (pas de websocket) — les notifications sont lues au chargement de la page
 - Le mode hors-ligne reste fonctionnel, les données sociales s'affichent avec les dernières valeurs connues
 
@@ -206,11 +208,13 @@ Toutes les tables Supabase auront RLS activé. Règles clés :
 - **Droit de rectification** : modification du pseudo possible depuis les paramètres
 
 ### Cookies & consentement
-Révioria utilise des cookies techniques (session Supabase Auth) et aucun cookie publicitaire.
+L'app étant 100 % client-side, Supabase Auth stocke le token de session dans `localStorage` (pas de cookie serveur). L'app n'utilise pas de cookies tiers ni publicitaires.
+
 Un bandeau de consentement sera affiché au premier accès, conforme au RGPD (directive ePrivacy) :
-- **Cookies nécessaires** (session auth) : toujours actifs, pas de consentement requis
+- **Stockage nécessaire** (session auth en localStorage) : toujours actif, pas de consentement requis
 - **Cookies analytiques** : désactivés par défaut, opt-in explicite
-- Le consentement est stocké en localStorage (`cookie-consent`)
+- Le choix de l'utilisateur est stocké en localStorage (`cookie-consent`)
+- Tous les composants du bandeau sont `"use client"`
 
 Nouveaux fichiers associés :
 ```
