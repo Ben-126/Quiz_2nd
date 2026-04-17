@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { getToutesPerformances } from "./performance";
 import { getHistorique } from "./history";
+import { ajouterALaQueue } from "./sync";
 import type { ProfilGamification, BadgeDebloque, ResultatGamification } from "@/types";
 
 // ─── Constantes niveaux ────────────────────────────────────────────────────────
@@ -285,6 +286,9 @@ export function enregistrerQuizGamification(params: {
     ...profilInter,
     badgesDebloques: [...profil.badgesDebloques, ...nouveauxBadges],
   });
+
+  // Sync vers Supabase (online immédiat, offline → queue)
+  ajouterALaQueue(nouveauXPTotal, nouveauxBadgeIds);
 
   return {
     xpGagne,
