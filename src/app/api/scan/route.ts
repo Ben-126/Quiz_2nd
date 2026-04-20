@@ -92,8 +92,8 @@ export async function POST(req: NextRequest) {
 
   const { image, mimeType, matiere, niveau } = parsed.data;
 
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
+  const apiKey = process.env.OPENAI_API_KEY?.trim();
+  if (!apiKey || !apiKey.startsWith("sk-")) {
     return Response.json(fallbackSansApiKey());
   }
 
@@ -159,6 +159,11 @@ export async function POST(req: NextRequest) {
   } catch (err: unknown) {
     if (process.env.NODE_ENV !== "production") {
       console.error("[scan] Erreur OpenAI:", err);
+    }
+    // Clé invalide ou quota dépassé → fallback au lieu d'une erreur 500
+    const status = (err as { status?: number })?.status;
+    if (status === 401 || status === 403 || status === 429) {
+      return Response.json(fallbackSansApiKey());
     }
     return Response.json({ error: "Erreur lors de l'analyse. Veuillez réessayer." }, { status: 500 });
   }
