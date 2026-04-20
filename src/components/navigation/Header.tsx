@@ -53,6 +53,13 @@ export default function Header() {
             Progression
           </Link>
 
+          <Link
+            href="/scan"
+            className="text-sm text-gray-600 hover:text-indigo-600 font-medium px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition-colors"
+          >
+            Scan
+          </Link>
+
           {user && (
             <Link
               href="/social"
