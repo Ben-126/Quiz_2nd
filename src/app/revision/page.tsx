@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Header from "@/components/navigation/Header";
 import RevisionIntelligente from "@/components/revision/RevisionIntelligente";
 
 export const metadata: Metadata = {
@@ -7,5 +8,12 @@ export const metadata: Metadata = {
 };
 
 export default function PageRevision() {
-  return <RevisionIntelligente />;
+  return (
+    <>
+      <Header />
+      <main className="flex-1">
+        <RevisionIntelligente />
+      </main>
+    </>
+  );
 }
