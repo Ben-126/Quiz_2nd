@@ -149,13 +149,14 @@ Donne un feedback constructif (3-4 phrases en français), identifie les principa
     }
 
     return Response.json({ transcrit, similitude, mots, feedback });
-  } catch (err: unknown) {
-    if (process.env.NODE_ENV !== "production") {
-      console.error("[prononcer] Erreur:", err);
-    }
-    return Response.json(
-      { error: "Erreur lors de l'analyse de prononciation. Réessayez." },
-      { status: 500 }
-    );
+  } catch {
+    // Fallback si quota dépassé ou erreur API
+    return Response.json({
+      transcrit: "",
+      similitude: 0,
+      mots: [],
+      feedback: "L'analyse de prononciation nécessite une clé API OpenAI avec du crédit disponible. Enregistrez votre voix et comparez-la vous-même à la phrase affichée.",
+      modeLocal: true,
+    });
   }
 }
