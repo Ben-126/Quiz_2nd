@@ -67,19 +67,8 @@ export default function ReconnaissanceVocale() {
     rec.onerror = (event: SpeechRecognitionErrorEvent) => {
       recognitionRef.current = null;
       setEnCours(false);
-      if (event.error === "not-allowed") {
-        // Demander la permission micro puis inviter à recliquer
-        navigator.mediaDevices.getUserMedia({ audio: true })
-          .then((stream) => {
-            stream.getTracks().forEach((t) => t.stop());
-            setErreur("Permission accordée ! Cliquez à nouveau sur le bouton.");
-          })
-          .catch(() => {
-            setErreur("Microphone refusé. Cliquez sur 🔒 → Microphone → Autoriser, puis rechargez.");
-          });
-      } else if (event.error !== "aborted") {
-        setErreur(MESSAGES_ERREUR[event.error] ?? `Erreur : ${event.error}`);
-      }
+      // Afficher le code d'erreur brut pour diagnostic
+      setErreur(`Code erreur : "${event.error}" — ${MESSAGES_ERREUR[event.error] ?? "Erreur inconnue"}`);
     };
 
     rec.onend = () => {
