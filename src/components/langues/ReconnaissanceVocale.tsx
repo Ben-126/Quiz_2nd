@@ -48,9 +48,9 @@ export default function ReconnaissanceVocale() {
     }
 
     // Demande explicite de permission micro → déclenche la popup du navigateur
+    let permStream: MediaStream | null = null;
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      stream.getTracks().forEach((t) => t.stop()); // on n'en a plus besoin
+      permStream = await navigator.mediaDevices.getUserMedia({ audio: true });
     } catch {
       setErreur("Microphone refusé. Cliquez sur l'icône 🔒 dans la barre d'adresse → Microphone → Autoriser, puis rechargez.");
       return;
@@ -89,7 +89,10 @@ export default function ReconnaissanceVocale() {
     try {
       rec.start();
       setEnCours(true);
+      // On libère le stream getUserMedia après le démarrage pour éviter le conflit de permission
+      permStream.getTracks().forEach((t) => t.stop());
     } catch (e) {
+      permStream.getTracks().forEach((t) => t.stop());
       setErreur(`Impossible de démarrer : ${e instanceof Error ? e.message : String(e)}`);
     }
   };

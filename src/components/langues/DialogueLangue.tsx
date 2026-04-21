@@ -55,9 +55,9 @@ export default function DialogueLangue() {
     if (!API) return;
 
     // Demande explicite de permission micro → déclenche la popup navigateur
+    let permStream: MediaStream | null = null;
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      stream.getTracks().forEach((t) => t.stop());
+      permStream = await navigator.mediaDevices.getUserMedia({ audio: true });
     } catch {
       return; // permission refusée, on ne démarre pas
     }
@@ -78,6 +78,8 @@ export default function DialogueLangue() {
     recognitionRef.current = rec;
     rec.start();
     setEcouteVocale(true);
+    // Libérer le stream après le démarrage
+    permStream.getTracks().forEach((t) => t.stop());
   };
 
   const arreterEcoute = () => {
