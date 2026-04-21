@@ -67,8 +67,9 @@ export default function ReconnaissanceVocale() {
     rec.onerror = (event: SpeechRecognitionErrorEvent) => {
       recognitionRef.current = null;
       setEnCours(false);
-      // Afficher le code d'erreur brut pour diagnostic
-      setErreur(`Code erreur : "${event.error}" — ${MESSAGES_ERREUR[event.error] ?? "Erreur inconnue"}`);
+      if (event.error !== "aborted") {
+        setErreur(MESSAGES_ERREUR[event.error] ?? `Erreur : ${event.error}`);
+      }
     };
 
     rec.onend = () => {
