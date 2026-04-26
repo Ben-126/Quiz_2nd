@@ -169,6 +169,7 @@ export default async function ChapitreDetailPage({ params }: Props) {
         <Link
           href={`/${niveauSlug}/${matiereSlug}/${chapitreSlug}/quiz`}
           data-testid="btn-demarrer-quiz"
+          className="btn-demarrer"
           style={{
             display: "block",
             width: "100%",
@@ -183,14 +184,6 @@ export default async function ChapitreDetailPage({ params }: Props) {
             textDecoration: "none",
             boxShadow: "0 4px 20px rgba(239,110,90,0.32)",
             transition: "transform .15s, box-shadow .15s",
-          }}
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)";
-            (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 6px 24px rgba(239,110,90,0.44)";
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(0)";
-            (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 20px rgba(239,110,90,0.32)";
           }}
         >
           🚀 Démarrer le quiz

@@ -89,6 +89,11 @@ body.app-theme {
   animation: bounceIn 0.4s ease-out forwards;
 }
 
+.btn-demarrer:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(239,110,90,0.44) !important;
+}
+
 .fade-up {
   opacity: 0;
   transform: translateY(22px);
