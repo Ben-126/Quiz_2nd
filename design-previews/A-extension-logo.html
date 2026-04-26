@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Révioria Academy — Identité Visuelle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* === RESET & BASE === */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary:     #7B8CD4;
+      --light:       #E8EBF8;
+      --very-light:  #F4F6FC;
+      --dark:        #1A1A2E;
+      --text:        #2C2C3E;
+      --gold:        #C9A84C;
+      --white:       #FFFFFF;
+      --orange:      #E8740C;
+      --border:      #DDE0F0;
+
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body:    'Libre Baskerville', Georgia, serif;
+      --font-mono:    'Space Mono', 'Courier New', monospace;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--text);
+      background-color: var(--very-light);
+      line-height: 1.65;
+      min-width: 360px;
+    }
+
+    /* Texture papier légère en fond */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* === UTILITIES === */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 clamp(1rem, 4vw, 3rem);
+      position: relative;
+      z-index: 1;
+    }
+
+    .section {
+      padding: clamp(3rem, 6vw, 5rem) 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section:last-of-type {
+      border-bottom: none;
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      max-width: 60px;
+      height: 1px;
+      background: var(--primary);
+      opacity: 0.4;
+    }
+
+    /* === FADE-IN ANIMATIONS === */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fade-in-delay-1 { transition-delay: 0.1s; }
+    .fade-in-delay-2 { transition-delay: 0.2s; }
+    .fade-in-delay-3 { transition-delay: 0.3s; }
+    .fade-in-delay-4 { transition-delay: 0.4s; }
+
+    /* ===================================================
+       NAV
+    =================================================== */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+      padding: 0.85rem clamp(1rem, 4vw, 3rem);
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-mark {
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+    }
+
+    .nav-logo-name {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 500;
+      font-size: 1.1rem;
+      color: var(--dark);
+      letter-spacing: 0.01em;
+    }
+
+    .nav-logo-sub {
+      font-family: var(--font-mono);
+      font-size: 0.5rem;
+      letter-spacing: 0.25em;
+      color: var(--primary);
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      list-style: none;
+      margin-left: auto;
+    }
+
+    .nav-links a {
+      display: block;
+      padding: 0.4rem 0.9rem;
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      color: var(--text);
+      text-decoration: none;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      opacity: 1;
+    }
+
+    .nav-links a.active {
+      opacity: 1;
+      color: var(--primary);
+    }
+
+    .nav-links a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -0.85rem;
+      left: 0.9rem;
+      right: 0.9rem;
+      height: 2px;
+      background: var(--primary);
+      border-radius: 2px 2px 0 0;
+    }
+
+    /* ===================================================
+       HERO — BRAND HEADER
+    =================================================== */
+    .hero {
+      background: var(--very-light);
+      padding: clamp(4rem, 8vw, 7rem) 0 clamp(3.5rem, 7vw, 6rem);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Cercles décoratifs en arrière-plan */
+    .hero-circles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .hero-circle {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid var(--primary);
+      opacity: 0.07;
+    }
+
+    .hero-circle:nth-child(1) { width: 420px; height: 420px; top: -120px; right: -80px; }
+    .hero-circle:nth-child(2) { width: 280px; height: 280px; top: -20px;  right: 80px; }
+    .hero-circle:nth-child(3) { width: 180px; height: 180px; top: 40px;   right: 180px; }
+    .hero-circle:nth-child(4) { width: 600px; height: 600px; bottom: -260px; left: -200px; opacity: 0.04; }
+
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Logo Mark — SVG Cerveau dans cercle */
+    .logo-mark {
+      width: clamp(80px, 12vw, 110px);
+      height: clamp(80px, 12vw, 110px);
+    }
+
+    .logo-wordmark {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .logo-name {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 500;
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      color: var(--dark);
+      letter-spacing: 0.02em;
+      line-height: 1;
+    }
+
+    .logo-academy {
+      font-family: var(--font-mono);
+      font-size: clamp(0.6rem, 1.2vw, 0.78rem);
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      color: var(--primary);
+      font-weight: 400;
+    }
+
+    .hero-tagline {
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: clamp(0.88rem, 1.5vw, 1rem);
+      color: var(--text);
+      opacity: 0.6;
+      letter-spacing: 0.04em;
+      margin-top: 0.5rem;
+    }
+
+    /* Fine ligne ornementale */
+    .ornament {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      width: 100%;
+      max-width: 280px;
+    }
+
+    .ornament-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--primary));
+      opacity: 0.3;
+    }
+
+    .ornament-line:last-child {
+      background: linear-gradient(to left, transparent, var(--primary));
+    }
+
+    .ornament-diamond {
+      width: 5px;
+      height: 5px;
+      background: var(--primary);
+      transform: rotate(45deg);
+      opacity: 0.5;
+    }
+
+    /* ===================================================
+       SECTION — PALETTE
+    =================================================== */
+    .palette-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .swatch {
+      flex: 1 1 140px;
+      min-width: 100px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .swatch-color {
+      height: clamp(60px, 8vw, 90px);
+      transition: transform 0.3s ease;
+    }
+
+    .swatch:hover .swatch-color {
+      transform: scaleY(1.04);
+      transform-origin: bottom;
+    }
+
+    .swatch-info {
+      padding: 0.7rem 0.9rem;
+      background: var(--white);
+      border-top: 1px solid var(--border);
+    }
+
+    .swatch-name {
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      color: var(--text);
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .swatch-hex {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text);
+      opacity: 0.5;
+    }
+
+    /* ===================================================
+       SECTION — TYPOGRAPHIE
+    =================================================== */
+    .typo-samples {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    .typo-sample {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 1.5rem;
+      align-items: start;
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .typo-sample:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .typo-meta {
+      padding-top: 0.4rem;
+    }
+
+    .typo-meta-font {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--primary);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    .typo-meta-spec {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: var(--text);
+      opacity: 0.4;
+      line-height: 1.6;
+    }
+
+    .typo-h1 {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 500;
+      font-size: clamp(2.4rem, 5vw, 3.5rem);
+      color: var(--dark);
+      line-height: 1.1;
+      letter-spacing: 0.01em;
+    }
+
+    .typo-h2 {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(1.6rem, 3vw, 2rem);
+      color: var(--dark);
+      line-height: 1.2;
+    }
+
+    .typo-body {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      color: var(--text);
+      line-height: 1.75;
+      max-width: 560px;
+    }
+
+    .typo-mono-display {
+      font-family: var(--font-mono);
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      color: var(--primary);
+      letter-spacing: -0.02em;
+    }
+
+    @media (max-width: 600px) {
+      .typo-sample {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+    }
+
+    /* ===================================================
+       SECTION — COMPOSANTS
+    =================================================== */
+    .cards-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+    }
+
+    /* Base Card */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 1.5rem;
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 6px 24px rgba(123,140,212,0.13);
+      transform: translateY(-3px);
+    }
+
+    /* Card Streak */
+    .card-streak {
+      border-color: var(--primary);
+    }
+
+    .card-streak-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 1.1rem;
+    }
+
+    .card-streak-flame {
+      width: 36px;
+      height: 36px;
+    }
+
+    .card-streak-gels {
+      display: flex;
+      gap: 0.3rem;
+      align-items: center;
+    }
+
+    .gel-icon {
+      font-size: 1.1rem;
+      opacity: 0.7;
+    }
+
+    .card-streak-title {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 1.4rem;
+      color: var(--dark);
+      line-height: 1.2;
+      margin-bottom: 0.4rem;
+    }
+
+    .card-streak-sub {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text);
+      opacity: 0.45;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .card-streak-number {
+      font-family: var(--font-mono);
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: var(--orange);
+      line-height: 1;
+      margin-bottom: 0.15rem;
+    }
+
+    /* Card XP */
+    .card-xp-header {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .card-xp-emoji {
+      font-size: 1.4rem;
+    }
+
+    .card-xp-titles {
+      flex: 1;
+    }
+
+    .card-xp-level-label {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: var(--primary);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      display: block;
+    }
+
+    .card-xp-name {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 1.2rem;
+      color: var(--dark);
+      line-height: 1.1;
+    }
+
+    .card-xp-badge {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      background: var(--light);
+      color: var(--primary);
+      padding: 0.25rem 0.5rem;
+      border-radius: 1px;
+      letter-spacing: 0.08em;
+    }
+
+    .xp-bar-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.5rem;
+    }
+
+    .xp-bar-current {
+      font-family: var(--font-mono);
+      font-size: 1.05rem;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .xp-bar-total {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text);
+      opacity: 0.4;
+    }
+
+    .xp-bar-track {
+      height: 4px;
+      background: var(--light);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .xp-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 2px;
+      width: 88%;
+      transition: width 1s ease 0.4s;
+    }
+
+    /* Card Badges */
+    .badges-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    .badge-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      text-align: center;
+    }
+
+    .badge-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.25s, background 0.25s;
+    }
+
+    .badge-item:hover .badge-circle {
+      border-color: var(--primary);
+      background: var(--very-light);
+    }
+
+    .badge-name {
+      font-family: var(--font-body);
+      font-size: 0.7rem;
+      color: var(--text);
+      opacity: 0.7;
+      line-height: 1.2;
+    }
+
+    .card-badges-title {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--dark);
+      margin-bottom: 1rem;
+    }
+
+    /* ===================================================
+       FOOTER
+    =================================================== */
+    .footer {
+      padding: 2.5rem 0;
+      text-align: center;
+      background: var(--dark);
+    }
+
+    .footer-text {
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: 0.82rem;
+      color: var(--white);
+      opacity: 0.45;
+      letter-spacing: 0.03em;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .footer-logo-name {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--white);
+      opacity: 0.6;
+    }
+
+    .footer-logo-sub {
+      font-family: var(--font-mono);
+      font-size: 0.48rem;
+      letter-spacing: 0.3em;
+      color: var(--primary);
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+
+    /* Decorative circle motif in footer */
+    .footer-circles {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .footer-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      border: 1px solid var(--primary);
+      opacity: 0.3;
+    }
+
+    .footer-dot.large {
+      width: 9px;
+      height: 9px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======================== NAV ======================== -->
+  <nav class="nav" aria-label="Navigation principale">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo" aria-label="Révioria Academy — Accueil">
+        <svg class="nav-logo-mark" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="14" cy="14" r="13" stroke="#7B8CD4" stroke-width="1.2"/>
+          <!-- Brain simplified -->
+          <path d="M9.5 15.5 C8 15 7 13.5 7.5 12 C8 10.5 9.5 10 10.5 10.5" stroke="#7B8CD4" stroke-width="1" stroke-linecap="round" fill="none"/>
+          <path d="M10.5 10.5 C11 9.2 12.5 8.5 14 9 C15.5 9.5 16 10.8 16 12" stroke="#7B8CD4" stroke-width="1" stroke-linecap="round" fill="none"/>
+          <path d="M16 12 C16.5 11 18 10.5 19 11.5 C20 12.5 19.5 14 18.5 14.5" stroke="#7B8CD4" stroke-width="1" stroke-linecap="round" fill="none"/>
+          <path d="M9.5 15.5 C9.8 17 11 18 12.5 17.8" stroke="#7B8CD4" stroke-width="1" stroke-linecap="round" fill="none"/>
+          <path d="M12.5 17.8 C13 18.5 14 18.8 15 18.5" stroke="#7B8CD4" stroke-width="1" stroke-linecap="round" fill="none"/>
+          <path d="M15 18.5 C16.5 18.5 17.8 17.5 18.2 16 C18.5 15.2 18.5 14.5 18.5 14.5" stroke="#7B8CD4" stroke-width="1" stroke-linecap="round" fill="none"/>
+          <path d="M14 9 L14 18.5" stroke="#7B8CD4" stroke-width="0.7" stroke-dasharray="1 1.5" stroke-linecap="round"/>
+          <circle cx="10.5" cy="13" r="1" fill="#7B8CD4" opacity="0.4"/>
+          <circle cx="17.5" cy="13" r="1" fill="#7B8CD4" opacity="0.4"/>
+        </svg>
+        <div class="nav-logo-text">
+          <span class="nav-logo-name">Révioria</span>
+          <span class="nav-logo-sub">Academy</span>
+        </div>
+      </a>
+      <ul class="nav-links" role="list">
+        <li><a href="#" class="active">Progression</a></li>
+        <li><a href="#">Révision</a></li>
+        <li><a href="#">Social</a></li>
+        <li><a href="#">Langues</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ======================== HERO ======================== -->
+  <header class="hero" role="banner">
+    <div class="hero-circles" aria-hidden="true">
+      <div class="hero-circle"></div>
+      <div class="hero-circle"></div>
+      <div class="hero-circle"></div>
+      <div class="hero-circle"></div>
+    </div>
+    <div class="container">
+      <div class="hero-content">
+
+        <!-- Logo Mark SVG -->
+        <svg class="logo-mark fade-in" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Logo Révioria Academy — cerveau dans un cercle">
+          <!-- Cercle extérieur -->
+          <circle cx="55" cy="55" r="52" stroke="#7B8CD4" stroke-width="1.8"/>
+          <!-- Cercle intérieur décoratif -->
+          <circle cx="55" cy="55" r="44" stroke="#7B8CD4" stroke-width="0.6" opacity="0.25"/>
+
+          <!-- Cerveau en line-art -->
+          <!-- Hémisphère gauche — lobe frontal -->
+          <path d="M35 58 C31 57 28 53 29 49 C30 45 33.5 43 36.5 43.5" stroke="#7B8CD4" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          <!-- Connexion frontale gauche vers centrale -->
+          <path d="M36.5 43.5 C38 40 41.5 38 45 38.5 C47.5 39 49 41 49.5 43.5" stroke="#7B8CD4" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          <!-- Sommet — connexion droite -->
+          <path d="M49.5 43.5 C50.5 39.5 53.5 38 57 38.5 C60 39 62 41 62.5 44" stroke="#7B8CD4" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          <!-- Hémisphère droit — lobe frontal -->
+          <path d="M62.5 44 C64 41 67 40 70 41.5 C73 43 74 46.5 73 49.5 C72.5 51 71.5 52 70.5 52.5" stroke="#7B8CD4" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          <!-- Lobe temporal droit vers occipital -->
+          <path d="M70.5 52.5 C72 54 73 57 72 60 C71 63 68.5 64.5 66 64.5" stroke="#7B8CD4" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          <!-- Occipital droit -->
+          <path d="M66 64.5 C65 67.5 63 69.5 60 70 C57.5 70.5 56 69.5 55 68" stroke="#7B8CD4" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          <!-- Occipital gauche -->
+          <path d="M55 68 C54 70 52 71 49.5 70.5 C47 70 45 68 44.5 65.5" stroke="#7B8CD4" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          <!-- Temporal gauche -->
+          <path d="M44.5 65.5 C42 65.5 39 64 37.5 61.5 C36.5 59.5 36 58.5 35 58" stroke="#7B8CD4" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+
+          <!-- Sillon central (fissure longitudinale) -->
+          <path d="M55 38.5 L55 68" stroke="#7B8CD4" stroke-width="0.8" stroke-dasharray="2.5 2.5" stroke-linecap="round" opacity="0.6"/>
+
+          <!-- Circonvolutions gauches -->
+          <path d="M39 52 C40.5 49 43 48 45.5 49" stroke="#7B8CD4" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.7"/>
+          <path d="M41 59 C42.5 56.5 46 55.5 48 57" stroke="#7B8CD4" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.7"/>
+          <path d="M46 43.5 C47 46 47.5 49 47 52" stroke="#7B8CD4" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.5"/>
+
+          <!-- Circonvolutions droites -->
+          <path d="M64.5 50 C63 47.5 60.5 47 58.5 48.5" stroke="#7B8CD4" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.7"/>
+          <path d="M63 58 C61.5 55.5 58 54.5 56.5 56" stroke="#7B8CD4" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.7"/>
+          <path d="M62 43.5 C61.5 46.5 61.5 50 62 52.5" stroke="#7B8CD4" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.5"/>
+
+          <!-- Points nodaux (synapses) -->
+          <circle cx="47" cy="52" r="1.8" fill="#7B8CD4" opacity="0.5"/>
+          <circle cx="63" cy="52" r="1.8" fill="#7B8CD4" opacity="0.5"/>
+          <circle cx="55" cy="44" r="1.5" fill="#7B8CD4" opacity="0.35"/>
+          <circle cx="55" cy="64" r="1.5" fill="#7B8CD4" opacity="0.35"/>
+        </svg>
+
+        <!-- Wordmark -->
+        <div class="logo-wordmark fade-in fade-in-delay-1">
+          <span class="logo-name">Révioria</span>
+          <span class="logo-academy">Academy</span>
+        </div>
+
+        <!-- Ornament -->
+        <div class="ornament fade-in fade-in-delay-2" aria-hidden="true">
+          <div class="ornament-line"></div>
+          <div class="ornament-diamond"></div>
+          <div class="ornament-line"></div>
+        </div>
+
+        <!-- Tagline -->
+        <p class="hero-tagline fade-in fade-in-delay-3">
+          La plateforme d'apprentissage pour les lycéens français
+        </p>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================== PALETTE ======================== -->
+  <section class="section" id="palette" aria-labelledby="palette-heading">
+    <div class="container">
+      <p class="section-label fade-in">Palette de couleurs</p>
+      <div class="palette-grid fade-in fade-in-delay-1">
+        <div class="swatch">
+          <div class="swatch-color" style="background:#7B8CD4;" role="img" aria-label="Couleur Primaire bleu pervenche"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">Primaire</span>
+            <span class="swatch-hex">#7B8CD4</span>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background:#E8EBF8;"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">Claire</span>
+            <span class="swatch-hex">#E8EBF8</span>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background:#F4F6FC;border-bottom:1px solid #DDE0F0;"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">Très claire</span>
+            <span class="swatch-hex">#F4F6FC</span>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background:#1A1A2E;"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">Navy</span>
+            <span class="swatch-hex">#1A1A2E</span>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background:#2C2C3E;"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">Texte</span>
+            <span class="swatch-hex">#2C2C3E</span>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background:#C9A84C;"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">Or accent</span>
+            <span class="swatch-hex">#C9A84C</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================== TYPOGRAPHIE ======================== -->
+  <section class="section" id="typo" aria-labelledby="typo-heading">
+    <div class="container">
+      <p class="section-label fade-in">Système typographique</p>
+      <div class="typo-samples">
+
+        <div class="typo-sample fade-in fade-in-delay-1">
+          <div class="typo-meta">
+            <span class="typo-meta-font">Cormorant Garamond</span>
+            <span class="typo-meta-spec">Italic 500<br>56px / 1.1</span>
+          </div>
+          <div>
+            <p class="typo-h1">Apprends.<br>Évolue. Maîtrise.</p>
+          </div>
+        </div>
+
+        <div class="typo-sample fade-in fade-in-delay-2">
+          <div class="typo-meta">
+            <span class="typo-meta-font">Cormorant Garamond</span>
+            <span class="typo-meta-spec">Regular 400<br>32px / 1.2</span>
+          </div>
+          <div>
+            <p class="typo-h2">Tableau de progression</p>
+          </div>
+        </div>
+
+        <div class="typo-sample fade-in fade-in-delay-3">
+          <div class="typo-meta">
+            <span class="typo-meta-font">Libre Baskerville</span>
+            <span class="typo-meta-spec">Regular 400<br>16px / 1.75</span>
+          </div>
+          <div>
+            <p class="typo-body">Chaque session de révision renforce ta mémoire à long terme. Révioria adapte le contenu à ton rythme pour que tu progresses avec méthode, sans effort inutile — et avec la satisfaction de voir ta courbe monter.</p>
+          </div>
+        </div>
+
+        <div class="typo-sample fade-in fade-in-delay-4">
+          <div class="typo-meta">
+            <span class="typo-meta-font">Space Mono</span>
+            <span class="typo-meta-spec">Bold 700<br>38px / 1.0</span>
+          </div>
+          <div>
+            <p class="typo-mono-display">1 847 XP</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================== COMPOSANTS ======================== -->
+  <section class="section" id="composants" aria-labelledby="composants-heading">
+    <div class="container">
+      <p class="section-label fade-in">Composants UI</p>
+      <div class="cards-row">
+
+        <!-- Card Streak -->
+        <article class="card card-streak fade-in fade-in-delay-1" aria-label="Carte Série de jours">
+          <div class="card-streak-header">
+            <svg class="card-streak-flame" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <!-- Flamme extérieure -->
+              <path d="M18 4 C18 4 24 10 25 17 C26 21 24 25 22 27 C22 23 20 21 18.5 20 C20 17 19 13 18 4Z" fill="#E8740C" opacity="0.9"/>
+              <path d="M18 4 C18 4 12 10 11 17 C10 21 12 25 14 27 C14 23 16 21 17.5 20 C16 17 17 13 18 4Z" fill="#E8740C" opacity="0.9"/>
+              <!-- Coeur de la flamme -->
+              <path d="M18 20 C16 20 14 22 14 25 C14 28.5 15.5 31 18 32 C20.5 31 22 28.5 22 25 C22 22 20 20 18 20Z" fill="#C9A84C" opacity="0.95"/>
+              <!-- Pointe centrale -->
+              <path d="M18 24 C17.2 24.5 17 25.5 17.5 26.5 C18 27.5 18.5 28 18 29 C18.5 28.5 19.5 27.5 19 26 C18.8 25 18.5 24.3 18 24Z" fill="#F4F6FC" opacity="0.8"/>
+            </svg>
+            <div class="card-streak-gels" aria-label="3 gels disponibles">
+              <span class="gel-icon" aria-hidden="true">❄️</span>
+              <span class="gel-icon" aria-hidden="true">❄️</span>
+              <span class="gel-icon" aria-hidden="true">❄️</span>
+            </div>
+          </div>
+          <div class="card-streak-number" aria-label="12 jours de série">12</div>
+          <div class="card-streak-title">Série de jours</div>
+          <div class="card-streak-sub">Consécutifs · Continue !</div>
+        </article>
+
+        <!-- Card XP Niveau -->
+        <article class="card fade-in fade-in-delay-2" aria-label="Carte niveau et XP">
+          <div class="card-xp-header">
+            <span class="card-xp-emoji" aria-hidden="true">🎒</span>
+            <div class="card-xp-titles">
+              <span class="card-xp-level-label">Niveau 3</span>
+              <div class="card-xp-name">Étudiant</div>
+            </div>
+            <span class="card-xp-badge">LVL 3</span>
+          </div>
+          <div class="xp-bar-label">
+            <span class="xp-bar-current">1 847 XP</span>
+            <span class="xp-bar-total">/ 2 100 XP</span>
+          </div>
+          <div class="xp-bar-track" role="progressbar" aria-valuenow="1847" aria-valuemin="0" aria-valuemax="2100" aria-label="Progression XP">
+            <div class="xp-bar-fill"></div>
+          </div>
+          <div style="margin-top: 0.8rem; font-family: var(--font-mono); font-size: 0.65rem; color: var(--text); opacity: 0.4; letter-spacing: 0.08em; text-transform: uppercase;">
+            253 XP avant le niveau 4
+          </div>
+        </article>
+
+        <!-- Card Badges -->
+        <article class="card fade-in fade-in-delay-3" aria-label="Carte badges obtenus">
+          <p class="card-badges-title">Badges obtenus</p>
+          <div class="badges-grid">
+            <div class="badge-item">
+              <div class="badge-circle" aria-label="Badge Mathématiques">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <circle cx="11" cy="11" r="10" stroke="#7B8CD4" stroke-width="1"/>
+                  <text x="11" y="15" text-anchor="middle" fill="#7B8CD4" font-family="Space Mono" font-size="10" font-weight="700">π</text>
+                </svg>
+              </div>
+              <span class="badge-name">Mathématiques</span>
+            </div>
+            <div class="badge-item">
+              <div class="badge-circle" aria-label="Badge Littérature">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <circle cx="11" cy="11" r="10" stroke="#C9A84C" stroke-width="1"/>
+                  <path d="M7 7 L7 15 M7 7 L13 7 C14.5 7 15.5 8 15.5 9.5 C15.5 11 14.5 12 13 12 L7 12" stroke="#C9A84C" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="badge-name">Littérature</span>
+            </div>
+            <div class="badge-item">
+              <div class="badge-circle" aria-label="Badge Sciences">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <circle cx="11" cy="11" r="10" stroke="#7B8CD4" stroke-width="1"/>
+                  <ellipse cx="11" cy="11" rx="7" ry="3" stroke="#7B8CD4" stroke-width="1" transform="rotate(30 11 11)" fill="none" opacity="0.6"/>
+                  <ellipse cx="11" cy="11" rx="7" ry="3" stroke="#7B8CD4" stroke-width="1" transform="rotate(-30 11 11)" fill="none" opacity="0.6"/>
+                  <circle cx="11" cy="11" r="1.5" fill="#7B8CD4" opacity="0.7"/>
+                </svg>
+              </div>
+              <span class="badge-name">Sciences</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================== FOOTER ======================== -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-logo">
+        <svg width="20" height="20" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="14" cy="14" r="13" stroke="#7B8CD4" stroke-width="1" opacity="0.6"/>
+          <path d="M9.5 15.5 C8 15 7 13.5 7.5 12 C8 10.5 9.5 10 10.5 10.5" stroke="#7B8CD4" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.6"/>
+          <path d="M10.5 10.5 C11 9.2 12.5 8.5 14 9 C15.5 9.5 16 10.8 16 12" stroke="#7B8CD4" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.6"/>
+          <path d="M16 12 C16.5 11 18 10.5 19 11.5 C20 12.5 19.5 14 18.5 14.5" stroke="#7B8CD4" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.6"/>
+          <path d="M9.5 15.5 C9.8 17 11 18 12.5 17.8 C13 18.5 14 18.8 15 18.5 C16.5 18.5 17.8 17.5 18.2 16 C18.5 15.2 18.5 14.5 18.5 14.5" stroke="#7B8CD4" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.6"/>
+        </svg>
+        <div>
+          <div class="footer-logo-name">Révioria</div>
+          <div class="footer-logo-sub">Academy</div>
+        </div>
+      </div>
+      <div class="footer-circles" aria-hidden="true">
+        <div class="footer-dot"></div>
+        <div class="footer-dot large"></div>
+        <div class="footer-dot"></div>
+        <div class="footer-dot large"></div>
+        <div class="footer-dot"></div>
+      </div>
+      <p class="footer-text">Révioria Academy — Fait avec 🧠 pour les lycéens français</p>
+    </div>
+  </footer>
+
+  <script>
+    // Fade-in au scroll avec IntersectionObserver
+    (function () {
+      const targets = document.querySelectorAll('.fade-in');
+
+      if (!('IntersectionObserver' in window)) {
+        targets.forEach(function (el) { el.classList.add('visible'); });
+        return;
+      }
+
+      const observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.12,
+        rootMargin: '0px 0px -40px 0px'
+      });
+
+      targets.forEach(function (el) { observer.observe(el); });
+    })();
+
+    // Animer la barre XP à l'entrée dans le viewport
+    (function () {
+      var fill = document.querySelector('.xp-bar-fill');
+      if (!fill) return;
+
+      if (!('IntersectionObserver' in window)) {
+        fill.style.width = '88%';
+        return;
+      }
+
+      fill.style.width = '0%';
+
+      var barObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            setTimeout(function () { fill.style.width = '88%'; }, 150);
+            barObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+
+      barObserver.observe(fill.closest('.card'));
+    })();
+  </script>
+</body>
+</html>

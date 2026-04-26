@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Révioria Academy — Design Pastel Lycéen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ===========================
+       CSS VARIABLES
+    =========================== */
+    :root {
+      --cream: #FEFAF3;
+      --lavender: #C4B5FD;
+      --lavender-deep: #A78BFA;
+      --mint: #6EE7B7;
+      --peach: #FCA5A5;
+      --sun: #FCD34D;
+      --sky: #93C5FD;
+      --text: #1F2937;
+      --text-sec: #6B7280;
+      --white: #FFFFFF;
+      --radius-card: 24px;
+      --radius-pill: 50px;
+      --shadow-lav: 0 8px 30px rgba(196, 181, 253, 0.4);
+      --shadow-mint: 0 8px 30px rgba(110, 231, 183, 0.35);
+      --shadow-peach: 0 8px 30px rgba(252, 165, 165, 0.4);
+      --shadow-sun: 0 8px 30px rgba(252, 211, 77, 0.35);
+      --shadow-sky: 0 8px 30px rgba(147, 197, 253, 0.35);
+      --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* ===========================
+       RESET & BASE
+    =========================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background-color: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+      /* Subtle noise texture via SVG */
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    }
+
+    /* ===========================
+       FLOATING NAV
+    =========================== */
+    .nav {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      border-radius: var(--radius-pill);
+      box-shadow: 0 4px 24px rgba(196, 181, 253, 0.25), 0 2px 8px rgba(0,0,0,0.06);
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      max-width: calc(100vw - 32px);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 34px;
+      height: 34px;
+      background: var(--lavender);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .nav-brand {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      background: linear-gradient(135deg, var(--lavender-deep), var(--peach));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-left: 12px;
+    }
+
+    .nav-link {
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: var(--text-sec);
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      transition: all 0.25s var(--spring);
+    }
+
+    .nav-link:hover {
+      color: var(--text);
+      background: rgba(196, 181, 253, 0.12);
+    }
+
+    .nav-link.active {
+      background: var(--lavender);
+      color: #4C1D95;
+      font-weight: 700;
+    }
+
+    .nav-cta {
+      margin-left: 8px;
+      background: var(--lavender);
+      color: #4C1D95;
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 8px 18px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.3s var(--spring);
+    }
+
+    .nav-cta:hover {
+      transform: scale(1.08) translateY(-1px);
+      box-shadow: var(--shadow-lav);
+    }
+
+    /* ===========================
+       MAIN WRAPPER
+    =========================== */
+    .page {
+      padding-top: 80px;
+    }
+
+    /* ===========================
+       SECTION COMMONS
+    =========================== */
+    .section {
+      padding: 72px 40px;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-sec);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 2rem;
+      color: var(--text);
+      margin-bottom: 40px;
+    }
+
+    /* ===========================
+       HERO SECTION
+    =========================== */
+    .hero {
+      position: relative;
+      min-height: 92vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      padding: 40px 20px;
+    }
+
+    /* Blobs */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(70px);
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .blob-lav {
+      width: 520px;
+      height: 520px;
+      background: radial-gradient(circle, var(--lavender) 0%, transparent 70%);
+      top: -120px;
+      right: -100px;
+      animation: blobFloat 8s ease-in-out infinite;
+    }
+
+    .blob-mint {
+      width: 380px;
+      height: 380px;
+      background: radial-gradient(circle, var(--mint) 0%, transparent 70%);
+      bottom: -60px;
+      left: -80px;
+      animation: blobFloat 10s ease-in-out infinite reverse;
+    }
+
+    .blob-peach {
+      width: 280px;
+      height: 280px;
+      background: radial-gradient(circle, var(--peach) 0%, transparent 70%);
+      top: 40%;
+      left: 10%;
+      animation: blobFloat 12s ease-in-out infinite 2s;
+    }
+
+    .blob-sun {
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, var(--sun) 0%, transparent 70%);
+      top: 15%;
+      left: 30%;
+      animation: blobFloat 9s ease-in-out infinite 4s;
+    }
+
+    @keyframes blobFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(20px, -30px) scale(1.04); }
+      66% { transform: translate(-15px, 20px) scale(0.97); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-logo-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .hero-logo-circle {
+      width: 72px;
+      height: 72px;
+      background: var(--lavender);
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-lav);
+      animation: logoBounce 3s ease-in-out infinite;
+    }
+
+    @keyframes logoBounce {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-8px) rotate(2deg); }
+    }
+
+    .hero-logo-circle svg {
+      width: 42px;
+      height: 42px;
+    }
+
+    .hero-wordmark {
+      text-align: left;
+    }
+
+    .hero-name {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 4rem;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--lavender-deep) 0%, #F472B6 50%, var(--peach) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: var(--text-sec);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .hero-tagline {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--text);
+      margin-bottom: 36px;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--lavender);
+      color: #4C1D95;
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 16px 36px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1.05rem;
+      cursor: pointer;
+      box-shadow: var(--shadow-lav);
+      transition: all 0.35s var(--spring);
+      text-decoration: none;
+    }
+
+    .hero-cta:hover {
+      transform: scale(1.1) translateY(-4px);
+      box-shadow: 0 16px 48px rgba(196, 181, 253, 0.6);
+    }
+
+    .hero-cta:active {
+      transform: scale(0.97);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      justify-content: center;
+      margin-top: 52px;
+      flex-wrap: wrap;
+    }
+
+    .hero-stat {
+      text-align: center;
+    }
+
+    .hero-stat-num {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 2rem;
+      background: linear-gradient(135deg, var(--lavender-deep), var(--mint));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-stat-label {
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--text-sec);
+    }
+
+    /* ===========================
+       PALETTE SECTION
+    =========================== */
+    .palette-section {
+      background: var(--white);
+      border-radius: 40px;
+      padding: 56px 48px;
+      margin: 0 24px;
+      box-shadow: 0 4px 40px rgba(0,0,0,0.05);
+    }
+
+    .swatches {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .swatch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .swatch-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      transition: all 0.35s var(--spring);
+      position: relative;
+    }
+
+    .swatch:hover .swatch-circle {
+      transform: scale(1.15) translateY(-6px);
+    }
+
+    .swatch-circle::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 3px solid currentColor;
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .swatch:hover .swatch-circle::after {
+      opacity: 0.3;
+    }
+
+    .swatch-lav   .swatch-circle { background: var(--lavender); box-shadow: 0 8px 24px rgba(196,181,253,0.5); }
+    .swatch-mint  .swatch-circle { background: var(--mint);     box-shadow: 0 8px 24px rgba(110,231,183,0.5); }
+    .swatch-peach .swatch-circle { background: var(--peach);    box-shadow: 0 8px 24px rgba(252,165,165,0.5); }
+    .swatch-sun   .swatch-circle { background: var(--sun);      box-shadow: 0 8px 24px rgba(252,211,77,0.5); }
+    .swatch-sky   .swatch-circle { background: var(--sky);      box-shadow: 0 8px 24px rgba(147,197,253,0.5); }
+    .swatch-cream .swatch-circle { background: var(--cream);    box-shadow: 0 8px 24px rgba(254,250,243,0.5); border: 2px solid #E5E7EB; }
+
+    .swatch-name {
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: var(--text-sec);
+    }
+
+    .swatch-hex {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 600;
+      font-size: 0.75rem;
+      color: #9CA3AF;
+    }
+
+    /* ===========================
+       TYPOGRAPHY SECTION
+    =========================== */
+    .typo-section {
+      position: relative;
+    }
+
+    .typo-hero-title {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 3rem;
+      background: linear-gradient(135deg, var(--lavender-deep) 0%, var(--peach) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: inline-block;
+      position: relative;
+      margin-bottom: 8px;
+    }
+
+    .squiggly-wrap {
+      position: relative;
+      display: inline-block;
+    }
+
+    .squiggly {
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 100%;
+    }
+
+    .typo-body {
+      font-family: 'Quicksand', sans-serif;
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--text-sec);
+      max-width: 540px;
+      margin-top: 28px;
+    }
+
+    .typo-big-num {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 7rem;
+      color: var(--lavender);
+      line-height: 1;
+      display: block;
+      margin-top: 24px;
+    }
+
+    .typo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .typo-samples {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .typo-sample-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 16px 20px;
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+
+    .typo-sample-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #9CA3AF;
+    }
+
+    /* ===========================
+       COMPONENTS SECTION
+    =========================== */
+    .components-section {
+      position: relative;
+    }
+
+    /* Blob behind components */
+    .section-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.35;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .section-blob-lav {
+      width: 600px;
+      height: 400px;
+      background: var(--lavender);
+      top: -80px;
+      right: -150px;
+    }
+
+    .section-blob-mint {
+      width: 400px;
+      height: 400px;
+      background: var(--mint);
+      bottom: 0;
+      left: -100px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ---- Card Streak ---- */
+    .card {
+      background: var(--white);
+      border-radius: var(--radius-card);
+      padding: 28px;
+      transition: transform 0.35s var(--spring), box-shadow 0.35s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: scale(1.04) rotate(-1deg);
+    }
+
+    .card-streak {
+      box-shadow: var(--shadow-lav);
+      border-top: 4px solid var(--lavender);
+    }
+
+    .card-streak:hover {
+      box-shadow: 0 16px 50px rgba(196, 181, 253, 0.55);
+    }
+
+    .streak-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .streak-emoji {
+      font-size: 2.8rem;
+      animation: fireWiggle 2s ease-in-out infinite;
+    }
+
+    @keyframes fireWiggle {
+      0%, 100% { transform: rotate(-5deg) scale(1); }
+      50% { transform: rotate(5deg) scale(1.1); }
+    }
+
+    .streak-num {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 3.2rem;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .streak-label {
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-sec);
+    }
+
+    .streak-gels {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(196, 181, 253, 0.12);
+      border-radius: 12px;
+      padding: 10px 14px;
+    }
+
+    .gel-icons {
+      display: flex;
+      gap: 2px;
+      font-size: 1.2rem;
+    }
+
+    .gel-text {
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--text-sec);
+      margin-left: 4px;
+    }
+
+    /* ---- Card XP ---- */
+    .card-xp {
+      background: linear-gradient(135deg, rgba(196,181,253,0.18) 0%, rgba(110,231,183,0.15) 100%);
+      box-shadow: var(--shadow-mint);
+      border: 1.5px solid rgba(196,181,253,0.3);
+    }
+
+    .card-xp:hover {
+      box-shadow: 0 16px 50px rgba(110, 231, 183, 0.45);
+    }
+
+    .xp-level {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--text);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .xp-points {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      margin-bottom: 16px;
+    }
+
+    .xp-current {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 2.4rem;
+      color: var(--lavender-deep);
+    }
+
+    .xp-total {
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-sec);
+    }
+
+    .xp-bar-track {
+      background: rgba(255,255,255,0.7);
+      border-radius: 20px;
+      height: 14px;
+      overflow: hidden;
+      margin-bottom: 12px;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+    }
+
+    .xp-bar-fill {
+      height: 100%;
+      border-radius: 20px;
+      background: linear-gradient(90deg, var(--lavender), var(--mint));
+      width: 67%;
+      position: relative;
+      animation: xpFill 1.2s var(--spring) both;
+    }
+
+    @keyframes xpFill {
+      from { width: 0%; }
+      to   { width: 67%; }
+    }
+
+    .xp-bar-fill::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 6px;
+      right: 20%;
+      height: 4px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.5);
+    }
+
+    .xp-stars {
+      display: flex;
+      gap: 4px;
+      font-size: 1rem;
+    }
+
+    .xp-stars span {
+      animation: starPop 0.4s var(--spring) both;
+    }
+    .xp-stars span:nth-child(1) { animation-delay: 0.1s; }
+    .xp-stars span:nth-child(2) { animation-delay: 0.2s; }
+    .xp-stars span:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes starPop {
+      from { transform: scale(0) rotate(-30deg); opacity: 0; }
+      to   { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    /* ---- Card Badge ---- */
+    .card-badge {
+      box-shadow: var(--shadow-peach);
+      border: 1.5px solid rgba(252,165,165,0.3);
+    }
+
+    .card-badge:hover {
+      box-shadow: 0 16px 50px rgba(252, 165, 165, 0.55);
+    }
+
+    .card-badge:hover .badge-icon {
+      animation: sparkleRotate 0.5s var(--spring);
+    }
+
+    @keyframes sparkleRotate {
+      0%   { transform: scale(1) rotate(0deg); }
+      50%  { transform: scale(1.3) rotate(15deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+
+    .badge-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--peach), #F87171);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-peach);
+      transition: transform 0.35s var(--spring);
+      position: relative;
+    }
+
+    .badge-icon::before,
+    .badge-icon::after {
+      content: '✦';
+      position: absolute;
+      font-size: 0.75rem;
+      color: var(--peach);
+      opacity: 0;
+      transition: all 0.4s var(--spring);
+    }
+
+    .badge-icon::before { top: -8px; right: -4px; }
+    .badge-icon::after  { bottom: -6px; left: -4px; }
+
+    .card-badge:hover .badge-icon::before,
+    .card-badge:hover .badge-icon::after {
+      opacity: 1;
+      transform: scale(1.4);
+    }
+
+    .badge-title {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 1rem;
+      color: var(--text);
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .badge-desc {
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--text-sec);
+      margin-bottom: 14px;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(252,165,165,0.18);
+      color: #B91C1C;
+      border-radius: var(--radius-pill);
+      padding: 5px 12px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+    }
+
+    /* ---- Card Sky (bonus) ---- */
+    .card-sky {
+      box-shadow: var(--shadow-sky);
+      border: 1.5px solid rgba(147,197,253,0.3);
+    }
+
+    .card-sky:hover {
+      box-shadow: 0 16px 50px rgba(147, 197, 253, 0.5);
+    }
+
+    .sky-progress-label {
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--text-sec);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .sky-bar-track {
+      background: rgba(147,197,253,0.15);
+      border-radius: 20px;
+      height: 10px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .sky-bar-fill {
+      height: 100%;
+      border-radius: 20px;
+      background: linear-gradient(90deg, var(--sky), #60A5FA);
+      animation: xpFill 1.4s var(--spring) both 0.2s;
+    }
+
+    .sky-subjects {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .sky-subject-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sky-subject-name {
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--text);
+    }
+
+    .sky-subject-mini-track {
+      width: 100px;
+      height: 6px;
+      background: rgba(147,197,253,0.2);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .sky-subject-mini-fill {
+      height: 100%;
+      border-radius: 10px;
+      background: linear-gradient(90deg, var(--sky), #3B82F6);
+    }
+
+    /* ===========================
+       TODAY'S VIBE SECTION
+    =========================== */
+    .vibe-section {
+      background: var(--white);
+      border-radius: 40px;
+      padding: 56px 48px;
+      margin: 0 24px;
+      box-shadow: 0 4px 40px rgba(0,0,0,0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vibe-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.25;
+      pointer-events: none;
+    }
+
+    .vibe-blob-1 {
+      width: 300px;
+      height: 300px;
+      background: var(--sun);
+      top: -80px;
+      right: -60px;
+    }
+
+    .vibe-blob-2 {
+      width: 250px;
+      height: 250px;
+      background: var(--mint);
+      bottom: -60px;
+      left: -40px;
+    }
+
+    .vibe-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .vibe-widget {
+      border-radius: 20px;
+      padding: 22px 20px;
+      transition: transform 0.3s var(--spring);
+    }
+
+    .vibe-widget:hover {
+      transform: translateY(-6px) scale(1.02);
+    }
+
+    .vibe-widget-mood {
+      background: linear-gradient(135deg, rgba(252,211,77,0.2), rgba(252,165,165,0.15));
+      border: 1.5px solid rgba(252,211,77,0.35);
+    }
+
+    .vibe-widget-goal {
+      background: linear-gradient(135deg, rgba(110,231,183,0.18), rgba(147,197,253,0.15));
+      border: 1.5px solid rgba(110,231,183,0.35);
+    }
+
+    .vibe-widget-streak {
+      background: linear-gradient(135deg, rgba(196,181,253,0.18), rgba(252,165,165,0.12));
+      border: 1.5px solid rgba(196,181,253,0.35);
+    }
+
+    .vibe-icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .vibe-widget-title {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 0.8rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-sec);
+      margin-bottom: 6px;
+    }
+
+    .vibe-widget-value {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 1.4rem;
+      color: var(--text);
+    }
+
+    .vibe-widget-sub {
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 600;
+      font-size: 0.82rem;
+      color: var(--text-sec);
+      margin-top: 2px;
+    }
+
+    .mood-dots {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .mood-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: rgba(255,255,255,0.6);
+      transition: transform 0.2s var(--spring);
+    }
+
+    .mood-dot:hover { transform: scale(1.3); }
+    .mood-dot.active { transform: scale(1.2); background: rgba(255,255,255,0.9); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+
+    /* ===========================
+       FOOTER
+    =========================== */
+    .footer {
+      text-align: center;
+      padding: 48px 24px;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text-sec);
+    }
+
+    .footer-logo {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 1.4rem;
+      background: linear-gradient(135deg, var(--lavender-deep), var(--peach));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    /* ===========================
+       SPARKLE DECORATIONS
+    =========================== */
+    .sparkles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .sparkle {
+      position: absolute;
+      font-size: 1rem;
+      opacity: 0.5;
+      animation: sparkleTwinkle 3s ease-in-out infinite;
+    }
+
+    @keyframes sparkleTwinkle {
+      0%, 100% { opacity: 0.2; transform: scale(0.8) rotate(0deg); }
+      50%       { opacity: 0.7; transform: scale(1.2) rotate(20deg); }
+    }
+
+    /* ===========================
+       RESPONSIVE
+    =========================== */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero-name { font-size: 2.8rem; }
+      .hero-logo-wrap { flex-direction: column; text-align: center; }
+      .hero-wordmark { text-align: center; }
+      .typo-grid { grid-template-columns: 1fr; }
+      .typo-big-num { font-size: 5rem; }
+      .section { padding: 48px 20px; }
+      .palette-section,
+      .vibe-section { padding: 36px 24px; margin: 0 12px; }
+      .section-title { font-size: 1.6rem; }
+    }
+
+    @media (max-width: 480px) {
+      .swatches { gap: 14px; }
+      .swatch-circle { width: 60px; height: 60px; }
+      .cards-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===========================
+       FLOATING NAV
+  =========================== -->
+  <nav class="nav">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">
+        <!-- Brain SVG -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9.5 2C8 2 6.5 3 6.5 4.5c0 .8.3 1.5.8 2C5.7 7.1 4.5 8.5 4.5 10c0 1 .4 1.9 1 2.5C4.8 13.1 4 14.2 4 15.5c0 2 1.6 3.5 3.5 3.5H9v1a2 2 0 0 0 4 0v-1h1.5c1.9 0 3.5-1.5 3.5-3.5 0-1.3-.8-2.4-1.5-3 .6-.6 1-1.5 1-2.5 0-1.5-1.2-2.9-2.8-3.5.5-.5.8-1.2.8-2C15.5 3 14 2 12.5 2c-.8 0-1.5.3-2 .8C10 2.3 9.5 2 9.5 2Z"/>
+        </svg>
+      </div>
+      <span class="nav-brand">Révioria</span>
+    </a>
+    <div class="nav-links">
+      <a href="#" class="nav-link active">Accueil</a>
+      <a href="#" class="nav-link">Réviser</a>
+      <a href="#" class="nav-link">Progrès</a>
+      <a href="#" class="nav-link">Classement</a>
+    </div>
+    <button class="nav-cta">✨ Commencer</button>
+  </nav>
+
+  <div class="page">
+
+    <!-- ===========================
+         HERO
+    =========================== -->
+    <section class="hero">
+      <!-- Blobs background -->
+      <div class="blob blob-lav"></div>
+      <div class="blob blob-mint"></div>
+      <div class="blob blob-peach"></div>
+      <div class="blob blob-sun"></div>
+
+      <!-- Sparkles decoration -->
+      <div class="sparkles">
+        <span class="sparkle" style="top:12%;left:8%;animation-delay:0s">✦</span>
+        <span class="sparkle" style="top:20%;right:12%;animation-delay:0.5s">⭐</span>
+        <span class="sparkle" style="top:70%;left:5%;animation-delay:1s">✨</span>
+        <span class="sparkle" style="top:60%;right:8%;animation-delay:1.5s">✦</span>
+        <span class="sparkle" style="top:85%;left:25%;animation-delay:0.8s">⭐</span>
+        <span class="sparkle" style="top:30%;left:20%;animation-delay:2s">✦</span>
+        <span class="sparkle" style="top:45%;right:20%;animation-delay:2.5s">✨</span>
+      </div>
+
+      <div class="hero-content">
+        <!-- Logo + wordmark -->
+        <div class="hero-logo-wrap">
+          <div class="hero-logo-circle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9.5 2C8 2 6.5 3 6.5 4.5c0 .8.3 1.5.8 2C5.7 7.1 4.5 8.5 4.5 10c0 1 .4 1.9 1 2.5C4.8 13.1 4 14.2 4 15.5c0 2 1.6 3.5 3.5 3.5H9v1a2 2 0 0 0 4 0v-1h1.5c1.9 0 3.5-1.5 3.5-3.5 0-1.3-.8-2.4-1.5-3 .6-.6 1-1.5 1-2.5 0-1.5-1.2-2.9-2.8-3.5.5-.5.8-1.2.8-2C15.5 3 14 2 12.5 2c-.8 0-1.5.3-2 .8C10 2.3 9.5 2 9.5 2Z"/>
+            </svg>
+          </div>
+          <div class="hero-wordmark">
+            <div class="hero-name">Révioria</div>
+            <div class="hero-sub">Academy</div>
+          </div>
+        </div>
+
+        <p class="hero-tagline">Révise. Progresse. Règne. 👑</p>
+
+        <a href="#" class="hero-cta">
+          🚀 Commencer gratuitement
+        </a>
+
+        <!-- Stats -->
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-num">42 k+</div>
+            <div class="hero-stat-label">élèves actifs</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num">1,2 M</div>
+            <div class="hero-stat-label">flashcards créées</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num">94 %</div>
+            <div class="hero-stat-label">de réussite au bac</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===========================
+         PALETTE
+    =========================== -->
+    <div style="max-width:1120px;margin:0 auto;padding:0 24px;">
+      <div class="palette-section">
+        <p class="section-label">🎨 Palette de couleurs</p>
+        <p class="section-title" style="margin-bottom:36px;">Des couleurs comme des bonbons</p>
+
+        <div class="swatches">
+          <div class="swatch swatch-lav">
+            <div class="swatch-circle"></div>
+            <div class="swatch-name">Lavande</div>
+            <div class="swatch-hex">#C4B5FD</div>
+          </div>
+          <div class="swatch swatch-mint">
+            <div class="swatch-circle"></div>
+            <div class="swatch-name">Mint</div>
+            <div class="swatch-hex">#6EE7B7</div>
+          </div>
+          <div class="swatch swatch-peach">
+            <div class="swatch-circle"></div>
+            <div class="swatch-name">Pêche</div>
+            <div class="swatch-hex">#FCA5A5</div>
+          </div>
+          <div class="swatch swatch-sun">
+            <div class="swatch-circle"></div>
+            <div class="swatch-name">Soleil</div>
+            <div class="swatch-hex">#FCD34D</div>
+          </div>
+          <div class="swatch swatch-sky">
+            <div class="swatch-circle"></div>
+            <div class="swatch-name">Ciel</div>
+            <div class="swatch-hex">#93C5FD</div>
+          </div>
+          <div class="swatch swatch-cream">
+            <div class="swatch-circle"></div>
+            <div class="swatch-name">Crème</div>
+            <div class="swatch-hex">#FEFAF3</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===========================
+         TYPOGRAPHY
+    =========================== -->
+    <section class="section typo-section">
+      <p class="section-label">✍️ Typographie</p>
+
+      <div class="typo-grid">
+        <div>
+          <!-- H1 with squiggly underline -->
+          <div class="squiggly-wrap">
+            <h1 class="typo-hero-title">Chaque jour compte ✨</h1>
+            <svg class="squiggly" viewBox="0 0 400 12" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+              <path d="M0 6 C20 1, 40 11, 60 6 S100 1, 120 6 S160 11, 180 6 S220 1, 240 6 S280 11, 300 6 S340 1, 360 6 S400 11, 400 6"
+                stroke="url(#sqGrad)" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <defs>
+                <linearGradient id="sqGrad" x1="0" y1="0" x2="400" y2="0" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#C4B5FD"/>
+                  <stop offset="100%" stop-color="#FCA5A5"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+
+          <p class="typo-body">
+            Bienvenue sur <strong>Révioria Academy</strong>, la plateforme de révision
+            qui transforme tes sessions d'étude en une vraie aventure.
+            Des flashcards intelligentes, un suivi de progression
+            motivant, et une communauté de lycéens qui avancent ensemble. 💪
+          </p>
+
+          <span class="typo-big-num">12</span>
+        </div>
+
+        <div class="typo-samples">
+          <div class="typo-sample-row">
+            <span class="typo-sample-label">Nunito ExtraBold — Titres</span>
+            <span style="font-family:'Nunito',sans-serif;font-weight:900;font-size:2rem;color:var(--text);">Titre principal</span>
+          </div>
+          <div class="typo-sample-row">
+            <span class="typo-sample-label">Nunito Bold — Sous-titres</span>
+            <span style="font-family:'Nunito',sans-serif;font-weight:700;font-size:1.4rem;color:var(--text);">Sous-titre de section</span>
+          </div>
+          <div class="typo-sample-row">
+            <span class="typo-sample-label">Quicksand Medium — Corps</span>
+            <span style="font-family:'Quicksand',sans-serif;font-weight:500;font-size:1rem;color:var(--text-sec);">Texte courant lisible et doux</span>
+          </div>
+          <div class="typo-sample-row">
+            <span class="typo-sample-label">Nunito ExtraBold — Chiffres</span>
+            <span style="font-family:'Nunito',sans-serif;font-weight:900;font-size:2.4rem;color:var(--lavender);">1 234</span>
+          </div>
+          <div class="typo-sample-row">
+            <span class="typo-sample-label">Dégradé Lavande → Pêche</span>
+            <span style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.6rem;background:linear-gradient(135deg,var(--lavender-deep),var(--peach));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Gradient text</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===========================
+         COMPONENTS
+    =========================== -->
+    <section class="section components-section">
+      <div class="section-blob section-blob-lav"></div>
+      <div class="section-blob section-blob-mint"></div>
+
+      <p class="section-label">🧩 Composants UI</p>
+      <p class="section-title">Cards & interactions</p>
+
+      <div class="cards-grid">
+
+        <!-- Card Streak -->
+        <div class="card card-streak">
+          <div class="streak-header">
+            <span class="streak-emoji">🔥</span>
+            <div>
+              <div class="streak-num">12</div>
+              <div class="streak-label">jours consécutifs</div>
+            </div>
+          </div>
+
+          <div style="font-family:'Quicksand',sans-serif;font-size:0.85rem;color:var(--text-sec);margin-bottom:12px;font-weight:600;">
+            Continue comme ça, tu déchires ! 🎉
+          </div>
+
+          <div class="streak-gels">
+            <div class="gel-icons">
+              <span>❄️</span><span>❄️</span><span>❄️</span>
+            </div>
+            <span class="gel-text">gels restants</span>
+          </div>
+        </div>
+
+        <!-- Card XP/Niveau -->
+        <div class="card card-xp">
+          <div class="xp-level">📚 Étudiant Confirmé</div>
+          <div style="font-family:'Quicksand',sans-serif;font-size:0.82rem;color:var(--text-sec);font-weight:600;margin-bottom:14px;">Niveau 7 · Prochain : Expert</div>
+          <div class="xp-points">
+            <span class="xp-current">2 340</span>
+            <span class="xp-total">/ 3 500 XP</span>
+          </div>
+          <div class="xp-bar-track">
+            <div class="xp-bar-fill"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div class="xp-stars">
+              <span>⭐</span><span>⭐</span><span>⭐</span>
+            </div>
+            <span style="font-family:'Quicksand',sans-serif;font-size:0.8rem;color:var(--text-sec);font-weight:600;">67% complété</span>
+          </div>
+        </div>
+
+        <!-- Card Badge -->
+        <div class="card card-badge">
+          <div class="badge-icon">⭐</div>
+          <div class="badge-title">Badge Persévérance</div>
+          <div class="badge-desc">Tu as révise 7 jours de suite. Incroyable !</div>
+          <div class="badge-pill">
+            <span>🔥</span> SÉRIE × 7
+          </div>
+        </div>
+
+        <!-- Card Progression matières -->
+        <div class="card card-sky">
+          <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:1.05rem;color:var(--text);margin-bottom:16px;">📊 Progression cette semaine</div>
+          <div class="sky-subjects">
+            <div>
+              <div class="sky-subject-row" style="margin-bottom:4px;">
+                <span class="sky-subject-name">Mathématiques</span>
+                <span style="font-family:'Nunito',sans-serif;font-weight:700;font-size:0.8rem;color:#3B82F6;">82%</span>
+              </div>
+              <div class="sky-bar-track">
+                <div class="sky-bar-fill" style="width:82%;animation:xpFill 1.4s cubic-bezier(.34,1.56,.64,1) both 0.1s;"></div>
+              </div>
+            </div>
+            <div>
+              <div class="sky-subject-row" style="margin-bottom:4px;">
+                <span class="sky-subject-name">Histoire-Géo</span>
+                <span style="font-family:'Nunito',sans-serif;font-weight:700;font-size:0.8rem;color:#3B82F6;">65%</span>
+              </div>
+              <div class="sky-bar-track">
+                <div class="sky-bar-fill" style="width:65%;animation:xpFill 1.4s cubic-bezier(.34,1.56,.64,1) both 0.25s;"></div>
+              </div>
+            </div>
+            <div>
+              <div class="sky-subject-row" style="margin-bottom:4px;">
+                <span class="sky-subject-name">Anglais</span>
+                <span style="font-family:'Nunito',sans-serif;font-weight:700;font-size:0.8rem;color:#3B82F6;">91%</span>
+              </div>
+              <div class="sky-bar-track">
+                <div class="sky-bar-fill" style="width:91%;animation:xpFill 1.4s cubic-bezier(.34,1.56,.64,1) both 0.4s;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===========================
+         TODAY'S VIBE
+    =========================== -->
+    <div style="max-width:1120px;margin:0 auto;padding:0 24px;margin-bottom:80px;">
+      <div class="vibe-section">
+        <div class="vibe-blob vibe-blob-1"></div>
+        <div class="vibe-blob vibe-blob-2"></div>
+
+        <p class="section-label" style="position:relative;z-index:1;">☀️ Today's vibe</p>
+        <p class="section-title" style="position:relative;z-index:1;margin-bottom:28px;">Comment tu te sens aujourd'hui ?</p>
+
+        <div class="vibe-grid">
+          <!-- Météo d'humeur -->
+          <div class="vibe-widget vibe-widget-mood">
+            <span class="vibe-icon">😊</span>
+            <div class="vibe-widget-title">Humeur</div>
+            <div class="vibe-widget-value">Super motivé !</div>
+            <div class="mood-dots">
+              <div class="mood-dot">😴</div>
+              <div class="mood-dot">😐</div>
+              <div class="mood-dot active">😊</div>
+              <div class="mood-dot">🤩</div>
+              <div class="mood-dot">🔥</div>
+            </div>
+          </div>
+
+          <!-- Objectif du jour -->
+          <div class="vibe-widget vibe-widget-goal">
+            <span class="vibe-icon">🎯</span>
+            <div class="vibe-widget-title">Objectif du jour</div>
+            <div class="vibe-widget-value">30 flashcards</div>
+            <div class="vibe-widget-sub">18 / 30 complétées ✅</div>
+            <div style="margin-top:10px;background:rgba(255,255,255,0.5);border-radius:10px;height:8px;overflow:hidden;">
+              <div style="height:100%;width:60%;background:linear-gradient(90deg,var(--mint),var(--sky));border-radius:10px;animation:xpFill 1.2s cubic-bezier(.34,1.56,.64,1) both 0.3s;"></div>
+            </div>
+          </div>
+
+          <!-- Mini streak -->
+          <div class="vibe-widget vibe-widget-streak">
+            <span class="vibe-icon">🔥</span>
+            <div class="vibe-widget-title">Ta série</div>
+            <div class="vibe-widget-value">12 jours</div>
+            <div class="vibe-widget-sub">Record perso : 21 jours 👑</div>
+            <div style="display:flex;gap:3px;margin-top:10px;flex-wrap:wrap;">
+              <!-- Last 7 days dots -->
+              <div style="width:20px;height:20px;border-radius:50%;background:var(--lavender);font-size:0.6rem;display:flex;align-items:center;justify-content:center;font-weight:700;color:#4C1D95;">L</div>
+              <div style="width:20px;height:20px;border-radius:50%;background:var(--lavender);font-size:0.6rem;display:flex;align-items:center;justify-content:center;font-weight:700;color:#4C1D95;">M</div>
+              <div style="width:20px;height:20px;border-radius:50%;background:var(--lavender);font-size:0.6rem;display:flex;align-items:center;justify-content:center;font-weight:700;color:#4C1D95;">M</div>
+              <div style="width:20px;height:20px;border-radius:50%;background:var(--lavender);font-size:0.6rem;display:flex;align-items:center;justify-content:center;font-weight:700;color:#4C1D95;">J</div>
+              <div style="width:20px;height:20px;border-radius:50%;background:var(--lavender);font-size:0.6rem;display:flex;align-items:center;justify-content:center;font-weight:700;color:#4C1D95;">V</div>
+              <div style="width:20px;height:20px;border-radius:50%;background:rgba(196,181,253,0.25);font-size:0.6rem;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--text-sec);">S</div>
+              <div style="width:20px;height:20px;border-radius:50%;background:var(--sun);font-size:0.6rem;display:flex;align-items:center;justify-content:center;font-weight:700;color:#92400E;">A</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===========================
+         FOOTER
+    =========================== -->
+    <footer class="footer">
+      <span class="footer-logo">Révioria Academy 👑</span>
+      <p>Fait avec 💜 pour les lycéens qui veulent cartonner</p>
+      <p style="margin-top:6px;font-size:0.78rem;color:#9CA3AF;">Design « Pastel Lycéen » · Preview UI Kit</p>
+    </footer>
+
+  </div><!-- end .page -->
+
+  <script>
+    // Mood dot interactivity
+    document.querySelectorAll('.mood-dot').forEach(dot => {
+      dot.addEventListener('click', function() {
+        document.querySelectorAll('.mood-dot').forEach(d => d.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

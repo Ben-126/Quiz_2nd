@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Révioria Academy — Design System D : Minimaliste Japonais</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Reset ─── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* ─── Tokens ─── */
+    :root {
+      --white:   #FFFFFF;
+      --black:   #0A0A0A;
+      --gray-bg: #F5F5F5;
+      --gray-tx: #6B6B6B;
+      --accent:  #7B8CD4;
+    }
+
+    /* ─── Base ─── */
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--white);
+      color: var(--black);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── Utility ─── */
+    .label-caps {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray-tx);
+    }
+
+    /* ─── Page shell ─── */
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+
+    /* ─── Divider ─── */
+    hr.rule {
+      border: none;
+      border-top: 1px solid var(--black);
+      width: 100%;
+    }
+
+    hr.rule-light {
+      border: none;
+      border-top: 1px solid #E8E8E8;
+      width: 100%;
+    }
+
+    /* ══════════════════════════════
+       1. HEADER
+    ══════════════════════════════ */
+    .site-header {
+      padding: 40px 48px 36px;
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .header-divider {
+      max-width: 100%;
+      border: none;
+      border-top: 1px solid var(--black);
+    }
+
+    .logo-mark {
+      flex-shrink: 0;
+    }
+
+    .logo-mark svg {
+      display: block;
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .logo-text .wordmark {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 2.8rem;
+      font-weight: 400;
+      color: var(--black);
+      line-height: 1;
+      letter-spacing: -0.01em;
+    }
+
+    .logo-text .tagline {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gray-tx);
+    }
+
+    .header-nav {
+      margin-left: auto;
+      display: flex;
+      gap: 36px;
+    }
+
+    .header-nav a {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 400;
+      color: var(--gray-tx);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: color 0.2s ease;
+    }
+
+    .header-nav a:hover {
+      color: var(--black);
+    }
+
+    /* ══════════════════════════════
+       2. SECTION WRAPPER
+    ══════════════════════════════ */
+    .section {
+      padding: 80px 0;
+    }
+
+    .section + .section {
+      border-top: 1px solid #E8E8E8;
+    }
+
+    .section-label {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gray-tx);
+      margin-bottom: 48px;
+    }
+
+    /* ══════════════════════════════
+       3. PALETTE
+    ══════════════════════════════ */
+    .palette-row {
+      display: flex;
+      gap: 0;
+    }
+
+    .swatch-wrap {
+      flex: 1;
+    }
+
+    .swatch {
+      height: 80px;
+      width: 100%;
+    }
+
+    .swatch-white  { background: var(--white);   border: 1px solid var(--black); }
+    .swatch-black  { background: var(--black); }
+    .swatch-gray-bg{ background: var(--gray-bg); border: 1px solid #DEDEDE; }
+    .swatch-gray-tx{ background: var(--gray-tx); }
+    .swatch-accent { background: var(--accent); }
+
+    .swatch-meta {
+      padding: 12px 0 0 0;
+    }
+
+    .swatch-meta .swatch-name {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--black);
+      display: block;
+    }
+
+    .swatch-meta .swatch-hex {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 11px;
+      color: var(--gray-tx);
+    }
+
+    /* ══════════════════════════════
+       4. TYPOGRAPHIE
+    ══════════════════════════════ */
+    .type-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+    }
+
+    .type-specimen h1 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 3.2rem;
+      font-weight: 300;
+      color: var(--black);
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+
+    .type-specimen .subtitle {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--gray-tx);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .type-specimen .body-text {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.95rem;
+      color: var(--black);
+      line-height: 1.8;
+    }
+
+    .type-number-block {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding-left: 64px;
+      border-left: 1px solid #E8E8E8;
+    }
+
+    .type-number-block .giant-number {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 9rem;
+      font-weight: 700;
+      color: var(--black);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .type-number-block .number-label {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.75rem;
+      color: var(--gray-tx);
+      letter-spacing: 0.1em;
+      margin-top: 8px;
+    }
+
+    /* ══════════════════════════════
+       5. NAVIGATION
+    ══════════════════════════════ */
+    .nav-preview {
+      border-top: 1px solid var(--black);
+      border-bottom: 1px solid #E8E8E8;
+      padding: 0;
+    }
+
+    .nav-preview-inner {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      height: 52px;
+    }
+
+    .nav-item {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.82rem;
+      color: var(--gray-tx);
+      padding: 0 28px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      transition: color 0.2s ease;
+      border-right: 1px solid #E8E8E8;
+      text-decoration: none;
+    }
+
+    .nav-item:first-child {
+      padding-left: 0;
+      border-left: none;
+    }
+
+    .nav-item.active {
+      color: var(--black);
+      font-weight: 600;
+    }
+
+    .nav-item:hover:not(.active) {
+      color: var(--black);
+    }
+
+    /* ══════════════════════════════
+       6. CARTES
+    ══════════════════════════════ */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    /* Card base */
+    .card {
+      position: relative;
+      padding: 40px 36px 32px;
+      background: var(--white);
+      border: 1px solid var(--black);
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 0.5s ease forwards;
+    }
+
+    .card:nth-child(1) { animation-delay: 0.05s; }
+    .card:nth-child(2) { animation-delay: 0.15s; }
+    .card:nth-child(3) { animation-delay: 0.25s; }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Accent line bottom */
+    .card-accent-line {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    /* Card Streak */
+    .card-streak .streak-number {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 5rem;
+      font-weight: 700;
+      color: var(--black);
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .card-streak .streak-unit {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.75rem;
+      color: var(--gray-tx);
+      letter-spacing: 0.06em;
+      margin-top: 2px;
+      display: block;
+    }
+
+    .card-streak .streak-desc {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.82rem;
+      font-style: italic;
+      color: var(--gray-tx);
+      margin-top: 20px;
+    }
+
+    .card-streak .streak-gels {
+      margin-top: 24px;
+      font-size: 0.78rem;
+      color: var(--gray-tx);
+      letter-spacing: 0.08em;
+    }
+
+    /* Card Niveau */
+    .card-niveau {
+      background: var(--gray-bg);
+      border-color: transparent;
+    }
+
+    .card-niveau .niveau-label {
+      /* uses .label-caps */
+      margin-bottom: 10px;
+    }
+
+    .card-niveau .niveau-title {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--black);
+      margin-bottom: 28px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 1px;
+      background: #CACACA;
+      position: relative;
+      margin-bottom: 10px;
+    }
+
+    .progress-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: var(--accent);
+      width: 87.95%; /* 1847/2100 */
+      transition: width 0.8s ease;
+    }
+
+    .progress-values {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 11px;
+      color: var(--gray-tx);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Card Badge */
+    .card-badge .badge-icon-wrap {
+      width: 56px;
+      height: 56px;
+      border: 1px solid var(--black);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .card-badge .badge-icon-wrap svg {
+      display: block;
+    }
+
+    .card-badge .badge-title {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: var(--black);
+      margin-bottom: 8px;
+    }
+
+    .card-badge .badge-date {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 11px;
+      color: var(--gray-tx);
+      letter-spacing: 0.04em;
+    }
+
+    /* ══════════════════════════════
+       7. SECTION NOMBRE ISOLÉ
+    ══════════════════════════════ */
+    .hero-number {
+      padding: 120px 0;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-number .giant-hero {
+      font-family: 'Noto Serif JP', serif;
+      font-size: clamp(5rem, 14vw, 11rem);
+      font-weight: 700;
+      color: var(--black);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-number .hero-unit {
+      font-family: 'Noto Serif JP', serif;
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 300;
+      color: var(--black);
+      letter-spacing: -0.02em;
+    }
+
+    .hero-number .hero-caption {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.78rem;
+      color: var(--gray-tx);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-top: 28px;
+    }
+
+    /* ══════════════════════════════
+       8. FOOTER
+    ══════════════════════════════ */
+    .site-footer {
+      padding: 48px 48px 64px;
+      max-width: 960px;
+      margin: 0 auto;
+      border-top: 1px solid var(--black);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-brand {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--black);
+    }
+
+    .footer-meta {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 11px;
+      color: var(--gray-tx);
+      letter-spacing: 0.08em;
+      text-align: right;
+      line-height: 1.7;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════
+       HEADER
+  ══════════════════════════════ -->
+  <header>
+    <div class="site-header">
+
+      <!-- Logo mark : cercle 1px + cerveau 2-path épuré -->
+      <div class="logo-mark">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- cercle extérieur 1px -->
+          <circle cx="22" cy="22" r="21" stroke="#0A0A0A" stroke-width="1" fill="none"/>
+          <!-- cerveau minimaliste : deux hémisphères stylisés, 2 paths -->
+          <path
+            d="M22 14
+               C18 14 14.5 17 14 21
+               C13.5 25 16 28 18 29
+               C19 29.5 20 30 22 30"
+            stroke="#0A0A0A" stroke-width="1" fill="none"
+            stroke-linecap="round"
+          />
+          <path
+            d="M22 14
+               C26 14 29.5 17 30 21
+               C30.5 25 28 28 26 29
+               C25 29.5 24 30 22 30"
+            stroke="#0A0A0A" stroke-width="1" fill="none"
+            stroke-linecap="round"
+          />
+          <!-- ligne médiane subtile -->
+          <line x1="22" y1="15" x2="22" y2="30" stroke="#0A0A0A" stroke-width="0.6" stroke-linecap="round" opacity="0.4"/>
+        </svg>
+      </div>
+
+      <div class="logo-text">
+        <span class="wordmark">Révioria</span>
+        <span class="tagline">Academy</span>
+      </div>
+
+      <nav class="header-nav" aria-label="Navigation principale">
+        <a href="#">Tableau de bord</a>
+        <a href="#">Matières</a>
+        <a href="#">Progression</a>
+        <a href="#">Profil</a>
+      </nav>
+
+    </div>
+    <hr class="header-divider" />
+  </header>
+
+
+  <main class="page">
+
+    <!-- ══════════════════════════════
+         SECTION 1 — PALETTE
+    ══════════════════════════════ -->
+    <section class="section">
+      <p class="section-label">01 — Palette chromatique</p>
+
+      <div class="palette-row">
+        <div class="swatch-wrap">
+          <div class="swatch swatch-white"></div>
+          <div class="swatch-meta">
+            <span class="swatch-name">Blanc pur</span>
+            <span class="swatch-hex">#FFFFFF</span>
+          </div>
+        </div>
+        <div class="swatch-wrap">
+          <div class="swatch swatch-black"></div>
+          <div class="swatch-meta">
+            <span class="swatch-name">Noir jet</span>
+            <span class="swatch-hex">#0A0A0A</span>
+          </div>
+        </div>
+        <div class="swatch-wrap">
+          <div class="swatch swatch-gray-bg"></div>
+          <div class="swatch-meta">
+            <span class="swatch-name">Gris léger</span>
+            <span class="swatch-hex">#F5F5F5</span>
+          </div>
+        </div>
+        <div class="swatch-wrap">
+          <div class="swatch swatch-gray-tx"></div>
+          <div class="swatch-meta">
+            <span class="swatch-name">Gris texte</span>
+            <span class="swatch-hex">#6B6B6B</span>
+          </div>
+        </div>
+        <div class="swatch-wrap">
+          <div class="swatch swatch-accent"></div>
+          <div class="swatch-meta">
+            <span class="swatch-name">Accent</span>
+            <span class="swatch-hex">#7B8CD4</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════
+         SECTION 2 — TYPOGRAPHIE
+    ══════════════════════════════ -->
+    <section class="section">
+      <p class="section-label">02 — Typographie</p>
+
+      <div class="type-grid">
+        <div class="type-specimen">
+          <h1>Apprendre,<br>c'est grandir.</h1>
+          <p class="subtitle">
+            La connaissance s'acquiert par la répétition patiente<br>et l'attention portée à chaque détail.
+          </p>
+          <p class="body-text">
+            Noto Serif JP pour les titres — élégance calligraphique.<br>
+            Plus Jakarta Sans pour le corps — clarté sans effort.
+          </p>
+        </div>
+
+        <div class="type-number-block">
+          <span class="giant-number">12</span>
+          <span class="number-label">jours de série</span>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════
+         SECTION 3 — NAVIGATION
+    ══════════════════════════════ -->
+    <section class="section">
+      <p class="section-label">03 — Navigation</p>
+
+      <nav class="nav-preview" aria-label="Navigation preview">
+        <div class="nav-preview-inner">
+          <a class="nav-item active" href="#">Tableau de bord</a>
+          <a class="nav-item" href="#">Mathématiques</a>
+          <a class="nav-item" href="#">Français</a>
+          <a class="nav-item" href="#">Histoire</a>
+          <a class="nav-item" href="#">Sciences</a>
+        </div>
+      </nav>
+    </section>
+
+
+    <!-- ══════════════════════════════
+         SECTION 4 — COMPOSANTS
+    ══════════════════════════════ -->
+    <section class="section">
+      <p class="section-label">04 — Composants</p>
+
+      <div class="cards-grid">
+
+        <!-- Card Streak -->
+        <article class="card card-streak">
+          <div class="streak-number">12</div>
+          <span class="streak-unit">jours</span>
+          <p class="streak-desc">— sans interruption</p>
+          <p class="streak-gels">Gels disponibles ❄ ❄ ❄</p>
+          <div class="card-accent-line"></div>
+        </article>
+
+        <!-- Card Niveau -->
+        <article class="card card-niveau">
+          <p class="label-caps niveau-label">Niveau 3</p>
+          <p class="niveau-title">Étudiant</p>
+          <div class="progress-track">
+            <div class="progress-fill"></div>
+          </div>
+          <div class="progress-values">
+            <span>1 847 pts</span>
+            <span>2 100</span>
+          </div>
+        </article>
+
+        <!-- Card Badge -->
+        <article class="card card-badge">
+          <div class="badge-icon-wrap" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- étoile minimaliste 1px stroke -->
+              <polygon
+                points="11,2 13.5,8.5 20.5,8.5 15,13 17,20 11,16 5,20 7,13 1.5,8.5 8.5,8.5"
+                stroke="#0A0A0A" stroke-width="1" fill="none"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+          <p class="badge-title">Série × 7</p>
+          <p class="badge-date">Obtenu le 14 avril 2026</p>
+          <div class="card-accent-line"></div>
+        </article>
+
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════
+         SECTION 5 — NOMBRE ISOLÉ
+    ══════════════════════════════ -->
+    <section class="section">
+      <p class="section-label">05 — Nombre isolé</p>
+
+      <div class="hero-number">
+        <div>
+          <span class="giant-hero">12</span>
+          <span class="hero-unit"> jours</span>
+        </div>
+        <p class="hero-caption">Ta plus longue série</p>
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- ══════════════════════════════
+       FOOTER
+  ══════════════════════════════ -->
+  <footer>
+    <div class="site-footer">
+      <span class="footer-brand">Révioria Academy</span>
+      <div class="footer-meta">
+        <span>Design System D — Minimaliste Japonais</span><br>
+        <span>Noto Serif JP · Plus Jakarta Sans</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Révioria — Prototype Direction Finale</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ══════════════════════════════════════
+       TOKENS
+    ══════════════════════════════════════ */
+    :root {
+      --bg:          #09090F;
+      --surface:     #111118;
+      --surface2:    #18181F;
+      --border:      rgba(255,255,255,0.07);
+      --accent:      #7C5CFC;          /* 1 seule couleur accent */
+      --accent-l:    #9B7EFF;
+      --accent-glow: rgba(124,92,252,0.18);
+      --text:        #F0EFF8;
+      --text-sec:    #8B8A9B;
+      --text-muted:  #55546A;
+      --radius-sm:   10px;
+      --radius-md:   16px;
+      --radius-lg:   24px;
+      --radius-xl:   32px;
+    }
+
+    /* ══════════════════════════════════════
+       RESET
+    ══════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Quicksand', sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    /* Grain subtil */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      background-size: 256px;
+    }
+
+    * { position: relative; z-index: 1; }
+
+    /* ══════════════════════════════════════
+       NAV
+    ══════════════════════════════════════ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px;
+      height: 64px;
+      background: rgba(9,9,15,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 1.25rem;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 32px; height: 32px;
+      background: var(--accent);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 8px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-sec);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); background: var(--surface2); }
+
+    .nav-cta {
+      background: var(--accent);
+      color: #fff !important;
+      border-radius: var(--radius-sm);
+    }
+    .nav-cta:hover { background: var(--accent-l) !important; }
+
+    /* ══════════════════════════════════════
+       HERO
+    ══════════════════════════════════════ */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      overflow: hidden;
+    }
+
+    /* Halo accent derrière le titre */
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -60%);
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 6px 16px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent-l);
+      margin-bottom: 32px;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-badge span { color: var(--text-sec); font-weight: 600; }
+
+    h1 {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2.6rem, 6vw, 4.8rem);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      max-width: 820px;
+      margin: 0 auto 24px;
+    }
+
+    h1 em {
+      font-style: normal;
+      color: var(--accent-l);
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--text-sec);
+      max-width: 520px;
+      margin: 0 auto 48px;
+      font-weight: 500;
+    }
+
+    .hero-actions {
+      display: flex; align-items: center; gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 14px 28px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 0 0 0 var(--accent-glow);
+      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-primary:hover {
+      background: var(--accent-l);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 32px var(--accent-glow);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-sec);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px 28px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+      text-decoration: none;
+    }
+    .btn-ghost:hover {
+      color: var(--text); border-color: rgba(255,255,255,0.2);
+      background: var(--surface2);
+    }
+
+    /* Stats rapides */
+    .hero-stats {
+      display: flex; gap: 40px; justify-content: center;
+      margin-top: 72px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      width: 100%;
+      max-width: 560px;
+      flex-wrap: wrap;
+    }
+
+    .stat { text-align: center; }
+    .stat-val {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 2rem;
+      color: var(--text);
+      letter-spacing: -0.03em;
+    }
+    .stat-val span { color: var(--accent-l); }
+    .stat-lbl { font-size: 0.82rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
+
+    /* ══════════════════════════════════════
+       SECTION WRAPPER
+    ══════════════════════════════════════ */
+    .section { padding: 96px 24px; max-width: 1100px; margin: 0 auto; }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent-l);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      color: var(--text-sec);
+      font-size: 1rem;
+      max-width: 500px;
+      font-weight: 500;
+    }
+
+    .section-header { margin-bottom: 56px; }
+
+    /* ══════════════════════════════════════
+       FEATURES GRID
+    ══════════════════════════════════════ */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .feature-card:hover {
+      border-color: rgba(124,92,252,0.3);
+      transform: translateY(-2px);
+    }
+
+    .feature-icon {
+      width: 48px; height: 48px;
+      background: var(--accent-glow);
+      border: 1px solid rgba(124,92,252,0.25);
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    .feature-title {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+
+    .feature-desc { color: var(--text-sec); font-size: 0.9rem; font-weight: 500; }
+
+    /* ══════════════════════════════════════
+       MATIERES — APP SECTION
+    ══════════════════════════════════════ */
+    .subjects-section {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .subjects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    .subject-pill {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      text-decoration: none;
+      display: block;
+    }
+    .subject-pill:hover {
+      border-color: rgba(124,92,252,0.4);
+      background: rgba(124,92,252,0.07);
+      transform: translateY(-2px);
+    }
+
+    .subject-emoji { font-size: 1.6rem; display: block; margin-bottom: 8px; }
+    .subject-name {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 0.82rem;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    /* ══════════════════════════════════════
+       PRICING
+    ══════════════════════════════════════ */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      align-items: start;
+    }
+
+    .plan-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 36px 32px;
+      transition: transform 0.2s;
+    }
+
+    .plan-card.featured {
+      border-color: var(--accent);
+      background: linear-gradient(145deg, rgba(124,92,252,0.12) 0%, var(--surface) 60%);
+      box-shadow: 0 0 0 1px rgba(124,92,252,0.3), 0 24px 48px rgba(124,92,252,0.1);
+    }
+
+    .plan-card:hover { transform: translateY(-3px); }
+
+    .plan-badge {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+    }
+
+    .plan-name {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 1.3rem;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .plan-desc { color: var(--text-sec); font-size: 0.88rem; font-weight: 500; margin-bottom: 28px; }
+
+    .plan-price {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 2.8rem;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .plan-price sub { font-size: 1rem; font-weight: 700; vertical-align: super; }
+    .plan-price span { font-size: 1rem; font-weight: 600; color: var(--text-sec); }
+    .plan-billed { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; margin-bottom: 28px; }
+
+    .plan-divider { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+
+    .plan-features { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+    .plan-features li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 0.88rem; color: var(--text-sec); font-weight: 600;
+    }
+    .plan-features li::before {
+      content: '✓';
+      color: var(--accent-l);
+      font-weight: 900;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .plan-features li.muted { color: var(--text-muted); }
+    .plan-features li.muted::before { content: '–'; color: var(--text-muted); }
+
+    .plan-btn {
+      width: 100%;
+      text-align: center;
+      padding: 13px;
+      border-radius: var(--radius-md);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+      cursor: pointer;
+      border: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .plan-btn-primary { background: var(--accent); color: #fff; }
+    .plan-btn-primary:hover { background: var(--accent-l); transform: translateY(-1px); }
+    .plan-btn-ghost { background: var(--surface2); color: var(--text-sec); border: 1px solid var(--border); }
+    .plan-btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.15); }
+
+    /* ══════════════════════════════════════
+       TESTIMONIALS
+    ══════════════════════════════════════ */
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .testi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+    }
+
+    .testi-stars { color: var(--accent-l); font-size: 1rem; margin-bottom: 14px; letter-spacing: 2px; }
+    .testi-text { font-size: 0.9rem; color: var(--text-sec); font-weight: 500; margin-bottom: 20px; line-height: 1.6; }
+
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .testi-avatar {
+      width: 36px; height: 36px;
+      background: var(--accent-glow);
+      border: 1px solid rgba(124,92,252,0.3);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .testi-name { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.85rem; }
+    .testi-meta { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
+
+    /* ══════════════════════════════════════
+       CTA FINAL
+    ══════════════════════════════════════ */
+    .cta-section {
+      text-align: center;
+      padding: 96px 24px;
+      background: radial-gradient(ellipse at center, rgba(124,92,252,0.1) 0%, transparent 70%);
+      border-top: 1px solid var(--border);
+    }
+
+    .cta-section h2 {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+
+    .cta-section p { color: var(--text-sec); font-size: 1rem; margin-bottom: 40px; font-weight: 500; }
+
+    /* ══════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════ */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px;
+    }
+
+    .footer-brand {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 1rem;
+      color: var(--text-sec);
+    }
+
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { color: var(--text-muted); font-size: 0.82rem; font-weight: 600; text-decoration: none; }
+    .footer-links a:hover { color: var(--text-sec); }
+
+    .footer-copy { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; }
+
+    /* ══════════════════════════════════════
+       DIVIDER
+    ══════════════════════════════════════ */
+    .full-divider { border: none; border-top: 1px solid var(--border); }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ NAV ═══ -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">📖</div>
+      Révioria
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">Fonctionnalités</a></li>
+      <li><a href="#matieres">Matières</a></li>
+      <li><a href="#pricing">Tarifs</a></li>
+      <li><a href="/app" class="nav-cta">Commencer →</a></li>
+    </ul>
+  </nav>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="hero">
+    <div class="hero-badge">
+      ✦ <span>Nouveau</span> — Correction IA + Analyses de progression
+    </div>
+
+    <h1>
+      Révise <em>vraiment</em> bien,<br/>pour une fois.
+    </h1>
+
+    <p class="hero-sub">
+      Des quiz générés par IA alignés sur ton programme de Seconde.
+      Progresse matière par matière, vois tes points faibles, et envoie le bac.
+    </p>
+
+    <div class="hero-actions">
+      <a href="/app" class="btn-primary">Commencer gratuitement →</a>
+      <a href="#features" class="btn-ghost">Voir comment ça marche</a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-val">10<span>+</span></div>
+        <div class="stat-lbl">matières couvertes</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">∞</div>
+        <div class="stat-lbl">questions générées</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">100<span>%</span></div>
+        <div class="stat-lbl">programme Seconde</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="full-divider"/>
+
+  <!-- ═══ FEATURES ═══ -->
+  <section class="section" id="features">
+    <div class="section-header">
+      <div class="section-label">Fonctionnalités</div>
+      <h2 class="section-title">Tout ce dont tu as besoin<br/>pour bien réviser</h2>
+      <p class="section-sub">Pas de fiches interminables. Des quiz ciblés, une IA qui t'analyse, et un vrai suivi de progression.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🧠</div>
+        <div class="feature-title">Quiz générés par IA</div>
+        <div class="feature-desc">Questions QCM, vrai/faux, réponse courte — adaptées à ton chapitre, générées à l'infini.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📈</div>
+        <div class="feature-title">Analyse de progression</div>
+        <div class="feature-desc">Vois exactement où tu pêches par matière et par compétence. Prédiction de note incluse.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔥</div>
+        <div class="feature-title">Streaks & motivation</div>
+        <div class="feature-desc">Maintiens ta série de jours consécutifs. Gels disponibles pour les jours difficiles.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🗣️</div>
+        <div class="feature-title">Pratique orale</div>
+        <div class="feature-desc">Entraîne-toi à l'oral avec reconnaissance vocale et feedback instantané.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📚</div>
+        <div class="feature-title">Toutes les matières</div>
+        <div class="feature-desc">Maths, Français, Histoire-Géo, SVT, Physique-Chimie, Langues vivantes et plus.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">✅</div>
+        <div class="feature-title">Correction détaillée</div>
+        <div class="feature-desc">Chaque réponse expliquée. Comprends pourquoi tu t'es trompé, pas juste la bonne réponse.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ MATIERES ═══ -->
+  <div class="subjects-section">
+    <section class="section" id="matieres">
+      <div class="section-header">
+        <div class="section-label">Programme Seconde</div>
+        <h2 class="section-title">Toutes tes matières,<br/>au même endroit</h2>
+        <p class="section-sub">Chaque matière organisée par chapitres et compétences. Navigation directe vers ton sujet du moment.</p>
+      </div>
+
+      <div class="subjects-grid">
+        <a href="#" class="subject-pill"><span class="subject-emoji">📐</span><span class="subject-name">Mathématiques</span></a>
+        <a href="#" class="subject-pill"><span class="subject-emoji">📖</span><span class="subject-name">Français</span></a>
+        <a href="#" class="subject-pill"><span class="subject-emoji">🌍</span><span class="subject-name">Histoire-Géo</span></a>
+        <a href="#" class="subject-pill"><span class="subject-emoji">🧬</span><span class="subject-name">SVT</span></a>
+        <a href="#" class="subject-pill"><span class="subject-emoji">⚗️</span><span class="subject-name">Physique-Chimie</span></a>
+        <a href="#" class="subject-pill"><span class="subject-emoji">💶</span><span class="subject-name">SES</span></a>
+        <a href="#" class="subject-pill"><span class="subject-emoji">🇬🇧</span><span class="subject-name">Anglais</span></a>
+        <a href="#" class="subject-pill"><span class="subject-emoji">🇪🇸</span><span class="subject-name">Espagnol</span></a>
+        <a href="#" class="subject-pill"><span class="subject-emoji">🇩🇪</span><span class="subject-name">Allemand</span></a>
+        <a href="#" class="subject-pill"><span class="subject-emoji">💻</span><span class="subject-name">SNT</span></a>
+        <a href="#" class="subject-pill"><span class="subject-emoji">⚖️</span><span class="subject-name">EMC</span></a>
+        <a href="#" class="subject-pill"><span class="subject-emoji">＋</span><span class="subject-name">Plus…</span></a>
+      </div>
+    </section>
+  </div>
+
+  <!-- ═══ PRICING ═══ -->
+  <section class="section" id="pricing">
+    <div class="section-header">
+      <div class="section-label">Tarifs</div>
+      <h2 class="section-title">Simple, sans surprise</h2>
+      <p class="section-sub">Commence gratuitement. Débloque tout avec Premium pour le prix d'un café par mois.</p>
+    </div>
+
+    <div class="pricing-grid">
+      <!-- Free -->
+      <div class="plan-card">
+        <div class="plan-name">Gratuit</div>
+        <div class="plan-desc">Pour découvrir et commencer à réviser.</div>
+        <div class="plan-price"><sub>€</sub>0 <span>/ mois</span></div>
+        <div class="plan-billed">Pour toujours gratuit</div>
+        <hr class="plan-divider"/>
+        <ul class="plan-features">
+          <li>3 matières au choix</li>
+          <li>Quiz illimités en mode basique</li>
+          <li>Correction simple</li>
+          <li>Suivi de progression basique</li>
+          <li class="muted">Analyse IA des points faibles</li>
+          <li class="muted">Prédiction de note</li>
+          <li class="muted">Streak & calendrier</li>
+          <li class="muted">Pratique orale</li>
+        </ul>
+        <button class="plan-btn plan-btn-ghost">Commencer gratuitement</button>
+      </div>
+
+      <!-- Premium -->
+      <div class="plan-card featured">
+        <div class="plan-badge">⭐ Recommandé</div>
+        <div class="plan-name">Premium</div>
+        <div class="plan-desc">Pour les élèves qui veulent vraiment progresser.</div>
+        <div class="plan-price"><sub>€</sub>4,99 <span>/ mois</span></div>
+        <div class="plan-billed">ou 39,99 € / an (économise 33%)</div>
+        <hr class="plan-divider"/>
+        <ul class="plan-features">
+          <li>Toutes les matières</li>
+          <li>Quiz IA avancés (QCM + oral + rédaction)</li>
+          <li>Correction détaillée expliquée</li>
+          <li>Analyse complète des points faibles</li>
+          <li>Prédiction de note en temps réel</li>
+          <li>Streak, gels & calendrier complet</li>
+          <li>Pratique orale avec feedback</li>
+          <li>Accès prioritaire aux nouvelles features</li>
+        </ul>
+        <button class="plan-btn plan-btn-primary">Essai gratuit 7 jours →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TEMOIGNAGES ═══ -->
+  <hr class="full-divider"/>
+  <section class="section">
+    <div class="section-header">
+      <div class="section-label">Ils révisent avec Révioria</div>
+      <h2 class="section-title">Ce que disent les élèves</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-text">"J'avais du mal en maths. En 2 semaines de quiz ciblés j'ai compris les chapitres sur lesquels je bloquais vraiment. Note passée de 9 à 15."</div>
+        <div class="testi-author">
+          <div class="testi-avatar">👩</div>
+          <div><div class="testi-name">Léa M.</div><div class="testi-meta">Seconde, Lycée Victor Hugo</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-text">"Le truc que j'aime c'est que les questions changent à chaque fois. Je peux réviser le même chapitre 10 fois sans jamais avoir les mêmes questions."</div>
+        <div class="testi-author">
+          <div class="testi-avatar">👦</div>
+          <div><div class="testi-name">Thomas R.</div><div class="testi-meta">Seconde, Lycée Jean Moulin</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-text">"La prédiction de note c'est ultra motivant. T'as envie de faire monter ton score avant l'exam. J'ai bossé plus que d'habitude sans m'en rendre compte."</div>
+        <div class="testi-author">
+          <div class="testi-avatar">👩</div>
+          <div><div class="testi-name">Camille D.</div><div class="testi-meta">Seconde, Lycée Pasteur</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CTA FINAL ═══ -->
+  <div class="cta-section">
+    <h2>Prêt à vraiment réviser ?</h2>
+    <p>Rejoins des milliers de lycéens qui progressent avec Révioria.</p>
+    <a href="/app" class="btn-primary">Commencer gratuitement →</a>
+  </div>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer>
+    <div class="footer-brand">Révioria</div>
+    <div class="footer-links">
+      <a href="#">Confidentialité</a>
+      <a href="#">CGU</a>
+      <a href="#">Contact</a>
+    </div>
+    <div class="footer-copy">© 2025 Révioria. Tous droits réservés.</div>
+  </footer>
+
+</body>
+</html>

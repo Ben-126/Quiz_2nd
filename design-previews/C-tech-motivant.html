@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Révioria Academy — Tech Motivant Design Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── Reset & Base ────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #080B14;
+      --surface:    #0F1423;
+      --surface2:   #141929;
+      --violet:     #6C47FF;
+      --violet-l:   #8B6FFF;
+      --orange:     #FF6B2B;
+      --orange-glow:rgba(255,107,43,0.15);
+      --text:       #E8EAED;
+      --text-sec:   #8892A4;
+      --green:      #22C55E;
+      --blue:       #38BDF8;
+      --border:     rgba(108,71,255,0.25);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Noise overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 256px 256px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    section, nav { position: relative; z-index: 1; }
+
+    /* ── Typography helpers ────────────────────────── */
+    .font-syne   { font-family: 'Syne', sans-serif; }
+    .font-dm     { font-family: 'DM Sans', sans-serif; }
+    .font-mono   { font-family: 'JetBrains Mono', monospace; }
+
+    .gradient-text {
+      background: linear-gradient(135deg, var(--violet-l) 0%, var(--orange) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--violet-l);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .section-label::before {
+      content: '';
+      display: inline-block;
+      width: 24px; height: 1px;
+      background: var(--violet-l);
+    }
+
+    /* ── Containers ────────────────────────────────── */
+    .wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .section-block {
+      padding: 5rem 0 4rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* ── Animations ────────────────────────────────── */
+    @keyframes float-up {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-8px); }
+    }
+    @keyframes glow-pulse {
+      0%, 100% { box-shadow: 0 0 20px rgba(108,71,255,0.4), 0 0 40px rgba(108,71,255,0.15); }
+      50%       { box-shadow: 0 0 35px rgba(108,71,255,0.7), 0 0 70px rgba(108,71,255,0.3); }
+    }
+    @keyframes orange-glow-pulse {
+      0%, 100% { text-shadow: 0 0 8px rgba(255,107,43,0.6); }
+      50%       { text-shadow: 0 0 20px rgba(255,107,43,1), 0 0 40px rgba(255,107,43,0.5); }
+    }
+    @keyframes flame {
+      0%, 100% { transform: scaleY(1) rotate(-2deg);  }
+      25%       { transform: scaleY(1.1) rotate(2deg); }
+      50%       { transform: scaleY(0.95) rotate(-3deg); }
+      75%       { transform: scaleY(1.08) rotate(1deg); }
+    }
+    @keyframes xp-fill {
+      from { width: 0; }
+      to   { width: 72%; }
+    }
+    @keyframes streak-fill {
+      from { width: 0; }
+      to   { width: 85%; }
+    }
+    @keyframes gradient-border {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes hex-glow {
+      0%, 100% { filter: drop-shadow(0 0 8px rgba(108,71,255,0.6)); }
+      50%       { filter: drop-shadow(0 0 20px rgba(255,107,43,0.8)); }
+    }
+    @keyframes particle-burst {
+      0%   { transform: scale(0) translate(0,0); opacity: 1; }
+      100% { transform: scale(1) translate(var(--tx), var(--ty)); opacity: 0; }
+    }
+    @keyframes stat-count-in {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes cold-pulse {
+      0%, 100% { box-shadow: 0 0 8px rgba(56,189,248,0.5); }
+      50%       { box-shadow: 0 0 22px rgba(56,189,248,0.9); }
+    }
+
+    /* ── NAVIGATION ───────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15,20,35,0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      gap: 2rem;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+    .nav-logo-circle {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--violet), var(--violet-l));
+      display: flex; align-items: center; justify-content: center;
+      animation: glow-pulse 3s ease-in-out infinite;
+    }
+    .nav-logo-circle svg { width: 20px; height: 20px; }
+    .nav-logo-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      background: linear-gradient(135deg, var(--violet-l), var(--orange));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-sec);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a.active {
+      color: var(--violet-l);
+    }
+    .nav-links a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 100%; height: 2px;
+      background: var(--violet-l);
+      border-radius: 2px;
+    }
+    .nav-cta {
+      background: linear-gradient(135deg, var(--violet), var(--orange));
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: 0.5rem 1.25rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .nav-cta:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(108,71,255,0.5);
+    }
+
+    /* ── HERO ──────────────────────────────────────── */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    #particle-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+    }
+    /* Ambient radial glows */
+    #hero::before {
+      content: '';
+      position: absolute;
+      top: -20%; left: 50%;
+      transform: translateX(-50%);
+      width: 900px; height: 600px;
+      background: radial-gradient(ellipse, rgba(108,71,255,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    #hero::after {
+      content: '';
+      position: absolute;
+      bottom: -10%; right: -10%;
+      width: 600px; height: 600px;
+      background: radial-gradient(ellipse, rgba(255,107,43,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+    .hero-logo-wrap {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      animation: float-up 6s ease-in-out infinite;
+    }
+    .hero-logo-circle {
+      width: 96px; height: 96px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--violet), var(--violet-l));
+      display: flex; align-items: center; justify-content: center;
+      animation: glow-pulse 3s ease-in-out infinite;
+    }
+    .hero-logo-circle svg { width: 54px; height: 54px; }
+
+    .hero-brand-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(3rem, 8vw, 5rem);
+      line-height: 1;
+      background: linear-gradient(135deg, var(--violet-l) 0%, var(--orange) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-academy {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.4em;
+      color: var(--text-sec);
+      font-weight: 400;
+      margin-top: 0.4rem;
+    }
+    .hero-tagline {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      font-weight: 600;
+      color: var(--text);
+      margin: 1.5rem 0 2.5rem;
+      opacity: 0.9;
+    }
+    .hero-tagline em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--violet-l), var(--orange));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: linear-gradient(135deg, var(--violet), var(--orange));
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 1rem 2.25rem;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.3s;
+      box-shadow: 0 0 24px rgba(108,71,255,0.4), 0 0 48px rgba(255,107,43,0.1);
+      text-decoration: none;
+    }
+    .hero-cta:hover {
+      transform: scale(1.06) translateY(-2px);
+      box-shadow: 0 0 36px rgba(108,71,255,0.7), 0 0 72px rgba(255,107,43,0.25);
+    }
+    .hero-cta svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+    /* ── STATS BAR ─────────────────────────────────── */
+    #stats-bar {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 0;
+    }
+    .stats-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4rem;
+      flex-wrap: wrap;
+    }
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      animation: stat-count-in 0.6s ease both;
+    }
+    .stat-item:nth-child(2) { animation-delay: 0.15s; }
+    .stat-item:nth-child(3) { animation-delay: 0.3s; }
+    .stat-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 2rem;
+    }
+    .stat-number.violet { color: var(--violet-l); text-shadow: 0 0 16px rgba(139,111,255,0.6); }
+    .stat-number.orange { color: var(--orange); text-shadow: 0 0 16px rgba(255,107,43,0.6); }
+    .stat-number.green  { color: var(--green);  text-shadow: 0 0 16px rgba(34,197,94,0.6); }
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--text-sec);
+      letter-spacing: 0.1em;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase;
+    }
+    .stat-divider {
+      width: 1px; height: 40px;
+      background: rgba(255,255,255,0.08);
+    }
+
+    /* ── PALETTE ───────────────────────────────────── */
+    .swatches {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .swatch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: default;
+    }
+    .swatch-circle {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: transform 0.2s, box-shadow 0.3s;
+    }
+    .swatch:hover .swatch-circle {
+      transform: scale(1.15);
+    }
+    .swatch-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-sec);
+      text-align: center;
+    }
+
+    /* ── TYPOGRAPHY SHOWCASE ────────────────────────── */
+    .type-demo { display: flex; flex-direction: column; gap: 2rem; }
+    .type-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      padding: 1.5rem;
+      background: var(--surface);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .type-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-sec);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .demo-h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.1;
+      background: linear-gradient(135deg, var(--violet-l) 30%, var(--orange) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .demo-h2 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 2rem;
+      color: var(--text);
+    }
+    .demo-body {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      color: var(--text);
+      line-height: 1.7;
+      max-width: 520px;
+    }
+    .demo-stats-xp {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 2.5rem;
+      color: var(--violet-l);
+      text-shadow: 0 0 20px rgba(139,111,255,0.7);
+    }
+
+    /* ── GLASS CARD ─────────────────────────────────── */
+    .glass-card {
+      background: rgba(15,20,35,0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(108,71,255,0.2);
+      border-radius: 20px;
+      padding: 1.75rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg,
+        rgba(108,71,255,0.07) 0%,
+        rgba(255,107,43,0.03) 100%);
+      border-radius: inherit;
+      pointer-events: none;
+    }
+    .glass-card:hover {
+      border-color: rgba(108,71,255,0.5);
+      box-shadow: 0 0 40px rgba(108,71,255,0.15);
+    }
+
+    /* Animated gradient border on hover */
+    .glass-card-animated {
+      position: relative;
+      border-radius: 20px;
+      padding: 2px; /* space for border */
+      background: linear-gradient(135deg, var(--violet), var(--orange), var(--violet));
+      background-size: 200% 200%;
+      animation: gradient-border 4s ease infinite;
+      transition: box-shadow 0.3s;
+    }
+    .glass-card-animated:hover {
+      box-shadow: 0 0 40px rgba(108,71,255,0.3), 0 0 80px rgba(255,107,43,0.1);
+    }
+    .glass-card-inner {
+      background: rgba(15,20,35,0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 18px;
+      padding: 1.75rem;
+      height: 100%;
+    }
+
+    /* ── CARDS GRID ─────────────────────────────────── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* STREAK CARD */
+    .streak-card-content { display: flex; flex-direction: column; gap: 1.25rem; }
+    .streak-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .flame-icon {
+      font-size: 2rem;
+      display: inline-block;
+      animation: flame 1.5s ease-in-out infinite;
+      transform-origin: bottom center;
+    }
+    .streak-number {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.6rem;
+      color: var(--orange);
+      animation: orange-glow-pulse 2s ease-in-out infinite;
+    }
+    .streak-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-sec);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .gel-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 0.9rem;
+      background: rgba(56,189,248,0.08);
+      border-radius: 8px;
+      border: 1px solid rgba(56,189,248,0.2);
+      animation: cold-pulse 3s ease-in-out infinite;
+    }
+    .gel-icon { font-size: 1.2rem; }
+    .gel-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--blue);
+    }
+    .prog-bar-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .prog-meta {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-sec);
+    }
+    .prog-track {
+      height: 6px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .prog-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--violet), var(--violet-l));
+      box-shadow: 0 0 10px rgba(108,71,255,0.6);
+      animation: streak-fill 1.5s 0.5s cubic-bezier(0.4,0,0.2,1) both;
+    }
+
+    /* XP CARD */
+    .xp-card-content { display: flex; flex-direction: column; gap: 1.25rem; }
+    .xp-level-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.75rem;
+      background: rgba(108,71,255,0.15);
+      border: 1px solid rgba(108,71,255,0.3);
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--violet-l);
+      letter-spacing: 0.1em;
+      width: fit-content;
+    }
+    .xp-big {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+    .xp-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 2.5rem;
+      color: var(--violet-l);
+      text-shadow: 0 0 20px rgba(139,111,255,0.7);
+    }
+    .xp-unit {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--text-sec);
+    }
+    .xp-bar-track {
+      height: 8px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .xp-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--violet), var(--violet-l));
+      box-shadow: 0 0 14px rgba(108,71,255,0.8), 0 0 28px rgba(108,71,255,0.3);
+      animation: xp-fill 1.8s 0.3s cubic-bezier(0.4,0,0.2,1) both;
+    }
+    .xp-bonus-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.75rem;
+      background: rgba(34,197,94,0.12);
+      border: 1px solid rgba(34,197,94,0.3);
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--green);
+      width: fit-content;
+    }
+
+    /* BADGE CARD */
+    .badge-card-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+      text-align: center;
+    }
+    .hex-wrap {
+      position: relative;
+      width: 100px; height: 100px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .hex-svg {
+      position: absolute;
+      inset: 0;
+      animation: hex-glow 2.5s ease-in-out infinite;
+    }
+    .hex-inner-text {
+      position: relative;
+      z-index: 1;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(255,255,255,0.4);
+    }
+    .badge-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.4rem;
+      background: linear-gradient(135deg, var(--violet-l), var(--orange));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .badge-sub {
+      font-size: 0.85rem;
+      color: var(--text-sec);
+    }
+    .particles-container {
+      position: relative;
+      width: 100px; height: 100px;
+    }
+    .particle {
+      position: absolute;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      top: 50%; left: 50%;
+      opacity: 0;
+    }
+    .particle:nth-child(1)  { background: var(--violet-l); --tx:-36px; --ty:-24px; animation: particle-burst 2s 0.2s ease-out infinite; }
+    .particle:nth-child(2)  { background: var(--orange);   --tx: 38px; --ty:-20px; animation: particle-burst 2s 0.5s ease-out infinite; }
+    .particle:nth-child(3)  { background: var(--green);    --tx:  4px; --ty:-44px; animation: particle-burst 2s 0.8s ease-out infinite; }
+    .particle:nth-child(4)  { background: var(--violet-l); --tx:-40px; --ty: 18px; animation: particle-burst 2s 1.0s ease-out infinite; }
+    .particle:nth-child(5)  { background: var(--orange);   --tx: 36px; --ty: 22px; animation: particle-burst 2s 1.3s ease-out infinite; }
+    .particle:nth-child(6)  { background: var(--blue);     --tx: -8px; --ty: 44px; animation: particle-burst 2s 1.6s ease-out infinite; }
+
+    /* ── RESPONSIVE ─────────────────────────────────── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .stats-inner { gap: 2rem; }
+      .stat-divider { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════
+     NAVIGATION
+═════════════════════════════════════════════════ -->
+<nav>
+  <div class="wrapper nav-inner">
+    <a href="#hero" class="nav-logo">
+      <div class="nav-logo-circle">
+        <!-- brain SVG -->
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9.5 2C8.12 2 7 3.12 7 4.5c0 .28.05.54.13.79A3.5 3.5 0 004.5 8.5c0 .74.23 1.43.62 2A3 3 0 003 13c0 1.31.84 2.43 2 2.83V17a4 4 0 004 4h1v-2h-1a2 2 0 01-2-2v-1.17A3.001 3.001 0 005 13c0-.52.13-1 .37-1.43A3.49 3.49 0 016.5 12c.28 0 .54-.04.79-.11A4.5 4.5 0 0011 14h1v1h2v-1h1a4.5 4.5 0 003.71-1.89c.25.07.5.11.79.11.67 0 1.29-.19 1.83-.5A3 3 0 0021 13a3 3 0 00-2-2.83V9a3 3 0 00-2-2.83V6a4 4 0 00-4-4H9.5z" fill="white" opacity="0.9"/>
+          <circle cx="9" cy="9" r="1.5" fill="white" opacity="0.6"/>
+          <circle cx="15" cy="9" r="1.5" fill="white" opacity="0.6"/>
+        </svg>
+      </div>
+      <span class="nav-logo-name">Révioria</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#" class="active">Accueil</a></li>
+      <li><a href="#">Cours</a></li>
+      <li><a href="#">Quiz</a></li>
+      <li><a href="#">Classement</a></li>
+      <li><a href="#">Profil</a></li>
+    </ul>
+    <button class="nav-cta">Continuer ›</button>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════════════
+     HERO
+═════════════════════════════════════════════════ -->
+<section id="hero">
+  <canvas id="particle-canvas"></canvas>
+
+  <div class="hero-content">
+    <div class="hero-logo-wrap">
+      <div class="hero-logo-circle">
+        <!-- Larger brain SVG -->
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19 4C16.24 4 14 6.24 14 9c0 .56.09 1.09.25 1.59A7 7 0 009 17c0 1.48.46 2.86 1.25 4A6 6 0 006 26c0 2.63 1.69 4.87 4.03 5.7V34a8 8 0 008 8h2v-4h-2a4 4 0 01-4-4v-2.35A6.002 6.002 0 016 26c0-1.04.26-2.02.73-2.87A6.99 6.99 0 0013 24c.56 0 1.09-.09 1.59-.25A9 9 0 0022 28h2v2h4v-2h2a9 9 0 007.41-3.77c.5.16 1.03.25 1.59.25 1.34 0 2.59-.38 3.65-1.04A6 6 0 0042 26a6 6 0 00-4-5.65V18a6 6 0 00-4-5.65V12a8 8 0 00-8-8H19z" fill="white" opacity="0.95"/>
+          <circle cx="18" cy="17" r="3" fill="white" opacity="0.5"/>
+          <circle cx="30" cy="17" r="3" fill="white" opacity="0.5"/>
+          <path d="M20 22h8" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="hero-brand-name">Révioria</div>
+    <div class="hero-academy">ACADEMY</div>
+
+    <p class="hero-tagline">
+      Révise plus <em>intelligemment</em>. Progresse plus <em>vite</em>.
+    </p>
+
+    <a href="#palette" class="hero-cta">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+      </svg>
+      Commencer maintenant
+    </a>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     STATS BAR
+═════════════════════════════════════════════════ -->
+<div id="stats-bar">
+  <div class="wrapper stats-inner">
+    <div class="stat-item">
+      <div class="stat-number violet" data-target="4238" id="stat-quiz">0</div>
+      <div class="stat-label">Quiz complétés</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-number orange" data-target="12" id="stat-streak">0</div>
+      <div class="stat-label">Jours de streak</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-number green" data-target="1847" id="stat-xp">0</div>
+      <div class="stat-label">XP Total</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     PALETTE
+═════════════════════════════════════════════════ -->
+<section id="palette" class="section-block">
+  <div class="wrapper">
+    <p class="section-label">01 — Palette</p>
+    <div class="swatches">
+      <div class="swatch">
+        <div class="swatch-circle" style="background:#080B14; box-shadow:0 0 0 1px rgba(255,255,255,0.15)"></div>
+        <div class="swatch-label">#080B14<br/>Fond</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-circle" style="background:#0F1423"></div>
+        <div class="swatch-label">#0F1423<br/>Surface</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-circle" style="background:#6C47FF; box-shadow:0 0 20px rgba(108,71,255,0.5)"></div>
+        <div class="swatch-label">#6C47FF<br/>Violet</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-circle" style="background:#8B6FFF; box-shadow:0 0 16px rgba(139,111,255,0.4)"></div>
+        <div class="swatch-label">#8B6FFF<br/>Violet clair</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-circle" style="background:#FF6B2B; box-shadow:0 0 20px rgba(255,107,43,0.5)"></div>
+        <div class="swatch-label">#FF6B2B<br/>Orange flash</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-circle" style="background:#E8EAED"></div>
+        <div class="swatch-label">#E8EAED<br/>Texte</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-circle" style="background:#8892A4"></div>
+        <div class="swatch-label">#8892A4<br/>Texte sec.</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-circle" style="background:#22C55E; box-shadow:0 0 16px rgba(34,197,94,0.4)"></div>
+        <div class="swatch-label">#22C55E<br/>Succès</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-circle" style="background:#38BDF8; box-shadow:0 0 16px rgba(56,189,248,0.4)"></div>
+        <div class="swatch-label">#38BDF8<br/>Gel / Ice</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     TYPOGRAPHIE
+═════════════════════════════════════════════════ -->
+<section class="section-block">
+  <div class="wrapper">
+    <p class="section-label">02 — Typographie</p>
+    <div class="type-demo">
+      <div class="type-row">
+        <div class="type-meta">Syne ExtraBold 56px — Titre principal (gradient)</div>
+        <div class="demo-h1">Maîtrise chaque chapitre</div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">Syne Bold 32px — Sous-titre</div>
+        <div class="demo-h2">Ta progression</div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">DM Sans 16px — Corps</div>
+        <p class="demo-body">
+          Chaque exercice compte. Chaque révision te rapproche de la maîtrise.
+          Révioria transforme ton bac en objectif atteignable, session après session.
+        </p>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">JetBrains Mono Bold 40px — Stats/XP</div>
+        <div class="demo-stats-xp">1 847 XP</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     COMPOSANTS UI
+═════════════════════════════════════════════════ -->
+<section class="section-block">
+  <div class="wrapper">
+    <p class="section-label">03 — Composants UI</p>
+    <div class="cards-grid">
+
+      <!-- ─── STREAK CARD ─── -->
+      <div class="glass-card">
+        <div class="streak-card-content">
+          <div>
+            <div class="streak-label">Streak actuel</div>
+            <div class="streak-header">
+              <span class="flame-icon">🔥</span>
+              <span class="flame-icon" style="animation-delay:0.3s">🔥</span>
+              <span class="streak-number">12 JOURS</span>
+            </div>
+          </div>
+          <div class="gel-row">
+            <span class="gel-icon">❄️</span>
+            <span class="gel-text">2 gels disponibles · Protège ta série</span>
+          </div>
+          <div class="prog-bar-wrap">
+            <div class="prog-meta">
+              <span>Prochain palier</span>
+              <span>85%</span>
+            </div>
+            <div class="prog-track">
+              <div class="prog-fill"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── XP CARD ─── -->
+      <div class="glass-card-animated">
+        <div class="glass-card-inner">
+          <div class="xp-card-content">
+            <div class="xp-level-badge">⚡ NIVEAU 3 · ÉTUDIANT</div>
+            <div class="xp-big">
+              <span class="xp-number">1 847</span>
+              <span class="xp-unit">/ 2 000 XP</span>
+            </div>
+            <div class="xp-bar-track">
+              <div class="xp-bar-fill"></div>
+            </div>
+            <div class="xp-bonus-badge">
+              ✦ +5 XP Bonus Streak · Actif
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── BADGE CARD ─── -->
+      <div class="glass-card" style="display:flex; align-items:center; justify-content:center;">
+        <div class="badge-card-content">
+          <div class="particles-container">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="hex-wrap">
+              <svg class="hex-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="hexGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#6C47FF"/>
+                    <stop offset="100%" stop-color="#FF6B2B"/>
+                  </linearGradient>
+                </defs>
+                <polygon
+                  points="50,5 93,27.5 93,72.5 50,95 7,72.5 7,27.5"
+                  stroke="url(#hexGrad)"
+                  stroke-width="3"
+                  fill="rgba(108,71,255,0.12)"
+                />
+              </svg>
+              <span class="hex-inner-text">×7</span>
+            </div>
+          </div>
+          <div class="badge-title">SÉRIE ×7</div>
+          <div class="badge-sub">7 quiz parfaits d'affilée<br/>
+            <span style="color:var(--violet-l); font-family:'JetBrains Mono',monospace; font-size:0.75rem;">+150 XP bonus débloqué</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     FOOTER SIGNATURE
+═════════════════════════════════════════════════ -->
+<footer style="padding: 3rem 0 2rem; border-top: 1px solid rgba(255,255,255,0.05);">
+  <div class="wrapper" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+    <span style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--text-sec);">
+      Révioria Academy · Design preview C-tech-motivant
+    </span>
+    <span style="font-family:'JetBrains Mono',monospace; font-size:0.7rem;">
+      <span style="color:var(--violet-l);">Syne</span>
+      <span style="color:var(--text-sec);"> · </span>
+      <span style="color:var(--text);">DM Sans</span>
+      <span style="color:var(--text-sec);"> · </span>
+      <span style="color:var(--orange);">JetBrains Mono</span>
+    </span>
+  </div>
+</footer>
+
+<!-- ════════════════════════════════════════════════
+     JAVASCRIPT
+═════════════════════════════════════════════════ -->
+<script>
+/* ── Particle Canvas ─────────────────────────────── */
+(function () {
+  const canvas = document.getElementById('particle-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles;
+
+  const VIOLET = '108,71,255';
+  const ORANGE = '255,107,43';
+
+  function resize() {
+    W = canvas.width  = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+
+  function makeParticle() {
+    const color = Math.random() < 0.6 ? VIOLET : ORANGE;
+    return {
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.5 + 0.3,
+      vx: (Math.random() - 0.5) * 0.25,
+      vy: (Math.random() - 0.5) * 0.25,
+      alpha: Math.random() * 0.5 + 0.1,
+      color,
+      twinkle: Math.random() * Math.PI * 2,
+      twinkleSpeed: Math.random() * 0.02 + 0.005,
+    };
+  }
+
+  function init() {
+    resize();
+    const count = Math.floor((W * H) / 8000);
+    particles = Array.from({ length: count }, makeParticle);
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    for (const p of particles) {
+      p.twinkle += p.twinkleSpeed;
+      const alpha = p.alpha * (0.6 + 0.4 * Math.sin(p.twinkle));
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${p.color},${alpha.toFixed(2)})`;
+      ctx.fill();
+
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0) p.x = W;
+      if (p.x > W) p.x = 0;
+      if (p.y < 0) p.y = H;
+      if (p.y > H) p.y = 0;
+    }
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', () => {
+    resize();
+    const count = Math.floor((W * H) / 8000);
+    while (particles.length < count) particles.push(makeParticle());
+    particles.length = count;
+  });
+
+  init();
+  draw();
+})();
+
+/* ── Animated Number Counters ───────────────────── */
+(function () {
+  function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
+
+  function animateCounter(el, target, duration, formatter) {
+    const start = performance.now();
+    function step(now) {
+      const t = Math.min((now - start) / duration, 1);
+      const val = Math.round(easeOutQuart(t) * target);
+      el.textContent = formatter ? formatter(val) : val;
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function formatXP(n) {
+    if (n >= 1000) return (Math.floor(n / 100) / 10).toFixed(1).replace('.', ' ').replace(/\.0$/, '') + ' ' + String(n % 1000).padStart(3, '0');
+    return n;
+  }
+
+  // Observe stats bar entering viewport
+  const statsBar = document.getElementById('stats-bar');
+  let triggered = false;
+
+  const observer = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting && !triggered) {
+      triggered = true;
+      animateCounter(document.getElementById('stat-quiz'),   4238, 2000);
+      animateCounter(document.getElementById('stat-streak'),   12, 1000);
+      animateCounter(document.getElementById('stat-xp'),     1847, 2200, n => {
+        if (n >= 1000) {
+          const k = Math.floor(n / 1000);
+          const r = n % 1000;
+          return k + '\u202F' + String(r).padStart(3, '0');
+        }
+        return n;
+      });
+    }
+  }, { threshold: 0.5 });
+
+  observer.observe(statsBar);
+})();
+</script>
+</body>
+</html>

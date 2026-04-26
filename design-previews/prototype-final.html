@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Révioria — Prototype Final</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,900&family=Quicksand:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+
+<style>
+/* ══════════════════════════════════════════
+   TOKENS — palette chaude, pas "IA"
+══════════════════════════════════════════ */
+:root {
+  /* Fonds */
+  --bg:      #090A12;
+  --bg2:     #0D0F1B;
+  --bg3:     #121622;
+  --card:    rgba(14, 16, 26, 0.92);
+
+  /* Bordures */
+  --border:  rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.14);
+
+  /* Couleurs actives — indigo (pas violet), coral, amber, teal */
+  --indigo:    #4D5EE8;
+  --indigo-l:  #7A8DF5;
+  --coral:     #EF6E5A;
+  --coral-l:   #F79080;
+  --amber:     #F5C840;
+  --amber-l:   #FAD96A;
+  --teal:      #3DD6BF;
+
+  /* Glows */
+  --glow-i:    rgba(77,94,232,0.16);
+  --glow-c:    rgba(239,110,90,0.14);
+  --glow-a:    rgba(245,200,64,0.12);
+
+  /* Texte */
+  --text:    #ECEDF5;
+  --text2:   #878FA8;
+  --text3:   #484F68;
+
+  /* Radii */
+  --r-sm:  10px;
+  --r-md:  16px;
+  --r-lg:  22px;
+  --r-xl:  30px;
+  --r-pill:999px;
+
+  /* Typo */
+  --f-display: 'DM Serif Display', Georgia, serif;
+  --f-head:    'Nunito', sans-serif;
+  --f-body:    'Quicksand', sans-serif;
+}
+
+/* ══════════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--f-body);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+
+/* Grain subtil sur tout le fond */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  background-size: 256px;
+}
+
+* { position: relative; z-index: 1; }
+
+/* ══════════════════════════════════════════
+   NAV — pill flottante
+══════════════════════════════════════════ */
+.nav-wrap {
+  position: fixed; top: 14px; left: 50%; transform: translateX(-50%);
+  width: calc(100% - 32px); max-width: 860px;
+  z-index: 200;
+}
+
+.nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 18px;
+  background: rgba(9,10,18,0.88);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border2);
+  border-radius: var(--r-pill);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.04);
+}
+
+.nav-logo {
+  display: flex; align-items: center; gap: 9px;
+  font-family: var(--f-head); font-weight: 900; font-size: 1.05rem;
+  letter-spacing: -0.015em; color: var(--text);
+  text-decoration: none;
+}
+
+/* Sparkle ✦ logo */
+.nav-logo svg { flex-shrink: 0; }
+
+.nav-links {
+  display: flex; align-items: center; gap: 2px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: var(--f-body); font-size: .84rem; font-weight: 600;
+  color: var(--text2); text-decoration: none;
+  padding: 6px 13px; border-radius: var(--r-pill);
+  transition: color .18s, background .18s;
+}
+.nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+
+.nav-cta {
+  font-family: var(--f-head); font-size: .84rem; font-weight: 800;
+  background: var(--coral); color: #fff;
+  border: none; padding: 8px 18px; border-radius: var(--r-pill);
+  cursor: pointer; text-decoration: none; white-space: nowrap;
+  transition: background .2s, transform .15s;
+  display: inline-block;
+}
+.nav-cta:hover { background: var(--coral-l); transform: translateY(-1px); }
+
+/* ══════════════════════════════════════════
+   HERO
+══════════════════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  padding: 140px 24px 80px;
+  display: flex; flex-direction: column;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+/* Glows atmosphériques */
+.hero-glow {
+  position: absolute; border-radius: 50%;
+  filter: blur(90px); pointer-events: none; z-index: 0;
+}
+.hero-glow-1 {
+  width: 560px; height: 400px;
+  background: radial-gradient(ellipse, var(--glow-i) 0%, transparent 70%);
+  top: 60px; left: 50%; transform: translateX(-50%);
+}
+.hero-glow-2 {
+  width: 380px; height: 380px;
+  background: radial-gradient(circle, var(--glow-c) 0%, transparent 70%);
+  bottom: 100px; right: -60px;
+}
+.hero-glow-3 {
+  width: 260px; height: 260px;
+  background: radial-gradient(circle, var(--glow-a) 0%, transparent 70%);
+  top: 180px; left: -60px;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(245,200,64,0.1);
+  border: 1px solid rgba(245,200,64,0.22);
+  border-radius: var(--r-pill);
+  padding: 6px 16px;
+  font-family: var(--f-head); font-size: .78rem; font-weight: 800;
+  color: var(--amber-l);
+  letter-spacing: .04em;
+  margin-bottom: 30px;
+}
+
+.hero h1 {
+  font-family: var(--f-display);
+  font-size: clamp(2.8rem, 6.5vw, 5rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  max-width: 760px;
+  margin: 0 auto 22px;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--coral-l);
+}
+
+.hero-sub {
+  font-size: 1.05rem;
+  color: var(--text2);
+  max-width: 500px;
+  margin: 0 auto 44px;
+  font-weight: 500;
+  line-height: 1.7;
+}
+
+.hero-actions {
+  display: flex; align-items: center; gap: 12px;
+  justify-content: center; flex-wrap: wrap;
+  margin-bottom: 64px;
+}
+
+.btn-primary {
+  font-family: var(--f-head); font-weight: 800; font-size: .98rem;
+  background: linear-gradient(135deg, var(--coral) 0%, #E85840 100%);
+  color: #fff; border: none;
+  padding: 14px 28px; border-radius: var(--r-pill);
+  cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+  box-shadow: 0 4px 20px rgba(239,110,90,0.32);
+  transition: transform .18s, box-shadow .18s;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(239,110,90,0.45); }
+
+.btn-ghost {
+  font-family: var(--f-head); font-weight: 700; font-size: .98rem;
+  background: transparent; color: var(--text2);
+  border: 1px solid var(--border2);
+  padding: 14px 26px; border-radius: var(--r-pill);
+  cursor: pointer; text-decoration: none;
+  transition: color .18s, border-color .18s, background .18s;
+}
+.btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.22); background: rgba(255,255,255,0.04); }
+
+/* Stats hero */
+.hero-stats {
+  display: flex; gap: 44px; justify-content: center;
+  flex-wrap: wrap;
+}
+
+.stat-val {
+  font-family: var(--f-head); font-size: 1.8rem; font-weight: 900;
+  color: var(--text); letter-spacing: -0.03em; display: block;
+}
+.stat-val em { font-style: normal; color: var(--coral-l); }
+.stat-lbl { font-size: .78rem; color: var(--text3); font-weight: 600; margin-top: 2px; }
+
+/* App mockup preview */
+.hero-mockup {
+  width: 100%; max-width: 680px; margin: 60px auto 0;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04);
+}
+
+.mockup-bar {
+  background: rgba(255,255,255,0.04);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.mockup-dots { display: flex; gap: 6px; }
+.mockup-dots span { width: 10px; height: 10px; border-radius: 50%; }
+.mockup-dots span:nth-child(1) { background: #FF5F57; }
+.mockup-dots span:nth-child(2) { background: #FFBD2E; }
+.mockup-dots span:nth-child(3) { background: #28CA41; }
+.mockup-url {
+  flex: 1; text-align: center;
+  font-size: .72rem; color: var(--text3);
+  background: rgba(255,255,255,0.04);
+  padding: 3px 12px; border-radius: 6px;
+  font-family: var(--f-body);
+}
+
+.mockup-body { padding: 20px; }
+
+.mockup-header {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 10px 14px;
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 14px;
+}
+
+.mockup-logo-dot {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--indigo); opacity: .7;
+}
+
+.mockup-nav { display: flex; gap: 6px; }
+.mockup-nav-item {
+  font-size: .68rem; color: var(--text3);
+  background: rgba(255,255,255,0.05);
+  padding: 4px 10px; border-radius: 6px;
+  font-family: var(--f-body); font-weight: 600;
+}
+.mockup-nav-item.active {
+  background: rgba(77,94,232,0.18); color: var(--indigo-l);
+}
+
+.mockup-streak {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(245,200,64,0.08);
+  border: 1px solid rgba(245,200,64,0.18);
+  border-radius: var(--r-sm);
+  padding: 10px 14px;
+  margin-bottom: 14px;
+}
+.mockup-streak-flame { font-size: 1.3rem; }
+.mockup-streak-info { flex: 1; }
+.mockup-streak-label { font-size: .7rem; color: var(--amber-l); font-family: var(--f-head); font-weight: 800; }
+.mockup-streak-sub { font-size: .62rem; color: var(--text3); }
+.mockup-streak-badge {
+  font-size: .65rem; font-family: var(--f-head); font-weight: 800;
+  color: var(--amber); background: rgba(245,200,64,0.12);
+  padding: 3px 8px; border-radius: 999px;
+  border: 1px solid rgba(245,200,64,0.2);
+}
+
+.mockup-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.mockup-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 12px;
+}
+.mockup-card-icon { font-size: 1.1rem; margin-bottom: 5px; }
+.mockup-card-name { font-size: .68rem; font-family: var(--f-head); font-weight: 800; color: var(--text); margin-bottom: 2px; }
+.mockup-card-sub { font-size: .6rem; color: var(--text3); }
+
+/* Progress bar dans une card */
+.mockup-bar-wrap { margin-top: 6px; background: rgba(255,255,255,0.07); border-radius: 3px; height: 3px; overflow: hidden; }
+.mockup-bar-fill { height: 100%; border-radius: 3px; background: var(--coral); }
+
+/* ══════════════════════════════════════════
+   LAYOUT UTILS
+══════════════════════════════════════════ */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+.section { padding: 88px 0; }
+.full-divider { border: none; border-top: 1px solid var(--border); }
+
+.section-label {
+  font-size: .72rem; font-weight: 700; letter-spacing: .14em;
+  text-transform: uppercase;
+  display: inline-block; margin-bottom: 14px;
+}
+.section-label.indigo { color: var(--indigo-l); }
+.section-label.coral  { color: var(--coral-l); }
+.section-label.amber  { color: var(--amber-l); }
+.section-label.teal   { color: var(--teal); }
+
+.section-title {
+  font-family: var(--f-head); font-weight: 900;
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  letter-spacing: -0.025em; line-height: 1.15;
+  margin-bottom: 14px;
+}
+
+.section-sub { color: var(--text2); font-size: .98rem; max-width: 480px; font-weight: 500; }
+.section-header { margin-bottom: 52px; }
+
+/* ══════════════════════════════════════════
+   FEATURES — 6 cards
+══════════════════════════════════════════ */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.feature-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 30px;
+  transition: border-color .2s, transform .2s;
+  overflow: hidden;
+}
+.feature-card::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--indigo) 0%, var(--coral) 60%, var(--amber) 100%);
+  opacity: 0; transition: opacity .25s;
+}
+.feature-card:hover { border-color: rgba(77,94,232,0.28); transform: translateY(-3px); }
+.feature-card:hover::before { opacity: 1; }
+
+.feature-icon {
+  width: 46px; height: 46px;
+  border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.25rem; margin-bottom: 18px;
+}
+.fi-indigo { background: rgba(77,94,232,0.12); border: 1px solid rgba(77,94,232,0.2); }
+.fi-coral  { background: rgba(239,110,90,0.10); border: 1px solid rgba(239,110,90,0.2); }
+.fi-amber  { background: rgba(245,200,64,0.10); border: 1px solid rgba(245,200,64,0.2); }
+.fi-teal   { background: rgba(61,214,191,0.10); border: 1px solid rgba(61,214,191,0.2); }
+
+.feature-title {
+  font-family: var(--f-head); font-weight: 800; font-size: 1rem;
+  margin-bottom: 8px; letter-spacing: -0.01em;
+}
+.feature-desc { color: var(--text2); font-size: .88rem; font-weight: 500; line-height: 1.6; }
+
+.feature-badge {
+  display: inline-block; margin-top: 14px;
+  font-size: .68rem; font-weight: 700; font-family: var(--f-head);
+  letter-spacing: .05em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: var(--r-pill);
+}
+.fb-free    { background: rgba(61,214,191,.1);  color: var(--teal);   border: 1px solid rgba(61,214,191,.2); }
+.fb-premium { background: rgba(245,200,64,.1);  color: var(--amber-l);border: 1px solid rgba(245,200,64,.2); }
+
+/* ══════════════════════════════════════════
+   COMMENT ÇA MARCHE — 4 étapes
+══════════════════════════════════════════ */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.step {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 30px 24px;
+  text-align: center;
+  transition: border-color .2s;
+}
+.step:hover { border-color: rgba(77,94,232,0.25); }
+
+.step-num {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--indigo) 0%, var(--coral) 100%);
+  color: #fff;
+  font-family: var(--f-head); font-weight: 900; font-size: .88rem;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.step h3 {
+  font-family: var(--f-head); font-size: .95rem; font-weight: 800;
+  margin-bottom: 8px; letter-spacing: -0.01em;
+}
+.step p { font-size: .84rem; color: var(--text2); font-weight: 500; }
+
+/* ══════════════════════════════════════════
+   MATIÈRES — fond légèrement différent
+══════════════════════════════════════════ */
+.subjects-section {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+  gap: 10px;
+}
+
+.subject-pill {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 18px 16px;
+  text-align: center;
+  cursor: pointer; display: block; text-decoration: none;
+  transition: border-color .2s, background .2s, transform .15s;
+}
+.subject-pill:hover {
+  border-color: rgba(77,94,232,0.35);
+  background: rgba(77,94,232,0.07);
+  transform: translateY(-2px);
+}
+.subject-emoji { font-size: 1.5rem; display: block; margin-bottom: 7px; }
+.subject-name {
+  font-family: var(--f-head); font-weight: 800; font-size: .8rem;
+  color: var(--text); letter-spacing: -0.01em;
+}
+
+/* ══════════════════════════════════════════
+   TÉMOIGNAGES
+══════════════════════════════════════════ */
+.testi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.testi-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 28px;
+  transition: border-color .2s;
+}
+.testi-card:hover { border-color: rgba(239,110,90,0.25); }
+
+.testi-stars { color: var(--amber); font-size: .95rem; margin-bottom: 14px; letter-spacing: 2px; }
+.testi-text { font-size: .88rem; color: var(--text2); font-weight: 500; margin-bottom: 20px; line-height: 1.65; font-style: italic; }
+.testi-author { display: flex; align-items: center; gap: 12px; }
+.testi-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(239,110,90,0.12);
+  border: 1px solid rgba(239,110,90,0.25);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.testi-name { font-family: var(--f-head); font-weight: 800; font-size: .84rem; }
+.testi-meta { font-size: .72rem; color: var(--text3); font-weight: 600; margin-top: 2px; }
+
+/* ══════════════════════════════════════════
+   PRICING
+══════════════════════════════════════════ */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.plan-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 36px 32px;
+  transition: transform .2s;
+}
+.plan-card.featured {
+  border-color: var(--coral);
+  background: linear-gradient(145deg, rgba(239,110,90,0.1) 0%, var(--card) 60%);
+  box-shadow: 0 0 0 1px rgba(239,110,90,0.25), 0 24px 48px rgba(239,110,90,0.08);
+}
+.plan-card:hover { transform: translateY(-3px); }
+
+.plan-badge {
+  display: inline-block; background: var(--coral);
+  color: #fff; font-size: .7rem; font-weight: 800;
+  font-family: var(--f-head); letter-spacing: .07em; text-transform: uppercase;
+  padding: 4px 12px; border-radius: var(--r-pill); margin-bottom: 18px;
+}
+
+.plan-name {
+  font-family: var(--f-head); font-weight: 900; font-size: 1.3rem;
+  letter-spacing: -0.02em; margin-bottom: 8px;
+}
+.plan-desc { color: var(--text2); font-size: .86rem; font-weight: 500; margin-bottom: 24px; }
+
+.plan-price {
+  font-family: var(--f-head); font-weight: 900; font-size: 2.8rem;
+  letter-spacing: -0.04em; line-height: 1;
+}
+.plan-price sub { font-size: 1rem; vertical-align: super; }
+.plan-price span { font-size: 1rem; font-weight: 600; color: var(--text2); }
+.plan-billed { font-size: .78rem; color: var(--text3); font-weight: 600; margin: 8px 0 24px; }
+
+.plan-divider { border: none; border-top: 1px solid var(--border); margin: 22px 0; }
+
+.plan-features { list-style: none; display: flex; flex-direction: column; gap: 11px; margin-bottom: 28px; }
+.plan-features li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: .86rem; color: var(--text2); font-weight: 600;
+}
+.plan-features li::before {
+  content: '✓'; color: var(--teal);
+  font-weight: 900; flex-shrink: 0; margin-top: 1px;
+}
+.plan-features li.off { color: var(--text3); }
+.plan-features li.off::before { content: '–'; color: var(--text3); }
+
+.plan-btn {
+  width: 100%; text-align: center;
+  padding: 13px; border-radius: var(--r-pill);
+  font-family: var(--f-head); font-weight: 800; font-size: .94rem;
+  cursor: pointer; border: none; transition: background .2s, transform .15s;
+}
+.plan-btn-solid {
+  background: linear-gradient(135deg, var(--coral) 0%, #E85840 100%);
+  color: #fff;
+  box-shadow: 0 4px 18px rgba(239,110,90,0.3);
+}
+.plan-btn-solid:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(239,110,90,0.42); }
+.plan-btn-ghost {
+  background: rgba(255,255,255,0.05); color: var(--text2);
+  border: 1px solid var(--border);
+}
+.plan-btn-ghost:hover { color: var(--text); border-color: var(--border2); background: rgba(255,255,255,0.08); }
+
+/* ══════════════════════════════════════════
+   CTA FINAL
+══════════════════════════════════════════ */
+.cta-section {
+  text-align: center;
+  padding: 88px 24px;
+  background: radial-gradient(ellipse at center, rgba(239,110,90,0.08) 0%, rgba(77,94,232,0.06) 50%, transparent 70%);
+  border-top: 1px solid var(--border);
+}
+
+.cta-section h2 {
+  font-family: var(--f-display);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  letter-spacing: -0.02em; margin-bottom: 16px;
+  font-weight: 400;
+}
+
+.cta-section p { color: var(--text2); font-size: 1rem; margin-bottom: 38px; font-weight: 500; }
+
+/* ══════════════════════════════════════════
+   SÉPARATEUR LANDING → APP
+══════════════════════════════════════════ */
+.app-separator {
+  padding: 48px 0;
+  text-align: center;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.app-separator-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--f-head); font-size: .72rem; font-weight: 800;
+  color: var(--text3); text-transform: uppercase; letter-spacing: .12em;
+  background: var(--bg);
+  padding: 8px 22px; border-radius: var(--r-pill);
+  border: 1px solid var(--border2);
+}
+
+/* ══════════════════════════════════════════
+   ZONE APP
+══════════════════════════════════════════ */
+.app-zone { background: var(--bg2); padding: 0 0 80px; }
+
+.app-header {
+  background: rgba(9,10,18,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 0;
+  position: sticky; top: 0; z-index: 50;
+  margin-bottom: 44px;
+}
+
+.app-header-inner {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+
+.app-logo {
+  display: flex; align-items: center; gap: 8px; text-decoration: none;
+}
+.app-logo-mark {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: rgba(77,94,232,0.15);
+  border: 1px solid rgba(77,94,232,0.3);
+  display: flex; align-items: center; justify-content: center;
+}
+.app-logo-name {
+  font-family: var(--f-head); font-weight: 900; font-size: .98rem;
+  color: var(--text); letter-spacing: -0.01em;
+}
+
+.app-nav { display: flex; gap: 2px; }
+.app-nav-link {
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--f-body); font-size: .8rem; font-weight: 600; color: var(--text2);
+  padding: 7px 12px; border-radius: var(--r-sm);
+  text-decoration: none; transition: all .18s;
+}
+.app-nav-link:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+.app-nav-link.active { color: var(--indigo-l); background: rgba(77,94,232,0.12); }
+
+.app-actions { display: flex; align-items: center; gap: 8px; }
+
+.streak-pill {
+  background: rgba(245,200,64,0.1);
+  border: 1px solid rgba(245,200,64,0.2);
+  padding: 5px 12px; border-radius: var(--r-pill);
+  font-family: var(--f-head); font-size: .76rem; font-weight: 800;
+  color: var(--amber-l);
+}
+
+.app-connect {
+  background: var(--indigo); color: #fff; border: none;
+  padding: 7px 16px; border-radius: var(--r-pill); cursor: pointer;
+  font-family: var(--f-head); font-size: .8rem; font-weight: 800;
+  transition: background .2s;
+}
+.app-connect:hover { background: var(--indigo-l); }
+
+/* App home */
+.app-home h2 {
+  font-family: var(--f-head); font-size: 1.5rem; font-weight: 900;
+  letter-spacing: -0.02em; margin-bottom: 6px;
+}
+.app-home p { color: var(--text2); font-size: .88rem; margin-bottom: 22px; }
+
+.level-selector { display: flex; gap: 8px; margin-bottom: 28px; flex-wrap: wrap; }
+.level-btn {
+  padding: 8px 20px; border-radius: var(--r-pill);
+  font-family: var(--f-head); font-size: .84rem; font-weight: 700;
+  cursor: pointer; border: 1px solid var(--border);
+  background: transparent; color: var(--text2);
+  transition: all .18s;
+}
+.level-btn.active { background: var(--indigo); color: #fff; border-color: var(--indigo); }
+.level-btn:hover:not(.active) { border-color: var(--border2); color: var(--text); }
+
+.app-subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+  gap: 10px;
+}
+.app-subject-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 20px;
+  text-decoration: none; color: var(--text);
+  transition: all .22s; display: flex; flex-direction: column; gap: 7px;
+}
+.app-subject-card:hover { transform: translateY(-3px); border-color: rgba(77,94,232,0.3); background: rgba(77,94,232,0.06); }
+.app-subject-emoji { font-size: 1.5rem; }
+.app-subject-name { font-family: var(--f-head); font-size: .86rem; font-weight: 800; }
+.app-subject-count { font-size: .72rem; color: var(--text3); }
+
+/* Progress mini dans les cards matière */
+.app-mini-bar { margin-top: 6px; background: rgba(255,255,255,0.07); border-radius: 2px; height: 3px; overflow: hidden; }
+.app-mini-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--indigo) 0%, var(--coral) 100%); }
+
+/* ══════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════ */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 30px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 14px;
+  background: var(--bg);
+}
+
+.footer-brand {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--f-head); font-weight: 900; font-size: .98rem; color: var(--text2);
+}
+
+.footer-links { display: flex; gap: 22px; }
+.footer-links a { color: var(--text3); font-size: .8rem; font-weight: 600; text-decoration: none; transition: color .18s; }
+.footer-links a:hover { color: var(--text2); }
+.footer-copy { font-size: .76rem; color: var(--text3); font-weight: 600; }
+
+/* ══════════════════════════════════════════
+   ANIMATIONS
+══════════════════════════════════════════ */
+.fade-up { opacity: 0; transform: translateY(22px); transition: opacity .5s ease, transform .5s ease; }
+.fade-up.visible { opacity: 1; transform: translateY(0); }
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .hero h1 { font-size: 2.6rem; }
+  .mockup-cards { grid-template-columns: repeat(2,1fr); }
+  .app-nav .app-nav-link span:last-child { display: none; }
+  .pricing-grid { max-width: 100%; }
+  footer { flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ████████████████████████████████████████
+     NAV
+████████████████████████████████████████ -->
+<div class="nav-wrap">
+  <nav class="nav">
+    <a href="#" class="nav-logo">
+      <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+        <path d="M14 3L16 12L25 14L16 16L14 25L12 16L3 14L12 12Z" fill="#4D5EE8"/>
+        <circle cx="22" cy="6" r="2.2" fill="#EF6E5A" opacity=".85"/>
+        <circle cx="6" cy="22" r="1.5" fill="#3DD6BF" opacity=".75"/>
+      </svg>
+      Révioria
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#features">Fonctionnalités</a></li>
+      <li><a href="#matieres">Matières</a></li>
+      <li><a href="#pricing">Tarifs</a></li>
+    </ul>
+
+    <a href="#app-zone" class="nav-cta">Commencer gratuitement →</a>
+  </nav>
+</div>
+
+<!-- ████████████████████████████████████████
+     HERO
+████████████████████████████████████████ -->
+<section class="hero">
+  <div class="hero-glow hero-glow-1"></div>
+  <div class="hero-glow hero-glow-2"></div>
+  <div class="hero-glow hero-glow-3"></div>
+
+  <div class="hero-badge fade-up">
+    🔥 Nouveau — Streaks, gels & prédiction de note
+  </div>
+
+  <h1 class="fade-up" style="transition-delay:.07s">
+    Révise <em>vraiment</em> bien,<br>pour une fois.
+  </h1>
+
+  <p class="hero-sub fade-up" style="transition-delay:.12s">
+    Des quiz générés en temps réel, alignés sur ton programme de Seconde.
+    Progresse matière par matière, repère tes points faibles, envoie le bac.
+  </p>
+
+  <div class="hero-actions fade-up" style="transition-delay:.17s">
+    <a href="#app-zone" class="btn-primary">🚀 Commencer gratuitement</a>
+    <a href="#how" class="btn-ghost">Voir comment ça marche →</a>
+  </div>
+
+  <div class="hero-stats fade-up" style="transition-delay:.22s">
+    <div class="stat">
+      <span class="stat-val">12k<em>+</em></span>
+      <span class="stat-lbl">lycéens actifs</span>
+    </div>
+    <div class="stat">
+      <span class="stat-val">∞</span>
+      <span class="stat-lbl">questions générées</span>
+    </div>
+    <div class="stat">
+      <span class="stat-val">100<em>%</em></span>
+      <span class="stat-lbl">programme officiel</span>
+    </div>
+  </div>
+
+  <!-- App mockup -->
+  <div class="hero-mockup fade-up" style="transition-delay:.28s">
+    <div class="mockup-bar">
+      <div class="mockup-dots"><span></span><span></span><span></span></div>
+      <div class="mockup-url">revioria.app</div>
+    </div>
+    <div class="mockup-body">
+      <div class="mockup-header">
+        <div class="mockup-logo-dot"></div>
+        <div class="mockup-nav">
+          <span class="mockup-nav-item active">📈 Progression</span>
+          <span class="mockup-nav-item">🧠 Révision</span>
+          <span class="mockup-nav-item">📷 Scan</span>
+          <span class="mockup-nav-item">🌍 Langues</span>
+          <span class="mockup-nav-item">👥 Social</span>
+        </div>
+      </div>
+      <div class="mockup-streak">
+        <span class="mockup-streak-flame">🔥</span>
+        <div class="mockup-streak-info">
+          <div class="mockup-streak-label">12 jours de suite</div>
+          <div class="mockup-streak-sub">1 gel disponible ce mois</div>
+        </div>
+        <span class="mockup-streak-badge">🥇 Série active</span>
+      </div>
+      <div class="mockup-cards">
+        <div class="mockup-card">
+          <div class="mockup-card-icon">📐</div>
+          <div class="mockup-card-name">Mathématiques</div>
+          <div class="mockup-card-sub">8 chapitres</div>
+          <div class="mockup-bar-wrap"><div class="mockup-bar-fill" style="width:72%"></div></div>
+        </div>
+        <div class="mockup-card">
+          <div class="mockup-card-icon">⚗️</div>
+          <div class="mockup-card-name">Physique-Chimie</div>
+          <div class="mockup-card-sub">6 chapitres</div>
+          <div class="mockup-bar-wrap"><div class="mockup-bar-fill" style="width:45%;background:var(--amber)"></div></div>
+        </div>
+        <div class="mockup-card">
+          <div class="mockup-card-icon">📖</div>
+          <div class="mockup-card-name">Français</div>
+          <div class="mockup-card-sub">5 chapitres</div>
+          <div class="mockup-bar-wrap"><div class="mockup-bar-fill" style="width:88%;background:var(--teal)"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="full-divider">
+
+<!-- ████████████████████████████████████████
+     FEATURES
+████████████████████████████████████████ -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="section-label indigo">Fonctionnalités</div>
+      <h2 class="section-title">Tout ce qu'il te faut<br>pour bien réviser</h2>
+      <p class="section-sub">Pas de fiches interminables. Des quiz ciblés, un vrai suivi, et des corrections qui t'expliquent pourquoi tu t'es trompé.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card fade-up">
+        <div class="feature-icon fi-indigo">🧠</div>
+        <div class="feature-title">Quiz adaptatif illimité</div>
+        <div class="feature-desc">QCM, vrai/faux, réponse courte — générés à l'infini, adaptés à ton chapitre et ton niveau réel.</div>
+        <span class="feature-badge fb-free">Gratuit</span>
+      </div>
+      <div class="feature-card fade-up" style="transition-delay:.05s">
+        <div class="feature-icon fi-coral">📈</div>
+        <div class="feature-title">Analyse de progression</div>
+        <div class="feature-desc">Vois exactement où tu pêches par matière et par compétence. Prédiction de ta note en temps réel.</div>
+        <span class="feature-badge fb-free">Gratuit</span>
+      </div>
+      <div class="feature-card fade-up" style="transition-delay:.1s">
+        <div class="feature-icon fi-amber">🔥</div>
+        <div class="feature-title">Streaks & Récompenses</div>
+        <div class="feature-desc">Maintiens ta série quotidienne, débloque des badges, monte en niveau. 3 gels par mois inclus.</div>
+        <span class="feature-badge fb-free">Gratuit</span>
+      </div>
+      <div class="feature-card fade-up" style="transition-delay:.15s">
+        <div class="feature-icon fi-teal">📷</div>
+        <div class="feature-title">Scanner de cours</div>
+        <div class="feature-desc">Prends en photo tes notes ou ta fiche, l'IA les transforme en quiz personnalisés en quelques secondes.</div>
+        <span class="feature-badge fb-premium">Premium</span>
+      </div>
+      <div class="feature-card fade-up" style="transition-delay:.2s">
+        <div class="feature-icon fi-indigo">🌍</div>
+        <div class="feature-title">Pratique des langues</div>
+        <div class="feature-desc">Dialogue, vocabulaire, prononciation — entraîne-toi avec un partenaire disponible 24h/24.</div>
+        <span class="feature-badge fb-premium">Premium</span>
+      </div>
+      <div class="feature-card fade-up" style="transition-delay:.25s">
+        <div class="feature-icon fi-coral">👥</div>
+        <div class="feature-title">Défis entre amis</div>
+        <div class="feature-desc">Lance des défis, compare les classements, révise en compétition. La motivation par le collectif.</div>
+        <span class="feature-badge fb-premium">Premium</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="full-divider">
+
+<!-- ████████████████████████████████████████
+     COMMENT ÇA MARCHE
+████████████████████████████████████████ -->
+<section class="section" id="how">
+  <div class="container">
+    <div class="section-header fade-up" style="text-align:center;max-width:500px;margin:0 auto 52px">
+      <div class="section-label coral">Comment ça marche</div>
+      <h2 class="section-title">Simple. Efficace. Immédiat.</h2>
+    </div>
+    <div class="steps">
+      <div class="step fade-up">
+        <div class="step-num">1</div>
+        <h3>Choisis ta matière</h3>
+        <p>Sélectionne ton niveau et ta matière parmi tout le programme officiel français de Seconde.</p>
+      </div>
+      <div class="step fade-up" style="transition-delay:.07s">
+        <div class="step-num">2</div>
+        <h3>Lance un quiz</h3>
+        <p>Des questions personnalisées générées en temps réel, adaptées exactement à ton niveau actuel.</p>
+      </div>
+      <div class="step fade-up" style="transition-delay:.14s">
+        <div class="step-num">3</div>
+        <h3>Comprends tes erreurs</h3>
+        <p>Chaque réponse est expliquée en détail. Tu sais pourquoi tu t'es trompé, pas juste la bonne réponse.</p>
+      </div>
+      <div class="step fade-up" style="transition-delay:.21s">
+        <div class="step-num">4</div>
+        <h3>Suis ta progression</h3>
+        <p>Visualise tes points forts et faibles, maintiens ta série, prédit ta note avant l'exam.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ████████████████████████████████████████
+     MATIÈRES
+████████████████████████████████████████ -->
+<div class="subjects-section" id="matieres">
+  <section class="section">
+    <div class="container">
+      <div class="section-header fade-up" style="text-align:center;max-width:520px;margin:0 auto 52px">
+        <div class="section-label teal">Programme Seconde</div>
+        <h2 class="section-title">Toutes tes matières,<br>au même endroit</h2>
+        <p class="section-sub" style="margin:0 auto">Chaque matière organisée par chapitres et compétences. Un clic et c'est parti.</p>
+      </div>
+      <div class="subjects-grid fade-up" style="transition-delay:.05s">
+        <a href="#" class="subject-pill"><span class="subject-emoji">📐</span><span class="subject-name">Mathématiques</span></a>
+        <a href="#" class="subject-pill"><span class="subject-emoji">📖</span><span class="subject-name">Français</span></a>
+        <a href="#" class="subject-pill"><span class="subject-emoji">🌍</span><span class="subject-name">Histoire-Géo</span></a>
+        <a href="#" class="subject-pill"><span class="subject-emoji">🧬</span><span class="subject-name">SVT</span></a>
+        <a href="#" class="subject-pill"><span class="subject-emoji">⚗️</span><span class="subject-name">Physique-Chimie</span></a>
+        <a href="#" class="subject-pill"><span class="subject-emoji">💶</span><span class="subject-name">SES</span></a>
+        <a href="#" class="subject-pill"><span class="subject-emoji">🇬🇧</span><span class="subject-name">Anglais</span></a>
+        <a href="#" class="subject-pill"><span class="subject-emoji">🇪🇸</span><span class="subject-name">Espagnol</span></a>
+        <a href="#" class="subject-pill"><span class="subject-emoji">🇩🇪</span><span class="subject-name">Allemand</span></a>
+        <a href="#" class="subject-pill"><span class="subject-emoji">💻</span><span class="subject-name">SNT</span></a>
+        <a href="#" class="subject-pill"><span class="subject-emoji">⚖️</span><span class="subject-name">EMC</span></a>
+        <a href="#" class="subject-pill" style="opacity:.55;border-style:dashed"><span class="subject-emoji">➕</span><span class="subject-name">Bientôt…</span></a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<hr class="full-divider">
+
+<!-- ████████████████████████████████████████
+     TÉMOIGNAGES
+████████████████████████████████████████ -->
+<section class="section">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="section-label coral">Ils révisent avec Révioria</div>
+      <h2 class="section-title">Ce que disent les élèves</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card fade-up">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-text">"J'avais du mal en maths. En 2 semaines de quiz ciblés j'ai compris les chapitres sur lesquels je bloquais vraiment. Note passée de 9 à 15."</div>
+        <div class="testi-author">
+          <div class="testi-avatar">👩</div>
+          <div><div class="testi-name">Léa M.</div><div class="testi-meta">Seconde — Lycée Victor Hugo</div></div>
+        </div>
+      </div>
+      <div class="testi-card fade-up" style="transition-delay:.07s">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-text">"Le truc que j'aime c'est que les questions changent à chaque fois. Je peux réviser le même chapitre 10 fois sans jamais avoir les mêmes questions."</div>
+        <div class="testi-author">
+          <div class="testi-avatar">👦</div>
+          <div><div class="testi-name">Thomas R.</div><div class="testi-meta">Seconde — Lycée Jean Moulin</div></div>
+        </div>
+      </div>
+      <div class="testi-card fade-up" style="transition-delay:.14s">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-text">"La prédiction de note c'est ultra motivant. T'as envie de faire monter ton score avant l'exam. J'ai bossé plus que d'habitude sans m'en rendre compte."</div>
+        <div class="testi-author">
+          <div class="testi-avatar">👩</div>
+          <div><div class="testi-name">Camille D.</div><div class="testi-meta">Seconde — Lycée Pasteur</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="full-divider">
+
+<!-- ████████████████████████████████████████
+     PRICING
+████████████████████████████████████████ -->
+<section class="section" id="pricing">
+  <div class="container">
+    <div class="section-header fade-up" style="text-align:center;max-width:500px;margin:0 auto 52px">
+      <div class="section-label amber">Tarifs</div>
+      <h2 class="section-title">Simple, sans surprise</h2>
+      <p class="section-sub" style="margin:0 auto">Commence gratuitement. Débloque tout avec Premium pour le prix d'un café par mois.</p>
+    </div>
+
+    <div class="pricing-grid fade-up" style="transition-delay:.06s">
+      <!-- Gratuit -->
+      <div class="plan-card">
+        <div class="plan-name">Gratuit</div>
+        <div class="plan-desc">Pour découvrir et commencer à réviser.</div>
+        <div class="plan-price"><sub>€</sub>0 <span>/ toujours</span></div>
+        <div class="plan-billed">Pour toujours gratuit, sans carte requise</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li>Quiz illimités en mode basique</li>
+          <li>3 matières au choix</li>
+          <li>Correction simple</li>
+          <li>Suivi de progression basique</li>
+          <li class="off">Analyse IA des points faibles</li>
+          <li class="off">Prédiction de note</li>
+          <li class="off">Streak & calendrier</li>
+          <li class="off">Scanner de cours</li>
+        </ul>
+        <button class="plan-btn plan-btn-ghost">Commencer gratuitement</button>
+      </div>
+
+      <!-- Premium -->
+      <div class="plan-card featured">
+        <div class="plan-badge">⭐ Recommandé</div>
+        <div class="plan-name">Premium</div>
+        <div class="plan-desc">Pour les élèves qui veulent vraiment progresser.</div>
+        <div class="plan-price"><sub>€</sub>4,99 <span>/ mois</span></div>
+        <div class="plan-billed">ou 39,99 € / an — économise 33%</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li>Toutes les matières</li>
+          <li>Quiz IA avancés (QCM + oral + rédaction)</li>
+          <li>Correction détaillée expliquée</li>
+          <li>Analyse complète des points faibles</li>
+          <li>Prédiction de note en temps réel</li>
+          <li>Streaks, gels & calendrier complet</li>
+          <li>Scanner de cours IA</li>
+          <li>Accès prioritaire aux nouvelles features</li>
+        </ul>
+        <button class="plan-btn plan-btn-solid">Essai gratuit 7 jours →</button>
+      </div>
+    </div>
+
+    <p class="fade-up" style="text-align:center;font-size:.78rem;color:var(--text3);margin-top:18px;transition-delay:.1s">
+      Sans engagement · Résiliation en 1 clic · Paiement sécurisé
+    </p>
+  </div>
+</section>
+
+<!-- ████████████████████████████████████████
+     CTA FINAL
+████████████████████████████████████████ -->
+<div class="cta-section fade-up">
+  <h2>Prêt à réviser <em style="font-style:italic;color:var(--coral-l)">vraiment</em> ?</h2>
+  <p>Rejoins 12 000 lycéens qui progressent déjà avec Révioria.</p>
+  <a href="#app-zone" class="btn-primary">🚀 Accéder à l'application</a>
+</div>
+
+<!-- ████████████████████████████████████████
+     SÉPARATEUR LANDING → APP
+████████████████████████████████████████ -->
+<div class="app-separator" id="app-zone">
+  <span class="app-separator-label">↓ Zone Application</span>
+</div>
+
+<!-- ████████████████████████████████████████
+     ZONE APP
+████████████████████████████████████████ -->
+<div class="app-zone">
+
+  <!-- Header sticky app -->
+  <div class="app-header">
+    <div class="container">
+      <div class="app-header-inner">
+        <a href="#app-zone" class="app-logo">
+          <div class="app-logo-mark">
+            <svg width="14" height="14" viewBox="0 0 28 28" fill="none">
+              <path d="M14 3L16 12L25 14L16 16L14 25L12 16L3 14L12 12Z" fill="#4D5EE8"/>
+            </svg>
+          </div>
+          <span class="app-logo-name">Révioria</span>
+        </a>
+
+        <nav class="app-nav">
+          <a href="#" class="app-nav-link active"><span>📈</span><span>Progression</span></a>
+          <a href="#" class="app-nav-link"><span>🧠</span><span>Révision</span></a>
+          <a href="#" class="app-nav-link"><span>📷</span><span>Scan</span></a>
+          <a href="#" class="app-nav-link"><span>🌍</span><span>Langues</span></a>
+          <a href="#" class="app-nav-link"><span>👥</span><span>Social</span></a>
+        </nav>
+
+        <div class="app-actions">
+          <div class="streak-pill">🔥 12 jours</div>
+          <button class="app-connect">🔑 Connexion</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Home app -->
+  <div class="container app-home fade-up">
+    <h2>Bonjour 👋 Qu'est-ce qu'on révise ?</h2>
+    <p>Choisis ton niveau puis ta matière pour générer un quiz personnalisé.</p>
+
+    <div class="level-selector">
+      <button class="level-btn active">📗 Seconde</button>
+      <button class="level-btn">📘 Première</button>
+      <button class="level-btn">📕 Terminale</button>
+    </div>
+
+    <div class="app-subjects-grid">
+      <a href="#" class="app-subject-card">
+        <span class="app-subject-emoji">📐</span>
+        <span class="app-subject-name">Mathématiques</span>
+        <span class="app-subject-count">8 chapitres</span>
+        <div class="app-mini-bar"><div class="app-mini-fill" style="width:72%"></div></div>
+      </a>
+      <a href="#" class="app-subject-card">
+        <span class="app-subject-emoji">⚗️</span>
+        <span class="app-subject-name">Physique-Chimie</span>
+        <span class="app-subject-count">6 chapitres</span>
+        <div class="app-mini-bar"><div class="app-mini-fill" style="width:45%;background:var(--amber)"></div></div>
+      </a>
+      <a href="#" class="app-subject-card">
+        <span class="app-subject-emoji">🧬</span>
+        <span class="app-subject-name">SVT</span>
+        <span class="app-subject-count">5 chapitres</span>
+        <div class="app-mini-bar"><div class="app-mini-fill" style="width:30%"></div></div>
+      </a>
+      <a href="#" class="app-subject-card">
+        <span class="app-subject-emoji">📖</span>
+        <span class="app-subject-name">Français</span>
+        <span class="app-subject-count">5 chapitres</span>
+        <div class="app-mini-bar"><div class="app-mini-fill" style="width:88%;background:var(--teal)"></div></div>
+      </a>
+      <a href="#" class="app-subject-card">
+        <span class="app-subject-emoji">🏛️</span>
+        <span class="app-subject-name">Histoire-Géo</span>
+        <span class="app-subject-count">7 chapitres</span>
+        <div class="app-mini-bar"><div class="app-mini-fill" style="width:55%"></div></div>
+      </a>
+      <a href="#" class="app-subject-card">
+        <span class="app-subject-emoji">💶</span>
+        <span class="app-subject-name">SES</span>
+        <span class="app-subject-count">4 chapitres</span>
+        <div class="app-mini-bar"><div class="app-mini-fill" style="width:20%;background:var(--amber)"></div></div>
+      </a>
+      <a href="#" class="app-subject-card" style="opacity:.55;border-style:dashed">
+        <span class="app-subject-emoji">➕</span>
+        <span class="app-subject-name" style="color:var(--text2)">Spécialité</span>
+        <span class="app-subject-count">Bientôt</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ████████████████████████████████████████
+     FOOTER
+████████████████████████████████████████ -->
+<footer>
+  <div class="footer-brand">
+    <svg width="18" height="18" viewBox="0 0 28 28" fill="none">
+      <path d="M14 3L16 12L25 14L16 16L14 25L12 16L3 14L12 12Z" fill="#4D5EE8" opacity=".7"/>
+    </svg>
+    Révioria
+  </div>
+  <div class="footer-links">
+    <a href="#">Mentions légales</a>
+    <a href="#">Confidentialité</a>
+    <a href="#">CGU</a>
+    <a href="#">Contact</a>
+  </div>
+  <span class="footer-copy">© 2026 Révioria</span>
+</footer>
+
+<script>
+// Fade-up au scroll
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// Boutons niveau
+document.querySelectorAll('.level-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+// Nav app liens actifs
+document.querySelectorAll('.app-nav-link').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelectorAll('.app-nav-link').forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

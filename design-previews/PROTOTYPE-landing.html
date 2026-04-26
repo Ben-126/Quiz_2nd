@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Révioria — Prototype Landing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & BASE ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:         #0C0D18;
+  --bg2:        #101422;
+  --bg3:        #151928;
+  --card:       rgba(18, 22, 36, 0.88);
+  --border:     rgba(140, 120, 200, 0.16);
+  --border2:    rgba(140, 120, 200, 0.32);
+  --pervenche:  #8B7ED8;
+  --pervenche2: #B0A4EE;
+  --peach:      #F08060;
+  --peach2:     #F8A878;
+  --green:      #5EEAD4;
+  --amber:      #F5C842;
+  --text:       #ECEEF5;
+  --text2:      #9AA3BC;
+  --text3:      #555E7A;
+  --radius:     20px;
+  --radius-sm:  12px;
+  --radius-lg:  30px;
+  --font-head:  'Nunito', sans-serif;
+  --font-body:  'Quicksand', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── NOISE TEXTURE ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 0;
+}
+
+/* ── UTILS ── */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+.tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-head); font-size: 11px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .1em;
+  padding: 4px 12px; border-radius: 999px;
+  background: rgba(123,140,212,.12); color: var(--pervenche2);
+  border: 1px solid rgba(123,140,212,.25);
+}
+.badge-new { background: rgba(245,200,66,.1); color: var(--amber); border-color: rgba(245,200,66,.25); }
+
+/* ── FLOATING NAV ── */
+.nav-wrap {
+  position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+  width: calc(100% - 40px); max-width: 900px;
+  z-index: 100;
+}
+.nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 20px;
+  background: rgba(17, 21, 38, 0.88);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  box-shadow: 0 8px 40px rgba(0,0,0,.35);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--font-head); font-weight: 900; font-size: 1.1rem;
+  color: var(--text); text-decoration: none;
+}
+.nav-logo svg { flex-shrink: 0; }
+.nav-links {
+  display: flex; align-items: center; gap: 4px;
+  list-style: none;
+}
+.nav-links a {
+  font-family: var(--font-body); font-size: .85rem; font-weight: 600;
+  color: var(--text2); text-decoration: none;
+  padding: 6px 14px; border-radius: 999px;
+  transition: all .2s;
+}
+.nav-links a:hover { color: var(--text); background: rgba(123,140,212,.1); }
+.nav-cta {
+  font-family: var(--font-head); font-size: .85rem; font-weight: 800;
+  background: var(--pervenche); color: #fff;
+  border: none; padding: 8px 20px; border-radius: 999px;
+  cursor: pointer; transition: all .25s;
+  white-space: nowrap;
+  text-decoration: none;
+  display: inline-block;
+}
+.nav-cta:hover { background: var(--pervenche2); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(123,140,212,.4); }
+
+/* ── HERO ── */
+.hero {
+  position: relative; padding: 140px 0 80px;
+  min-height: 100vh; display: flex; align-items: center;
+  overflow: hidden;
+}
+.hero-glow {
+  position: absolute; border-radius: 50%; filter: blur(80px);
+  pointer-events: none;
+}
+.hero-glow-1 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(139,126,216,.24) 0%, transparent 70%);
+  top: -100px; left: -100px;
+}
+.hero-glow-2 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(240,128,96,.20) 0%, transparent 70%);
+  bottom: 0; right: -80px;
+}
+.hero-glow-3 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(94,234,212,.10) 0%, transparent 70%);
+  top: 40%; left: 55%;
+}
+.hero-content { position: relative; z-index: 1; max-width: 680px; }
+.hero-eyebrow { margin-bottom: 20px; }
+.hero h1 {
+  font-family: var(--font-head); font-size: clamp(2.8rem, 6vw, 4.2rem);
+  font-weight: 900; line-height: 1.08; margin-bottom: 20px;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.hero h1 span.accent {
+  background: linear-gradient(135deg, var(--pervenche) 0%, var(--peach) 70%, var(--amber) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-sub {
+  font-size: 1.1rem; color: var(--text2); max-width: 520px;
+  margin-bottom: 36px; line-height: 1.7;
+}
+.hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 48px; }
+.btn-primary {
+  font-family: var(--font-head); font-weight: 800; font-size: 1rem;
+  background: linear-gradient(135deg, var(--pervenche) 0%, #6B7FD4 100%);
+  color: #fff; border: none; padding: 14px 30px; border-radius: 999px;
+  cursor: pointer; transition: all .25s; text-decoration: none;
+  box-shadow: 0 4px 24px rgba(123,140,212,.35);
+  display: inline-block;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(123,140,212,.5); }
+.btn-secondary {
+  font-family: var(--font-head); font-weight: 700; font-size: 1rem;
+  background: transparent; color: var(--text2);
+  border: 1px solid var(--border2); padding: 14px 28px; border-radius: 999px;
+  cursor: pointer; transition: all .25s; text-decoration: none; display: inline-block;
+}
+.btn-secondary:hover { color: var(--text); border-color: var(--pervenche); background: rgba(123,140,212,.08); }
+.hero-stats {
+  display: flex; gap: 32px; flex-wrap: wrap;
+}
+.hero-stat { }
+.hero-stat .num {
+  font-family: var(--font-head); font-size: 1.6rem; font-weight: 900; color: var(--text);
+  display: block;
+}
+.hero-stat .lbl { font-size: .8rem; color: var(--text3); font-weight: 600; }
+
+/* ── APP PREVIEW ── */
+.app-preview {
+  position: relative; z-index: 1;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 20px 80px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.04);
+  margin-top: 60px;
+}
+.preview-bar {
+  background: rgba(255,255,255,.04);
+  padding: 10px 16px;
+  display: flex; align-items: center; gap: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.preview-dots { display: flex; gap: 6px; }
+.preview-dots span {
+  width: 10px; height: 10px; border-radius: 50%;
+}
+.preview-dots span:nth-child(1) { background: #FF5F57; }
+.preview-dots span:nth-child(2) { background: #FFBD2E; }
+.preview-dots span:nth-child(3) { background: #28CA41; }
+.preview-url {
+  flex: 1; text-align: center;
+  font-size: .75rem; color: var(--text3);
+  background: rgba(255,255,255,.04); padding: 3px 12px; border-radius: 6px;
+  font-family: var(--font-body);
+}
+.preview-body {
+  padding: 20px;
+  min-height: 200px;
+}
+.preview-header-mock {
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 16px;
+}
+.preview-logo-mock {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--pervenche); opacity: .7;
+}
+.preview-nav-mock { display: flex; gap: 8px; }
+.preview-nav-item {
+  font-size: .7rem; color: var(--text3);
+  background: rgba(255,255,255,.05); padding: 4px 10px; border-radius: 6px;
+  font-family: var(--font-body); font-weight: 600;
+}
+.preview-nav-item.active { background: rgba(123,140,212,.2); color: var(--pervenche2); }
+.preview-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.preview-card {
+  background: rgba(255,255,255,.04); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 14px;
+  font-size: .7rem; color: var(--text2);
+  font-family: var(--font-body);
+}
+.preview-card .card-icon { font-size: 1.2rem; margin-bottom: 6px; }
+.preview-card .card-lbl { font-weight: 700; color: var(--text); font-size: .72rem; margin-bottom: 3px; }
+
+/* ── SECTION GÉNÉRIQUE ── */
+section { padding: 80px 0; position: relative; }
+.section-head { text-align: center; max-width: 600px; margin: 0 auto 56px; }
+.section-head h2 {
+  font-family: var(--font-head); font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  font-weight: 900; margin: 12px 0 16px; color: var(--text);
+  letter-spacing: -0.015em;
+}
+.section-head p { color: var(--text2); font-size: 1rem; line-height: 1.7; }
+
+/* ── FEATURES ── */
+.features-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+.feature-card {
+  background: var(--card);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  transition: all .3s;
+  position: relative; overflow: hidden;
+}
+.feature-card::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--pervenche) 0%, var(--peach) 60%, var(--amber) 100%);
+  opacity: 0; transition: opacity .3s;
+}
+.feature-card:hover { transform: translateY(-4px); border-color: var(--border2); }
+.feature-card:hover::before { opacity: 1; }
+.feature-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  background: rgba(123,140,212,.12); border: 1px solid rgba(123,140,212,.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; margin-bottom: 16px;
+}
+.feature-card h3 {
+  font-family: var(--font-head); font-size: 1rem; font-weight: 800;
+  color: var(--text); margin-bottom: 8px;
+}
+.feature-card p { font-size: .88rem; color: var(--text2); line-height: 1.6; }
+.feature-badge {
+  display: inline-block; font-size: .68rem; font-weight: 700;
+  padding: 2px 8px; border-radius: 999px; margin-top: 10px;
+  font-family: var(--font-head); text-transform: uppercase; letter-spacing: .05em;
+}
+.fb-free { background: rgba(94,234,212,.1); color: var(--green); border: 1px solid rgba(94,234,212,.2); }
+.fb-premium { background: rgba(232,134,92,.1); color: var(--peach2); border: 1px solid rgba(232,134,92,.2); }
+
+/* ── COMMENT ÇA MARCHE ── */
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; }
+.step {
+  text-align: center; padding: 32px 24px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); position: relative;
+}
+.step-num {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--pervenche) 0%, #6B7FD4 100%);
+  color: #fff; font-family: var(--font-head); font-weight: 900; font-size: .9rem;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+}
+.step h3 { font-family: var(--font-head); font-size: .95rem; font-weight: 800; margin-bottom: 8px; }
+.step p { font-size: .83rem; color: var(--text2); }
+
+/* ── PRICING ── */
+.pricing-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px; max-width: 760px; margin: 0 auto;
+}
+.pricing-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 36px 32px;
+  transition: transform .3s;
+}
+.pricing-card:hover { transform: translateY(-4px); }
+.pricing-card.featured {
+  border-color: var(--pervenche);
+  background: linear-gradient(135deg, rgba(123,140,212,.12) 0%, rgba(232,134,92,.06) 100%);
+  box-shadow: 0 0 40px rgba(123,140,212,.15);
+}
+.pricing-name {
+  font-family: var(--font-head); font-size: .8rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .12em; color: var(--text2); margin-bottom: 8px;
+}
+.pricing-card.featured .pricing-name { color: var(--pervenche2); }
+.pricing-price {
+  font-family: var(--font-head); font-size: 3rem; font-weight: 900; color: var(--text);
+  line-height: 1; margin-bottom: 4px;
+}
+.pricing-price span { font-size: 1rem; font-weight: 600; color: var(--text2); }
+.pricing-desc { font-size: .85rem; color: var(--text2); margin-bottom: 28px; }
+.pricing-features { list-style: none; margin-bottom: 28px; display: flex; flex-direction: column; gap: 10px; }
+.pricing-features li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: .88rem; color: var(--text2);
+}
+.check { color: var(--green); font-size: .9rem; flex-shrink: 0; margin-top: 1px; }
+.pricing-btn {
+  width: 100%; padding: 13px; border-radius: 999px;
+  font-family: var(--font-head); font-size: .95rem; font-weight: 800;
+  cursor: pointer; transition: all .25s; border: none;
+}
+.pricing-btn-ghost {
+  background: rgba(255,255,255,.06); color: var(--text);
+  border: 1px solid var(--border);
+}
+.pricing-btn-ghost:hover { background: rgba(255,255,255,.1); }
+.pricing-btn-solid {
+  background: linear-gradient(135deg, var(--pervenche) 0%, #6B7FD4 100%);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(123,140,212,.35);
+}
+.pricing-btn-solid:hover { box-shadow: 0 8px 32px rgba(123,140,212,.5); transform: translateY(-1px); }
+.popular-badge {
+  background: linear-gradient(135deg, var(--pervenche) 0%, var(--peach) 100%);
+  color: #fff; font-size: .7rem; font-family: var(--font-head); font-weight: 800;
+  padding: 3px 12px; border-radius: 999px; margin-bottom: 16px;
+  display: inline-block;
+}
+
+/* ── SÉPARATEUR APP ── */
+.app-separator {
+  padding: 60px 0 20px;
+  text-align: center; position: relative;
+}
+.app-separator::before {
+  content: ''; position: absolute;
+  left: 0; right: 0; top: 50%;
+  height: 1px; background: var(--border);
+}
+.app-separator-label {
+  position: relative; z-index: 1; display: inline-block;
+  background: var(--bg2); padding: 10px 24px; border-radius: 999px;
+  border: 1px solid var(--border);
+  font-family: var(--font-head); font-size: .8rem; font-weight: 800;
+  color: var(--text2); text-transform: uppercase; letter-spacing: .1em;
+}
+
+/* ── APP ZONE ── */
+.app-zone { background: var(--bg2); padding: 40px 0 80px; }
+.app-header {
+  background: rgba(17,21,38,.9); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 0; margin-bottom: 40px;
+  position: sticky; top: 0; z-index: 50;
+}
+.app-header-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
+}
+.app-logo {
+  display: flex; align-items: center; gap: 8px; text-decoration: none;
+}
+.app-logo-circle {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 1.5px solid var(--pervenche);
+  display: flex; align-items: center; justify-content: center;
+}
+.app-logo-name {
+  font-family: var(--font-head); font-weight: 900; font-size: 1rem;
+  color: var(--text);
+}
+.app-nav { display: flex; gap: 4px; align-items: center; }
+.app-nav-link {
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--font-body); font-size: .82rem; font-weight: 600; color: var(--text2);
+  padding: 7px 14px; border-radius: var(--radius-sm);
+  text-decoration: none; transition: all .2s;
+}
+.app-nav-link:hover { color: var(--text); background: rgba(123,140,212,.1); }
+.app-nav-link.active { color: var(--pervenche2); background: rgba(123,140,212,.12); }
+.app-actions { display: flex; align-items: center; gap: 8px; }
+.xp-pill {
+  background: rgba(123,140,212,.12); border: 1px solid rgba(123,140,212,.2);
+  padding: 5px 12px; border-radius: 999px;
+  font-family: var(--font-head); font-size: .78rem; font-weight: 800;
+  color: var(--pervenche2);
+}
+.app-btn-connect {
+  background: var(--pervenche); color: #fff; border: none;
+  padding: 7px 16px; border-radius: 999px; cursor: pointer;
+  font-family: var(--font-head); font-size: .82rem; font-weight: 800;
+  transition: all .2s;
+}
+.app-btn-connect:hover { background: var(--pervenche2); }
+
+/* ── HOME APP ── */
+.app-home { }
+.level-selector {
+  display: flex; gap: 8px; margin-bottom: 28px; flex-wrap: wrap;
+}
+.level-btn {
+  padding: 8px 20px; border-radius: 999px;
+  font-family: var(--font-head); font-size: .85rem; font-weight: 700;
+  cursor: pointer; border: 1px solid var(--border);
+  background: transparent; color: var(--text2);
+  transition: all .2s;
+}
+.level-btn.active {
+  background: var(--pervenche); color: #fff; border-color: var(--pervenche);
+}
+.level-btn:hover:not(.active) { border-color: var(--border2); color: var(--text); }
+.subjects-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+}
+.subject-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px;
+  text-decoration: none; color: var(--text);
+  transition: all .25s; display: flex; flex-direction: column; gap: 8px;
+}
+.subject-card:hover { transform: translateY(-3px); border-color: var(--border2); }
+.subject-emoji { font-size: 1.6rem; }
+.subject-name {
+  font-family: var(--font-head); font-size: .9rem; font-weight: 800;
+}
+.subject-count { font-size: .75rem; color: var(--text3); }
+
+/* ── CTA FINAL ── */
+.cta-final {
+  padding: 80px 0;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(123,140,212,.08) 0%, rgba(232,134,92,.05) 100%);
+  border-top: 1px solid var(--border);
+}
+.cta-final h2 {
+  font-family: var(--font-head); font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 900; margin-bottom: 16px;
+}
+.cta-final p { color: var(--text2); margin-bottom: 32px; font-size: 1rem; }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--bg); border-top: 1px solid var(--border);
+  padding: 32px 0;
+}
+.footer-inner {
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+}
+.footer-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+.footer-logo-name {
+  font-family: var(--font-head); font-weight: 900; color: var(--text2); font-size: .95rem;
+}
+.footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+.footer-links a {
+  font-size: .8rem; color: var(--text3); text-decoration: none;
+  transition: color .2s;
+}
+.footer-links a:hover { color: var(--text2); }
+.footer-copy { font-size: .78rem; color: var(--text3); }
+
+/* ── SECTION LABEL ── */
+.section-label {
+  display: inline-block; margin-bottom: 16px;
+  background: var(--bg2); border: 1px solid var(--border2);
+  padding: 6px 16px; border-radius: 999px;
+  font-family: var(--font-head); font-size: .7rem; font-weight: 800;
+  color: var(--pervenche2); text-transform: uppercase; letter-spacing: .1em;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  height: 1px; background: var(--border);
+  margin: 0;
+}
+
+/* ── ANIM ── */
+.fade-up { opacity: 0; transform: translateY(24px); transition: opacity .5s ease, transform .5s ease; }
+.fade-up.visible { opacity: 1; transform: translateY(0); }
+
+/* ── ANNOTATION ── */
+.annotation {
+  position: absolute; right: -8px; top: -8px;
+  background: var(--peach); color: #fff;
+  font-family: var(--font-head); font-size: .65rem; font-weight: 800;
+  padding: 3px 8px; border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(232,134,92,.4);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .preview-cards { grid-template-columns: repeat(2, 1fr); }
+  .hero { padding: 120px 0 60px; }
+  .hero-stats { gap: 20px; }
+  .app-nav .app-nav-link span:not(:first-child) { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════
+     🌐 ZONE LANDING PAGE
+════════════════════════════════════ -->
+
+<!-- NAVBAR -->
+<div class="nav-wrap">
+  <nav class="nav">
+    <a href="#" class="nav-logo">
+      <!-- Logo SVG (sparkle étoile) -->
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 4L15.6 12.4L24 14L15.6 15.6L14 24L12.4 15.6L4 14L12.4 12.4Z" fill="#8B7ED8"/>
+        <circle cx="21.5" cy="6.5" r="1.8" fill="#F08060" opacity=".85"/>
+        <circle cx="6" cy="22" r="1.2" fill="#5EEAD4" opacity=".7"/>
+      </svg>
+      Révioria
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">Fonctionnalités</a></li>
+      <li><a href="#how">Comment ça marche</a></li>
+      <li><a href="#pricing">Tarifs</a></li>
+    </ul>
+    <a href="#app-zone" class="nav-cta">Commencer gratuitement</a>
+  </nav>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow hero-glow-1"></div>
+  <div class="hero-glow hero-glow-2"></div>
+  <div class="hero-glow hero-glow-3"></div>
+  <div class="container">
+    <div class="hero-content fade-up">
+      <div class="hero-eyebrow">
+        <span class="tag badge-new">🔥 Nouveau — Streaks & Gels</span>
+      </div>
+      <h1>
+        Révise plus<br>
+        <span class="accent">efficacement.</span><br>
+        Réussis vraiment.
+      </h1>
+      <p class="hero-sub">
+        L'IA qui s'adapte à ton programme scolaire. Quiz générés en temps réel, révision espacée, coach personnel — tout ce dont tu as besoin pour le bac.
+      </p>
+      <div class="hero-ctas">
+        <a href="#app-zone" class="btn-primary">🚀 Commencer gratuitement</a>
+        <a href="#how" class="btn-secondary">Voir comment ça marche →</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="num">12 400+</span>
+          <span class="lbl">lycéens actifs</span>
+        </div>
+        <div class="hero-stat">
+          <span class="num">98 000+</span>
+          <span class="lbl">quiz générés</span>
+        </div>
+        <div class="hero-stat">
+          <span class="num">4.8★</span>
+          <span class="lbl">satisfaction</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- App Preview Mockup -->
+    <div class="app-preview fade-up" style="transition-delay:.15s">
+      <div class="preview-bar">
+        <div class="preview-dots">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="preview-url">revioria.app</div>
+      </div>
+      <div class="preview-body">
+        <div class="preview-header-mock">
+          <div class="preview-logo-mock"></div>
+          <div class="preview-nav-mock">
+            <span class="preview-nav-item active">📈 Progression</span>
+            <span class="preview-nav-item">🧠 Révision</span>
+            <span class="preview-nav-item">📷 Scan</span>
+            <span class="preview-nav-item">🌍 Langues</span>
+            <span class="preview-nav-item">👥 Social</span>
+          </div>
+        </div>
+        <div class="preview-cards">
+          <div class="preview-card">
+            <div class="card-icon">📚</div>
+            <div class="card-lbl">Mathématiques</div>
+            <div style="color:#5A6380;font-size:.65rem">8 chapitres • 24 quiz</div>
+          </div>
+          <div class="preview-card">
+            <div class="card-icon">🔬</div>
+            <div class="card-lbl">Physique-Chimie</div>
+            <div style="color:#5A6380;font-size:.65rem">6 chapitres • 18 quiz</div>
+          </div>
+          <div class="preview-card">
+            <div class="card-icon">📖</div>
+            <div class="card-lbl">Français</div>
+            <div style="color:#5A6380;font-size:.65rem">5 chapitres • 15 quiz</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="container">
+    <div class="section-head fade-up">
+      <span class="section-label">Fonctionnalités</span>
+      <h2>Tout ce qu'il te faut pour réussir</h2>
+      <p>De la génération de quiz IA au coach personnel, Révioria couvre tout ton programme scolaire.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card fade-up">
+        <div class="feature-icon">⚡</div>
+        <h3>Quiz IA adaptatif</h3>
+        <p>Des questions générées instantanément selon ton niveau et ton programme. QCM, vrai/faux, réponses courtes.</p>
+        <span class="feature-badge fb-free">Gratuit</span>
+      </div>
+      <div class="feature-card fade-up" style="transition-delay:.05s">
+        <div class="feature-icon">🧠</div>
+        <h3>Révision espacée</h3>
+        <p>L'algorithme mémorise ce que tu oublies et te le repose au bon moment. Zéro effort de planification.</p>
+        <span class="feature-badge fb-free">Gratuit</span>
+      </div>
+      <div class="feature-card fade-up" style="transition-delay:.1s">
+        <div class="feature-icon">📷</div>
+        <h3>Scanner de cours</h3>
+        <p>Prends en photo tes notes ou ta fiche, l'IA les transforme en quiz en quelques secondes.</p>
+        <span class="feature-badge fb-premium">Premium</span>
+      </div>
+      <div class="feature-card fade-up" style="transition-delay:.15s">
+        <div class="feature-icon">🌍</div>
+        <h3>Langues vivantes</h3>
+        <p>Dialogue, prononciation, vocabulaire — entraîne-toi avec un partenaire IA disponible 24h/24.</p>
+        <span class="feature-badge fb-premium">Premium</span>
+      </div>
+      <div class="feature-card fade-up" style="transition-delay:.2s">
+        <div class="feature-icon">🔥</div>
+        <h3>Streaks & Récompenses</h3>
+        <p>Maintiens ta série quotidienne, débloque des badges, monte en niveau. 3 gels par mois pour protéger ta progression.</p>
+        <span class="feature-badge fb-free">Gratuit</span>
+      </div>
+      <div class="feature-card fade-up" style="transition-delay:.25s">
+        <div class="feature-icon">👥</div>
+        <h3>Défis entre amis</h3>
+        <p>Lance des défis, compare les classements, révise en compétition. La motivation par le social.</p>
+        <span class="feature-badge fb-premium">Premium</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- COMMENT ÇA MARCHE -->
+<section id="how">
+  <div class="container">
+    <div class="section-head fade-up">
+      <span class="section-label">Comment ça marche</span>
+      <h2>Simple. Efficace. Immédiat.</h2>
+    </div>
+    <div class="steps">
+      <div class="step fade-up">
+        <div class="step-num">1</div>
+        <h3>Choisis ta matière</h3>
+        <p>Sélectionne ton niveau et ta matière parmi tout le programme officiel français.</p>
+      </div>
+      <div class="step fade-up" style="transition-delay:.08s">
+        <div class="step-num">2</div>
+        <h3>Lance un quiz</h3>
+        <p>L'IA génère des questions personnalisées en temps réel, adaptées à ton niveau actuel.</p>
+      </div>
+      <div class="step fade-up" style="transition-delay:.16s">
+        <div class="step-num">3</div>
+        <h3>Suis ta progression</h3>
+        <p>Visualise tes points forts et faibles, prédit ta note, maintiens ta série quotidienne.</p>
+      </div>
+      <div class="step fade-up" style="transition-delay:.24s">
+        <div class="step-num">4</div>
+        <h3>Perfectionne-toi</h3>
+        <p>Le système de révision espacée te fait retravailler exactement ce que tu risques d'oublier.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="container">
+    <div class="section-head fade-up">
+      <span class="section-label">Tarifs</span>
+      <h2>Gratuit pour commencer, puissant pour aller loin</h2>
+      <p>Commence gratuitement. Passe en Premium quand tu veux plus.</p>
+    </div>
+    <div class="pricing-grid fade-up">
+      <div class="pricing-card">
+        <div class="pricing-name">Gratuit</div>
+        <div class="pricing-price">0€ <span>/ toujours</span></div>
+        <p class="pricing-desc">Tout ce qu'il faut pour commencer à réviser.</p>
+        <ul class="pricing-features">
+          <li><span class="check">✓</span> Quiz IA illimités</li>
+          <li><span class="check">✓</span> Révision espacée</li>
+          <li><span class="check">✓</span> Streaks & badges</li>
+          <li><span class="check">✓</span> Progression & stats</li>
+          <li style="color:var(--text3)"><span class="check" style="color:var(--text3)">✕</span> Scanner de cours</li>
+          <li style="color:var(--text3)"><span class="check" style="color:var(--text3)">✕</span> Module langues</li>
+          <li style="color:var(--text3)"><span class="check" style="color:var(--text3)">✕</span> Défis entre amis</li>
+        </ul>
+        <button class="pricing-btn pricing-btn-ghost">Commencer gratuitement</button>
+      </div>
+      <div class="pricing-card featured">
+        <div class="popular-badge">⭐ Le plus populaire</div>
+        <div class="pricing-name">Premium</div>
+        <div class="pricing-price">4.99€ <span>/ mois</span></div>
+        <p class="pricing-desc">Toutes les fonctionnalités. Zéro limite.</p>
+        <ul class="pricing-features">
+          <li><span class="check">✓</span> Tout le plan Gratuit</li>
+          <li><span class="check">✓</span> Scanner de cours IA</li>
+          <li><span class="check">✓</span> Module langues complet</li>
+          <li><span class="check">✓</span> Défis & classements</li>
+          <li><span class="check">✓</span> Coach IA illimité</li>
+          <li><span class="check">✓</span> Analyse prédictive de note</li>
+          <li><span class="check">✓</span> Support prioritaire</li>
+        </ul>
+        <button class="pricing-btn pricing-btn-solid">Essayer 7 jours gratuits</button>
+      </div>
+    </div>
+    <p style="text-align:center;font-size:.8rem;color:var(--text3);margin-top:20px">
+      Sans engagement • Résiliation en 1 clic • Paiement sécurisé
+    </p>
+  </div>
+</section>
+
+<!-- CTA FINAL LANDING -->
+<div class="cta-final fade-up">
+  <div class="container">
+    <h2>Prêt à réviser intelligemment ?</h2>
+    <p>Rejoins 12 400 lycéens qui révisent déjà avec Révioria.</p>
+    <a href="#app-zone" class="btn-primary">🚀 Accéder à l'application</a>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     🔀 TRANSITION LANDING → APP
+════════════════════════════════════ -->
+<div class="app-separator" id="app-zone">
+  <span class="app-separator-label">↓ Zone Application</span>
+</div>
+
+<!-- ════════════════════════════════════
+     📱 ZONE APP
+════════════════════════════════════ -->
+<div class="app-zone">
+
+  <!-- APP HEADER -->
+  <div class="app-header">
+    <div class="container">
+      <div class="app-header-inner">
+        <!-- Logo -->
+        <a href="#app-zone" class="app-logo">
+          <div class="app-logo-circle">
+            <svg width="16" height="16" viewBox="0 0 28 28" fill="none">
+              <path d="M14 4L15.6 12.4L24 14L15.6 15.6L14 24L12.4 15.6L4 14L12.4 12.4Z" fill="#8B7ED8"/>
+            </svg>
+          </div>
+          <span class="app-logo-name">Révioria</span>
+        </a>
+
+        <!-- Nav features -->
+        <nav class="app-nav">
+          <a href="#" class="app-nav-link active">
+            <span>📈</span>
+            <span>Progression</span>
+          </a>
+          <a href="#" class="app-nav-link">
+            <span>🧠</span>
+            <span>Révision</span>
+          </a>
+          <a href="#" class="app-nav-link">
+            <span>📷</span>
+            <span>Scan</span>
+          </a>
+          <a href="#" class="app-nav-link">
+            <span>🌍</span>
+            <span>Langues</span>
+          </a>
+          <a href="#" class="app-nav-link">
+            <span>👥</span>
+            <span>Social</span>
+          </a>
+        </nav>
+
+        <!-- Actions droite -->
+        <div class="app-actions">
+          <div class="xp-pill">⚡ 1 847 XP</div>
+          <button class="app-btn-connect">🔑 Connexion</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- APP HOME -->
+  <div class="container app-home">
+    <div class="fade-up">
+      <h2 style="font-family:var(--font-head);font-size:1.6rem;font-weight:900;margin-bottom:8px">
+        Bonjour 👋 Qu'est-ce qu'on révise ?
+      </h2>
+      <p style="color:var(--text2);font-size:.9rem;margin-bottom:24px">
+        Choisis ton niveau puis ta matière pour générer un quiz personnalisé.
+      </p>
+    </div>
+
+    <!-- Sélecteur niveau -->
+    <div class="level-selector fade-up" style="transition-delay:.05s">
+      <button class="level-btn active">📗 Seconde</button>
+      <button class="level-btn">📘 Première</button>
+      <button class="level-btn">📕 Terminale</button>
+    </div>
+
+    <!-- Sujets -->
+    <div class="subjects-grid fade-up" style="transition-delay:.1s">
+      <a href="#" class="subject-card">
+        <span class="subject-emoji">📐</span>
+        <span class="subject-name">Mathématiques</span>
+        <span class="subject-count">8 chapitres</span>
+      </a>
+      <a href="#" class="subject-card">
+        <span class="subject-emoji">⚗️</span>
+        <span class="subject-name">Physique-Chimie</span>
+        <span class="subject-count">6 chapitres</span>
+      </a>
+      <a href="#" class="subject-card">
+        <span class="subject-emoji">🧬</span>
+        <span class="subject-name">SVT</span>
+        <span class="subject-count">5 chapitres</span>
+      </a>
+      <a href="#" class="subject-card">
+        <span class="subject-emoji">📖</span>
+        <span class="subject-name">Français</span>
+        <span class="subject-count">5 chapitres</span>
+      </a>
+      <a href="#" class="subject-card">
+        <span class="subject-emoji">🏛️</span>
+        <span class="subject-name">Histoire-Géo</span>
+        <span class="subject-count">7 chapitres</span>
+      </a>
+      <a href="#" class="subject-card">
+        <span class="subject-emoji">🌐</span>
+        <span class="subject-name">SES</span>
+        <span class="subject-count">4 chapitres</span>
+      </a>
+      <a href="#" class="subject-card" style="border-style:dashed;opacity:.6">
+        <span class="subject-emoji">➕</span>
+        <span class="subject-name" style="color:var(--text2)">Spécialité</span>
+        <span class="subject-count">Bientôt</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <a href="#" class="footer-logo">
+        <svg width="20" height="20" viewBox="0 0 28 28" fill="none">
+          <path d="M14 4L15.6 12.4L24 14L15.6 15.6L14 24L12.4 15.6L4 14L12.4 12.4Z" fill="#8B7ED8" opacity=".7"/>
+        </svg>
+        <span class="footer-logo-name">Révioria</span>
+      </a>
+      <div class="footer-links">
+        <a href="#">Mentions légales</a>
+        <a href="#">Confidentialité</a>
+        <a href="#">CGU</a>
+        <a href="#">Contact</a>
+      </div>
+      <span class="footer-copy">© 2026 Révioria</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ── JS ── -->
+<script>
+// Boutons niveau interactifs
+document.querySelectorAll('.level-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+// Fade-up au scroll
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// Nav link actif
+document.querySelectorAll('.app-nav-link').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelectorAll('.app-nav-link').forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
