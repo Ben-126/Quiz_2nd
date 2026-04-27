@@ -26,12 +26,12 @@ export default function GraphiqueChapitres({
   useEffect(() => { setMounted(true); }, []);
 
   if (!mounted) {
-    return <div className="h-[200px] bg-gray-50 rounded-xl animate-pulse" />;
+    return <div style={{ height: 200, background: "rgba(255,255,255,0.04)", borderRadius: "var(--r-md)" }} className="animate-pulse" />;
   }
 
   if (chapitres.length === 0) {
     return (
-      <div className="h-[200px] flex items-center justify-center text-gray-400 text-sm">
+      <div style={{ height: 200, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text3)", fontSize: 14 }}>
         Aucun chapitre disponible
       </div>
     );
@@ -57,19 +57,22 @@ export default function GraphiqueChapitres({
           }
         }}
       >
-        <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 10 }} tickFormatter={(v) => `${v}%`} />
-        <YAxis type="category" dataKey="nom" tick={{ fontSize: 10 }} width={90} />
-        <Tooltip formatter={(value) => [`${value}%`, "Score moyen"]} />
+        <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 10, fill: "#878FA8" }} tickFormatter={(v) => `${v}%`} />
+        <YAxis type="category" dataKey="nom" tick={{ fontSize: 10, fill: "#878FA8" }} width={90} />
+        <Tooltip
+          contentStyle={{ background: "var(--bg2)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text)" }}
+          formatter={(value) => [`${value}%`, "Score moyen"]}
+        />
         <Bar dataKey="score" radius={[0, 4, 4, 0]} cursor="pointer" isAnimationActive>
           {data.map((entry) => (
             <Cell
               key={entry.slug}
               fill={
                 entry.slug === chapitreActifSlug
-                  ? "#6366f1"
+                  ? "#4D5EE8"
                   : entry.nonFait
-                  ? "#e5e7eb"
-                  : "#a5b4fc"
+                  ? "rgba(255,255,255,0.08)"
+                  : "rgba(77,94,232,0.45)"
               }
             />
           ))}

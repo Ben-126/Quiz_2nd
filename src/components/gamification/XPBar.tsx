@@ -34,21 +34,22 @@ export default function XPBar() {
   return (
     <Link
       href="/progression"
-      className="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-indigo-50 transition-colors group"
+      className="flex items-center gap-2 px-2 py-1 transition-colors group"
+      style={{ borderRadius: "var(--r-sm)" }}
       title={`Niveau ${niveau.numero} — ${niveau.nom} · ${xpTotal} XP`}
     >
       <span className="text-sm">{niveau.emoji}</span>
       <div className="hidden sm:flex flex-col gap-0.5 min-w-[80px]">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-indigo-700 leading-none">
+          <span className="text-xs font-semibold leading-none" style={{ color: "var(--indigo-l)" }}>
             Niv. {niveau.numero}
           </span>
-          <span className="text-xs text-indigo-400 leading-none">{xpTotal} XP</span>
+          <span className="text-xs leading-none" style={{ color: "var(--text3)" }}>{xpTotal} XP</span>
         </div>
-        <div className="w-full h-1.5 bg-indigo-100 rounded-full overflow-hidden">
+        <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(77,94,232,0.2)" }}>
           <div
-            className="h-full bg-indigo-500 rounded-full transition-all duration-500"
-            style={{ width: `${progression.pourcentage}%` }}
+            className="h-full rounded-full transition-all duration-500"
+            style={{ width: `${progression.pourcentage}%`, background: "var(--indigo-l)" }}
           />
         </div>
       </div>

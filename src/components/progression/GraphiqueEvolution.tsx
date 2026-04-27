@@ -15,14 +15,14 @@ export default function GraphiqueEvolution({ entrees }: GraphiqueEvolutionProps)
   useEffect(() => { setMounted(true); }, []);
 
   if (!mounted) {
-    return <div className="h-[200px] bg-gray-50 rounded-xl animate-pulse" />;
+    return <div style={{ height: 200, background: "rgba(255,255,255,0.04)", borderRadius: "var(--r-md)" }} className="animate-pulse" />;
   }
 
   if (entrees.length === 0) {
     return (
-      <div className="h-[200px] flex flex-col items-center justify-center gap-2 text-gray-400">
-        <p className="text-3xl">📈</p>
-        <p className="text-sm text-center">Clique sur un chapitre pour voir son évolution</p>
+      <div style={{ height: 200, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8, color: "var(--text3)" }}>
+        <p style={{ fontSize: 30 }}>📈</p>
+        <p style={{ fontSize: 14, textAlign: "center" }}>Clique sur un chapitre pour voir son évolution</p>
       </div>
     );
   }
@@ -35,21 +35,24 @@ export default function GraphiqueEvolution({ entrees }: GraphiqueEvolutionProps)
   return (
     <ResponsiveContainer width="100%" height={200}>
       <LineChart data={data} margin={{ top: 10, right: 16, left: 0, bottom: 0 }}>
-        <XAxis dataKey="date" tick={{ fontSize: 10 }} />
-        <YAxis domain={[0, 100]} tick={{ fontSize: 10 }} tickFormatter={(v) => `${v}%`} />
-        <Tooltip formatter={(value) => [`${value}%`, "Score"]} />
+        <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#878FA8" }} />
+        <YAxis domain={[0, 100]} tick={{ fontSize: 10, fill: "#878FA8" }} tickFormatter={(v) => `${v}%`} />
+        <Tooltip
+          contentStyle={{ background: "var(--bg2)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text)" }}
+          formatter={(value) => [`${value}%`, "Score"]}
+        />
         <ReferenceLine
           y={80}
-          stroke="#22c55e"
+          stroke="#3DD6BF"
           strokeDasharray="4 2"
-          label={{ value: "80%", fontSize: 9, fill: "#22c55e", position: "right" }}
+          label={{ value: "80%", fontSize: 9, fill: "#3DD6BF", position: "right" }}
         />
         <Line
           type="monotone"
           dataKey="score"
-          stroke="#6366f1"
+          stroke="#4D5EE8"
           strokeWidth={2}
-          dot={{ r: 4, fill: "#6366f1" }}
+          dot={{ r: 4, fill: "#4D5EE8" }}
           activeDot={{ r: 6 }}
           isAnimationActive
         />

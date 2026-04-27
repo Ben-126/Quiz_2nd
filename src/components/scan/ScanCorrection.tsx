@@ -93,7 +93,8 @@ export default function ScanCorrection() {
       {/* Zone de capture */}
       {(etat === "idle" || etat === "erreur") && (
         <div
-          className="border-2 border-dashed border-indigo-300 rounded-2xl p-8 text-center bg-indigo-50 hover:bg-indigo-100 transition-colors cursor-pointer"
+          className="rounded-2xl p-8 text-center transition-colors cursor-pointer"
+          style={{ border: "2px dashed rgba(77,94,232,0.4)", background: "rgba(77,94,232,0.06)" }}
           onClick={() => inputRef.current?.click()}
           onDrop={handleDrop}
           onDragOver={(e) => e.preventDefault()}
@@ -103,17 +104,18 @@ export default function ScanCorrection() {
           aria-label="Zone de dépôt ou clic pour choisir une image"
         >
           <div className="text-5xl mb-4">📷</div>
-          <p className="text-indigo-700 font-semibold text-lg mb-1">
+          <p style={{ color: "var(--indigo-l)", fontWeight: 600, fontSize: 18, marginBottom: 4 }}>
             Prends en photo ton exercice
           </p>
-          <p className="text-gray-500 text-sm mb-4">
+          <p style={{ color: "var(--text3)", fontSize: 14, marginBottom: 16 }}>
             Appuie pour ouvrir l&apos;appareil photo ou glisse une image ici
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <button
               type="button"
               onClick={(e) => { e.stopPropagation(); inputRef.current?.click(); }}
-              className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold text-sm transition-colors"
+              className="px-5 py-2.5 rounded-xl font-semibold text-sm transition-colors"
+              style={{ background: "var(--indigo)", color: "#fff", border: "none", cursor: "pointer" }}
             >
               📷 Appareil photo / Galerie
             </button>
@@ -131,7 +133,7 @@ export default function ScanCorrection() {
       )}
 
       {etat === "erreur" && (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 text-sm">
+        <div className="rounded-xl p-4 text-sm" style={{ background: "rgba(239,110,90,0.1)", border: "1px solid rgba(239,110,90,0.3)", color: "var(--coral-l)" }}>
           {erreur}
         </div>
       )}
@@ -139,12 +141,13 @@ export default function ScanCorrection() {
       {/* Prévisualisation */}
       {(etat === "preview" || etat === "chargement") && imagePreview && (
         <div className="space-y-4">
-          <div className="rounded-2xl overflow-hidden border border-gray-200 shadow-sm">
+          <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid var(--border)", boxShadow: "0 4px 16px rgba(0,0,0,0.3)" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={imagePreview}
               alt="Aperçu de l'exercice"
-              className="w-full max-h-96 object-contain bg-gray-50"
+              className="w-full max-h-96 object-contain"
+              style={{ background: "rgba(255,255,255,0.04)" }}
             />
           </div>
 
@@ -153,7 +156,8 @@ export default function ScanCorrection() {
               type="button"
               onClick={reinitialiser}
               disabled={etat === "chargement"}
-              className="flex-1 py-3 border border-gray-300 text-gray-600 rounded-xl font-semibold text-sm hover:bg-gray-50 transition-colors disabled:opacity-50"
+              className="flex-1 py-3 rounded-xl font-semibold text-sm transition-colors disabled:opacity-50"
+              style={{ border: "1px solid var(--border2)", color: "var(--text2)", background: "transparent", cursor: "pointer" }}
             >
               Changer la photo
             </button>
@@ -161,7 +165,8 @@ export default function ScanCorrection() {
               type="button"
               onClick={analyser}
               disabled={etat === "chargement"}
-              className="flex-[2] py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold text-sm transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+              className="flex-[2] py-3 rounded-xl font-semibold text-sm transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+              style={{ background: "var(--indigo)", color: "#fff", border: "none", cursor: "pointer" }}
             >
               {etat === "chargement" ? (
                 <>
@@ -180,30 +185,30 @@ export default function ScanCorrection() {
       {etat === "resultat" && resultat && (
         <div className="space-y-4">
           {/* Correction principale */}
-          <div className="bg-green-50 border-2 border-green-200 rounded-2xl p-5">
-            <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-2">Correction</p>
-            <p className="text-gray-800 leading-relaxed whitespace-pre-wrap">{resultat.correction}</p>
+          <div className="rounded-2xl p-5" style={{ background: "rgba(61,214,191,0.08)", border: "2px solid rgba(61,214,191,0.3)" }}>
+            <p style={{ fontSize: 12, fontWeight: 600, color: "var(--teal)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>Correction</p>
+            <p style={{ color: "var(--text)", lineHeight: 1.7, whiteSpace: "pre-wrap" }}>{resultat.correction}</p>
             {resultat.note && (
-              <p className="text-xs text-green-700 mt-3 italic">{resultat.note}</p>
+              <p style={{ fontSize: 12, color: "var(--teal)", marginTop: 12, fontStyle: "italic" }}>{resultat.note}</p>
             )}
           </div>
 
           {/* Explication */}
           {resultat.explication && (
-            <div className="bg-white border border-indigo-100 rounded-2xl p-5">
-              <p className="text-xs font-semibold text-indigo-500 uppercase tracking-wide mb-2">Explication</p>
-              <p className="text-gray-700 text-sm leading-relaxed">{resultat.explication}</p>
+            <div className="rounded-2xl p-5" style={{ background: "var(--card)", border: "1px solid rgba(77,94,232,0.2)" }}>
+              <p style={{ fontSize: 12, fontWeight: 600, color: "var(--indigo-l)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>Explication</p>
+              <p style={{ color: "var(--text2)", fontSize: 14, lineHeight: 1.6 }}>{resultat.explication}</p>
             </div>
           )}
 
           {/* Étapes */}
           {resultat.etapes.length > 0 && (
-            <div className="bg-white border border-gray-100 rounded-2xl p-5">
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Méthode pas à pas</p>
+            <div className="rounded-2xl p-5" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
+              <p style={{ fontSize: 12, fontWeight: 600, color: "var(--text3)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 12 }}>Méthode pas à pas</p>
               <ol className="space-y-2">
                 {resultat.etapes.map((etape, i) => (
-                  <li key={i} className="flex gap-3 text-sm text-gray-700">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center mt-0.5">
+                  <li key={i} className="flex gap-3 text-sm" style={{ color: "var(--text2)" }}>
+                    <span className="flex-shrink-0 w-6 h-6 rounded-full font-bold text-xs flex items-center justify-center mt-0.5" style={{ background: "rgba(77,94,232,0.1)", color: "var(--indigo-l)" }}>
                       {i + 1}
                     </span>
                     <span>{etape}</span>
@@ -215,12 +220,12 @@ export default function ScanCorrection() {
 
           {/* Conseils */}
           {resultat.conseils.length > 0 && (
-            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
-              <p className="text-xs font-semibold text-amber-600 uppercase tracking-wide mb-3">Conseils</p>
+            <div className="rounded-2xl p-5" style={{ background: "rgba(245,200,64,0.08)", border: "1px solid rgba(245,200,64,0.25)" }}>
+              <p style={{ fontSize: 12, fontWeight: 600, color: "var(--amber)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 12 }}>Conseils</p>
               <ul className="space-y-2">
                 {resultat.conseils.map((conseil, i) => (
-                  <li key={i} className="flex gap-2 text-sm text-amber-900">
-                    <span className="text-amber-500 mt-0.5">💡</span>
+                  <li key={i} className="flex gap-2 text-sm" style={{ color: "var(--text2)" }}>
+                    <span style={{ color: "var(--amber)", marginTop: 2 }}>💡</span>
                     <span>{conseil}</span>
                   </li>
                 ))}
@@ -233,14 +238,16 @@ export default function ScanCorrection() {
             <button
               type="button"
               onClick={reinitialiser}
-              className="flex-1 py-3 border border-gray-300 text-gray-600 rounded-xl font-semibold text-sm hover:bg-gray-50 transition-colors"
+              className="flex-1 py-3 rounded-xl font-semibold text-sm transition-colors"
+              style={{ border: "1px solid var(--border2)", color: "var(--text2)", background: "transparent", cursor: "pointer" }}
             >
               Nouvel exercice
             </button>
             <button
               type="button"
               onClick={() => { setEtat("preview"); setResultat(null); }}
-              className="flex-1 py-3 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-xl font-semibold text-sm hover:bg-indigo-100 transition-colors"
+              className="flex-1 py-3 rounded-xl font-semibold text-sm transition-colors"
+              style={{ background: "rgba(77,94,232,0.1)", color: "var(--indigo-l)", border: "1px solid rgba(77,94,232,0.2)", cursor: "pointer" }}
             >
               Réanalyser
             </button>

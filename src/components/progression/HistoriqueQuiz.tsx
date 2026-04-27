@@ -26,7 +26,7 @@ function badgeScore(score: number): string {
 export default function HistoriqueQuiz({ entrees }: HistoriqueQuizProps) {
   if (entrees.length === 0) {
     return (
-      <p className="text-sm text-gray-400 text-center py-4">
+      <p style={{ fontSize: 14, color: "var(--text3)", textAlign: "center", padding: "16px 0" }}>
         Aucun quiz complété pour l&apos;instant.
       </p>
     );
@@ -44,26 +44,26 @@ export default function HistoriqueQuiz({ entrees }: HistoriqueQuizProps) {
   }
 
   return (
-    <div className="space-y-4">
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       {groups.map((group) => (
         <div key={group.label}>
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
+          <p style={{ fontSize: 11, fontWeight: 600, color: "var(--text3)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 8 }}>
             {group.label}
           </p>
-          <div className="space-y-2">
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {group.entrees.map((e, i) => (
               <div
                 key={i}
-                className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0"
+                style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 0", borderBottom: i < group.entrees.length - 1 ? "1px solid var(--border)" : "none" }}
               >
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-800 truncate">
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ fontSize: 14, fontWeight: 500, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                     {e.matiereName} · {e.chapitreNom}
                   </p>
-                  <p className="text-xs text-gray-400 capitalize">{e.niveau}</p>
+                  <p style={{ fontSize: 12, color: "var(--text3)", textTransform: "capitalize" }}>{e.niveau}</p>
                 </div>
-                <div className="flex items-center gap-2 shrink-0 ml-3">
-                  <span className="text-sm font-bold text-gray-700">{e.score}%</span>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0, marginLeft: 12 }}>
+                  <span style={{ fontSize: 14, fontWeight: 700, color: "var(--text2)" }}>{e.score}%</span>
                   <span>{badgeScore(e.score)}</span>
                 </div>
               </div>

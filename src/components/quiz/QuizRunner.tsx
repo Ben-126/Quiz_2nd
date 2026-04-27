@@ -341,11 +341,11 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
   if (etat === "chargement") {
     return (
       <div className="flex flex-col items-center justify-center py-16 gap-4" data-testid="chargement">
-        <div className="w-10 h-10 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin" />
-        <p className="text-gray-500 text-sm">
+        <div className="w-10 h-10 border-4 rounded-full animate-spin" style={{ borderColor: "rgba(77,94,232,0.3)", borderTopColor: "var(--indigo)" }} />
+        <p style={{ color: "var(--text2)", fontSize: 14 }}>
           {modeRevision.actif ? "Préparation de la révision ciblée..." : modeQuiz === "controle" ? "Préparation du contrôle..." : "Génération du quiz en cours..."}
         </p>
-        <p className="text-gray-400 text-xs">{titreChapitre}</p>
+        <p style={{ color: "var(--text3)", fontSize: 12 }}>{titreChapitre}</p>
       </div>
     );
   }
@@ -354,11 +354,11 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
     return (
       <div className="text-center py-16 space-y-4" data-testid="erreur">
         <p className="text-4xl">😕</p>
-        <p className="text-gray-700 font-medium">Impossible de charger le quiz</p>
-        <p className="text-gray-500 text-sm">{erreur}</p>
+        <p style={{ color: "var(--text)", fontWeight: 500 }}>Impossible de charger le quiz</p>
+        <p style={{ color: "var(--text2)", fontSize: 14 }}>{erreur}</p>
         <button
           onClick={() => chargerQuiz()}
-          className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold transition-colors"
+          style={{ padding: "12px 24px", background: "var(--indigo)", color: "#fff", borderRadius: "var(--r-md)", fontWeight: 600, border: "none", cursor: "pointer" }}
         >
           Réessayer
         </button>
@@ -425,19 +425,20 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
     <div className="space-y-4">
       {/* Bandeau mode contrôle avec chronomètre global */}
       {modeQuiz === "controle" && etat === "question" && (
-        <div className={`flex items-center justify-between px-4 py-2.5 rounded-xl border-2 ${
-          tempsControle <= 60 ? "bg-red-50 border-red-300" :
-          tempsControle <= 120 ? "bg-orange-50 border-orange-300" :
-          "bg-orange-50 border-orange-200"
-        }`}>
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "10px 16px",
+          borderRadius: "var(--r-md)",
+          border: "2px solid",
+          borderColor: tempsControle <= 60 ? "rgba(239,110,90,0.5)" : "rgba(245,200,64,0.4)",
+          background: tempsControle <= 60 ? "rgba(239,110,90,0.1)" : "rgba(245,200,64,0.08)",
+        }}>
           <div className="flex items-center gap-2">
-            <span className="text-sm font-bold text-orange-700">📝 Mode Contrôle</span>
+            <span style={{ fontSize: 14, fontWeight: 700, color: tempsControle <= 60 ? "var(--coral-l)" : "var(--amber)" }}>📝 Mode Contrôle</span>
           </div>
-          <div className={`flex items-center gap-1.5 font-mono font-bold text-lg ${
-            tempsControle <= 60 ? "text-red-600" :
-            tempsControle <= 120 ? "text-orange-600" :
-            "text-orange-700"
-          }`}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: "monospace", fontWeight: 700, fontSize: 18, color: tempsControle <= 60 ? "var(--coral-l)" : "var(--amber)" }}>
             <span aria-label="Temps restant">⏱</span>
             <span data-testid="timer-controle">{formatTemps(tempsControle)}</span>
           </div>
@@ -447,14 +448,19 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
       {(etiquetteNiveau || modeRevision.actif) && modeQuiz === "entrainement" && (
         <div className="flex gap-2 flex-wrap">
           {etiquetteNiveau && (
-            <span className={`text-xs font-semibold px-2 py-1 rounded-full ${
-              niveau === "debutant" ? "bg-green-100 text-green-700" : "bg-purple-100 text-purple-700"
-            }`}>
+            <span style={{
+              fontSize: 12,
+              fontWeight: 600,
+              padding: "4px 8px",
+              borderRadius: "var(--r-pill)",
+              background: niveau === "debutant" ? "rgba(61,214,191,0.1)" : "rgba(77,94,232,0.1)",
+              color: niveau === "debutant" ? "var(--teal)" : "var(--indigo-l)",
+            }}>
               {niveau === "debutant" ? "Niveau débutant" : "Niveau avancé"}
             </span>
           )}
           {modeRevision.actif && (
-            <span className="text-xs font-semibold px-2 py-1 rounded-full bg-orange-100 text-orange-700">
+            <span style={{ fontSize: 12, fontWeight: 600, padding: "4px 8px", borderRadius: "var(--r-pill)", background: "rgba(245,200,64,0.1)", color: "var(--amber)" }}>
               Mode révision
             </span>
           )}
@@ -463,8 +469,8 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
 
       {etat === "verification" && (
         <div className="flex flex-col items-center justify-center py-8 gap-3" data-testid="verification">
-          <div className="w-8 h-8 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin" />
-          <p className="text-gray-500 text-sm">Correction en cours...</p>
+          <div className="w-8 h-8 border-4 rounded-full animate-spin" style={{ borderColor: "rgba(77,94,232,0.3)", borderTopColor: "var(--indigo)" }} />
+          <p style={{ color: "var(--text2)", fontSize: 14 }}>Correction en cours...</p>
         </div>
       )}
 

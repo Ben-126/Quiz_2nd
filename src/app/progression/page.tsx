@@ -107,10 +107,10 @@ export default function ProgressionPage() {
 
   if (!mounted) {
     return (
-      <div className="flex flex-col min-h-screen">
+      <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", background: "var(--bg)" }}>
         <Header />
-        <main className="flex-1 flex items-center justify-center">
-          <div className="w-8 h-8 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin" />
+        <main style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ width: 32, height: 32, border: "4px solid rgba(77,94,232,0.3)", borderTopColor: "var(--indigo)", borderRadius: "50%" }} className="animate-spin" />
         </main>
       </div>
     );
@@ -118,17 +118,17 @@ export default function ProgressionPage() {
 
   if (totalQuiz === 0 && historique.length === 0) {
     return (
-      <div className="flex flex-col min-h-screen">
+      <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", background: "var(--bg)" }}>
         <Header />
-        <main className="flex-1 flex flex-col items-center justify-center px-4 text-center gap-4">
-          <p className="text-6xl">📊</p>
-          <h2 className="text-xl font-bold text-gray-800">Aucune progression pour l&apos;instant</h2>
-          <p className="text-gray-500 text-sm max-w-xs">
+        <main style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 16px", textAlign: "center", gap: 16 }}>
+          <p style={{ fontSize: 48 }}>📊</p>
+          <h2 style={{ fontSize: 20, fontWeight: 700, color: "var(--text)" }}>Aucune progression pour l&apos;instant</h2>
+          <p style={{ color: "var(--text3)", fontSize: 14, maxWidth: 280 }}>
             Lance ton premier quiz pour voir ta progression ici 🚀
           </p>
           <Link
             href="/app"
-            className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-colors"
+            style={{ padding: "12px 24px", background: "var(--indigo)", color: "#fff", borderRadius: "var(--r-md)", fontWeight: 600, textDecoration: "none" }}
           >
             Choisir une matière
           </Link>
@@ -138,22 +138,22 @@ export default function ProgressionPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", background: "var(--bg)" }}>
       <Header />
-      <main className="max-w-4xl mx-auto w-full px-4 py-6 space-y-6">
+      <main style={{ maxWidth: 896, margin: "0 auto", width: "100%", padding: "24px 16px 48px", display: "flex", flexDirection: "column", gap: 24 }}>
 
         {totalQuiz > 0 && (
-          <div className="flex gap-3 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl border border-indigo-100">
-            <div className="flex-1 text-center">
-              <p className="text-2xl font-bold text-indigo-700">{totalQuiz}</p>
-              <p className="text-xs text-indigo-500">quiz complétés</p>
+          <div style={{ display: "flex", gap: 12, padding: 16, background: "rgba(77,94,232,0.08)", borderRadius: "var(--r-lg)", border: "1px solid rgba(77,94,232,0.18)" }}>
+            <div style={{ flex: 1, textAlign: "center" }}>
+              <p style={{ fontSize: 24, fontWeight: 700, color: "var(--indigo-l)" }}>{totalQuiz}</p>
+              <p style={{ fontSize: 12, color: "var(--indigo-l)", opacity: 0.7 }}>quiz complétés</p>
             </div>
-            <div className="w-px bg-indigo-200" />
-            <div className="flex-1 text-center">
-              <p className="text-2xl font-bold text-indigo-700">
+            <div style={{ width: 1, background: "rgba(77,94,232,0.3)" }} />
+            <div style={{ flex: 1, textAlign: "center" }}>
+              <p style={{ fontSize: 24, fontWeight: 700, color: "var(--indigo-l)" }}>
                 {scoreMoyenGlobal !== null ? `${scoreMoyenGlobal}%` : "—"}
               </p>
-              <p className="text-xs text-indigo-500">score moyen global</p>
+              <p style={{ fontSize: 12, color: "var(--indigo-l)", opacity: 0.7 }}>score moyen global</p>
             </div>
           </div>
         )}
@@ -162,32 +162,31 @@ export default function ProgressionPage() {
           const niveau      = getNiveauFromXP(profilGami.xpTotal);
           const progression = getProgressionNiveau(profilGami.xpTotal);
           return (
-            <div className="bg-white rounded-2xl border border-indigo-100 shadow-sm p-5 space-y-4">
+            <div style={{ background: "var(--card)", borderRadius: "var(--r-lg)", border: "1px solid var(--border)", padding: 20, display: "flex", flexDirection: "column", gap: 16 }}>
               {/* Niveau actuel */}
-              <div className="flex items-center gap-4">
-                <div className="flex flex-col items-center justify-center w-16 h-16 rounded-2xl bg-indigo-50 border-2 border-indigo-200 shrink-0">
-                  <span className="text-2xl">{niveau.emoji}</span>
-                  <span className="text-xs font-bold text-indigo-600">Niv. {niveau.numero}</span>
+              <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: 64, height: 64, borderRadius: "var(--r-md)", background: "rgba(77,94,232,0.08)", border: "2px solid rgba(77,94,232,0.3)", flexShrink: 0 }}>
+                  <span style={{ fontSize: 24 }}>{niveau.emoji}</span>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: "var(--indigo-l)" }}>Niv. {niveau.numero}</span>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-baseline gap-2 mb-1">
-                    <p className="text-lg font-bold text-gray-800">{niveau.nom}</p>
-                    <p className="text-sm text-indigo-500 font-medium">{profilGami.xpTotal} XP</p>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginBottom: 4 }}>
+                    <p style={{ fontSize: 18, fontWeight: 700, color: "var(--text)" }}>{niveau.nom}</p>
+                    <p style={{ fontSize: 14, color: "var(--indigo-l)", fontWeight: 500 }}>{profilGami.xpTotal} XP</p>
                   </div>
                   {progression.xpPourMonter > 0 ? (
                     <>
-                      <div className="w-full h-2.5 bg-indigo-100 rounded-full overflow-hidden">
+                      <div style={{ width: "100%", height: 10, background: "rgba(77,94,232,0.15)", borderRadius: 999, overflow: "hidden" }}>
                         <div
-                          className="h-full bg-indigo-500 rounded-full transition-all duration-700"
-                          style={{ width: `${progression.pourcentage}%` }}
+                          style={{ height: "100%", background: "var(--indigo)", borderRadius: 999, transition: "width 0.7s", width: `${progression.pourcentage}%` }}
                         />
                       </div>
-                      <p className="text-xs text-gray-400 mt-1">
+                      <p style={{ fontSize: 11, color: "var(--text3)", marginTop: 4 }}>
                         {progression.xpDansNiveau} / {progression.xpPourMonter} XP pour le niveau suivant
                       </p>
                     </>
                   ) : (
-                    <p className="text-xs text-yellow-600 font-semibold mt-1">Niveau maximum atteint !</p>
+                    <p style={{ fontSize: 11, color: "var(--amber)", fontWeight: 600, marginTop: 4 }}>Niveau maximum atteint !</p>
                   )}
                 </div>
               </div>
@@ -196,17 +195,23 @@ export default function ProgressionPage() {
               {notifsStreak.map((notif, i) => (
                 <div
                   key={i}
-                  className={`flex gap-3 p-3 rounded-xl text-sm border ${
-                    notif.type === "streak_rappel"
-                      ? "bg-orange-50 border-orange-200 text-orange-800"
+                  style={{
+                    display: "flex",
+                    gap: 12,
+                    padding: 12,
+                    borderRadius: "var(--r-sm)",
+                    fontSize: 14,
+                    border: "1px solid",
+                    ...(notif.type === "streak_rappel"
+                      ? { background: "rgba(245,200,64,0.1)", borderColor: "rgba(245,200,64,0.3)", color: "var(--amber)" }
                       : notif.type === "streak_gel_utilise"
-                      ? "bg-blue-50 border-blue-200 text-blue-800"
-                      : "bg-red-50 border-red-200 text-red-800"
-                  }`}
+                      ? { background: "rgba(61,214,191,0.1)", borderColor: "rgba(61,214,191,0.3)", color: "var(--teal)" }
+                      : { background: "rgba(239,110,90,0.1)", borderColor: "rgba(239,110,90,0.3)", color: "var(--coral-l)" })
+                  }}
                 >
                   <div>
-                    <p className="font-semibold">{notif.message}</p>
-                    <p className="text-xs mt-0.5 opacity-80">{notif.detail}</p>
+                    <p style={{ fontWeight: 600 }}>{notif.message}</p>
+                    <p style={{ fontSize: 12, marginTop: 2, opacity: 0.8 }}>{notif.detail}</p>
                   </div>
                 </div>
               ))}
@@ -216,7 +221,7 @@ export default function ProgressionPage() {
 
               {/* Badges */}
               <div>
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                <p style={{ fontSize: 11, fontWeight: 600, color: "var(--text3)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 12 }}>
                   Badges — {profilGami.badgesDebloques.length} / {tousLesBadges.length} débloqués
                 </p>
                 <BadgeGrid allBadges={tousLesBadges} debloques={profilGami.badgesDebloques} />
@@ -228,34 +233,48 @@ export default function ProgressionPage() {
           );
         })()}
 
-        <div className="flex gap-2 flex-wrap" role="tablist">
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }} role="tablist">
           {NIVEAUX.map((n) => (
             <button
               key={n.slug}
               role="tab"
               aria-selected={niveauActif === n.slug}
               onClick={() => setNiveauActif(n.slug)}
-              className={`px-3 py-1.5 rounded-full text-sm font-semibold transition-colors border-2 ${
-                niveauActif === n.slug
-                  ? "bg-indigo-600 text-white border-indigo-600"
-                  : "bg-white text-indigo-600 border-indigo-300 hover:border-indigo-500"
-              }`}
+              style={{
+                padding: "6px 12px",
+                borderRadius: "var(--r-pill)",
+                fontSize: 14,
+                fontWeight: 600,
+                border: "2px solid",
+                cursor: "pointer",
+                transition: "all 0.15s",
+                ...(niveauActif === n.slug
+                  ? { background: "var(--indigo)", color: "#fff", borderColor: "var(--indigo)" }
+                  : { background: "transparent", color: "var(--indigo-l)", borderColor: "rgba(77,94,232,0.4)" })
+              }}
             >
               {n.emoji} {n.label}
             </button>
           ))}
         </div>
 
-        <div className="flex gap-2 flex-wrap">
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           {niveauInfo.matieres.map((m) => (
             <button
               key={m.slug}
               onClick={() => { setMatiereActiveSlug(m.slug); setChapitreActifSlug(null); }}
-              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                matiereActiveSlug === m.slug
-                  ? "bg-indigo-600 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
+              style={{
+                padding: "6px 12px",
+                borderRadius: "var(--r-pill)",
+                fontSize: 14,
+                fontWeight: 500,
+                cursor: "pointer",
+                border: "none",
+                transition: "all 0.15s",
+                ...(matiereActiveSlug === m.slug
+                  ? { background: "var(--indigo)", color: "#fff" }
+                  : { background: "rgba(255,255,255,0.06)", color: "var(--text2)" })
+              }}
             >
               {m.emoji} {m.nom}
             </button>
@@ -263,7 +282,7 @@ export default function ProgressionPage() {
         </div>
 
         {matiereActive && (
-          <div className="space-y-4">
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <StatsMatiere matiereSlug={matiereActiveSlug} chapitres={matiereActive.chapitres} />
 
             <PredictionNote
@@ -272,21 +291,21 @@ export default function ProgressionPage() {
               performances={performances}
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
-                <h3 className="text-sm font-semibold text-gray-700 mb-3">Score par chapitre</h3>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 16 }}>
+              <div style={{ background: "var(--card)", borderRadius: "var(--r-lg)", border: "1px solid var(--border)", padding: 16, boxShadow: "0 4px 16px rgba(0,0,0,0.3)" }}>
+                <h3 style={{ fontSize: 14, fontWeight: 600, color: "var(--text2)", marginBottom: 12 }}>Score par chapitre</h3>
                 <GraphiqueChapitres
                   chapitres={chapitresData}
                   chapitreActifSlug={chapitreActifSlug}
                   onSelectChapitre={setChapitreActifSlug}
                 />
-                <p className="text-xs text-gray-400 mt-2 text-center">
+                <p style={{ fontSize: 11, color: "var(--text3)", marginTop: 8, textAlign: "center" }}>
                   Clique sur un chapitre pour voir son évolution →
                 </p>
               </div>
 
-              <div className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
-                <h3 className="text-sm font-semibold text-gray-700 mb-3">
+              <div style={{ background: "var(--card)", borderRadius: "var(--r-lg)", border: "1px solid var(--border)", padding: 16, boxShadow: "0 4px 16px rgba(0,0,0,0.3)" }}>
+                <h3 style={{ fontSize: 14, fontWeight: 600, color: "var(--text2)", marginBottom: 12 }}>
                   {chapitreActifSlug
                     ? `Évolution — ${matiereActive.chapitres.find((c) => c.slug === chapitreActifSlug)?.titre ?? ""}`
                     : "Évolution du score"}
@@ -298,16 +317,16 @@ export default function ProgressionPage() {
         )}
 
         {historique.length > 0 && (
-          <div className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
-            <h3 className="text-sm font-semibold text-gray-700 mb-3">Historique récent</h3>
+          <div style={{ background: "var(--card)", borderRadius: "var(--r-lg)", border: "1px solid var(--border)", padding: 16, boxShadow: "0 4px 16px rgba(0,0,0,0.3)" }}>
+            <h3 style={{ fontSize: 14, fontWeight: 600, color: "var(--text2)", marginBottom: 12 }}>Historique récent</h3>
             <HistoriqueQuiz entrees={historique.slice(0, 20)} />
           </div>
         )}
 
-        <div className="flex justify-center pt-2 pb-4">
+        <div style={{ display: "flex", justifyContent: "center", paddingTop: 8, paddingBottom: 16 }}>
           <Link
             href="/parametres"
-            className="text-xs text-gray-400 hover:text-indigo-500 transition-colors underline underline-offset-2"
+            style={{ fontSize: 12, color: "var(--text3)", textDecoration: "underline", textUnderlineOffset: 2 }}
           >
             ⚙️ Paramètres et réinitialisation
           </Link>

@@ -72,18 +72,20 @@ export default function ListeAmis({ userId }: ListeAmisProps) {
   return (
     <div className="space-y-6">
       {/* Lien d'invitation */}
-      <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4 space-y-2">
-        <p className="text-sm font-semibold text-indigo-800">Inviter un ami</p>
-        <p className="text-xs text-indigo-600">Partage ce lien pour qu&apos;un ami te rejoigne :</p>
+      <div className="rounded-xl p-4 space-y-2" style={{ background: "rgba(77,94,232,0.08)", border: "1px solid rgba(77,94,232,0.2)" }}>
+        <p style={{ fontSize: 14, fontWeight: 600, color: "var(--indigo-l)" }}>Inviter un ami</p>
+        <p style={{ fontSize: 12, color: "var(--text2)" }}>Partage ce lien pour qu&apos;un ami te rejoigne :</p>
         <div className="flex gap-2">
           <input
             readOnly
             value={lienInvitation}
-            className="flex-1 text-xs bg-white border border-indigo-200 rounded-lg px-3 py-2 text-gray-700"
+            className="flex-1 text-xs rounded-lg px-3 py-2"
+            style={{ background: "rgba(255,255,255,0.05)", border: "1px solid var(--border2)", color: "var(--text2)", outline: "none" }}
           />
           <button
             onClick={() => navigator.clipboard.writeText(lienInvitation)}
-            className="px-3 py-2 bg-indigo-600 text-white text-xs font-semibold rounded-lg hover:bg-indigo-700 transition-colors"
+            className="px-3 py-2 text-xs font-semibold rounded-lg transition-colors"
+            style={{ background: "var(--indigo)", color: "#fff", border: "none", cursor: "pointer" }}
           >
             Copier
           </button>
@@ -97,28 +99,31 @@ export default function ListeAmis({ userId }: ListeAmisProps) {
           value={recherche}
           onChange={(e) => setRecherche(e.target.value)}
           placeholder="Rechercher un ami par pseudo..."
-          className="flex-1 px-4 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="flex-1 px-4 py-2 rounded-xl text-sm"
+          style={{ background: "rgba(255,255,255,0.05)", color: "var(--text)", border: "1px solid var(--border2)", outline: "none" }}
         />
         <button
           type="submit"
-          className="px-4 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-xl hover:bg-indigo-700 transition-colors"
+          className="px-4 py-2 text-sm font-semibold rounded-xl transition-colors"
+          style={{ background: "var(--indigo)", color: "#fff", border: "none", cursor: "pointer" }}
         >
           Chercher
         </button>
       </form>
 
       {message && (
-        <p className="text-sm text-center text-indigo-600 font-medium">{message}</p>
+        <p className="text-sm text-center font-medium" style={{ color: "var(--indigo-l)" }}>{message}</p>
       )}
 
       {resultatsRecherche.length > 0 && (
         <ul className="space-y-2">
           {resultatsRecherche.map((p) => (
-            <li key={p.id} className="flex items-center justify-between px-4 py-3 bg-white border border-gray-100 rounded-xl">
-              <span className="text-sm font-medium">{p.pseudo}</span>
+            <li key={p.id} className="flex items-center justify-between px-4 py-3 rounded-xl" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
+              <span style={{ fontSize: 14, fontWeight: 500, color: "var(--text)" }}>{p.pseudo}</span>
               <button
                 onClick={() => handleEnvoyerDemande(p.id)}
-                className="text-xs bg-indigo-600 text-white px-3 py-1.5 rounded-lg hover:bg-indigo-700 transition-colors"
+                className="text-xs px-3 py-1.5 rounded-lg transition-colors"
+                style={{ background: "var(--indigo)", color: "#fff", border: "none", cursor: "pointer" }}
               >
                 + Ajouter
               </button>
@@ -130,20 +135,22 @@ export default function ListeAmis({ userId }: ListeAmisProps) {
       {/* Demandes reçues */}
       {demandes.length > 0 && (
         <div className="space-y-2">
-          <h3 className="text-sm font-semibold text-gray-700">Demandes reçues ({demandes.length})</h3>
+          <h3 style={{ fontSize: 14, fontWeight: 600, color: "var(--text2)" }}>Demandes reçues ({demandes.length})</h3>
           {demandes.map((d) => (
-            <div key={d.id} className="flex items-center justify-between px-4 py-3 bg-yellow-50 border border-yellow-200 rounded-xl">
-              <span className="text-sm font-medium">{(d.profil as ProfilPublic | undefined)?.pseudo ?? "Utilisateur"}</span>
+            <div key={d.id} className="flex items-center justify-between px-4 py-3 rounded-xl" style={{ background: "rgba(245,200,64,0.08)", border: "1px solid rgba(245,200,64,0.25)" }}>
+              <span style={{ fontSize: 14, fontWeight: 500, color: "var(--text)" }}>{(d.profil as ProfilPublic | undefined)?.pseudo ?? "Utilisateur"}</span>
               <div className="flex gap-2">
                 <button
                   onClick={() => handleAccepter(d.id)}
-                  className="text-xs bg-green-500 text-white px-3 py-1.5 rounded-lg hover:bg-green-600 transition-colors"
+                  className="text-xs px-3 py-1.5 rounded-lg transition-colors"
+                  style={{ background: "rgba(61,214,191,0.15)", color: "var(--teal)", border: "1px solid rgba(61,214,191,0.3)", cursor: "pointer" }}
                 >
                   Accepter
                 </button>
                 <button
                   onClick={() => handleRefuser(d.id)}
-                  className="text-xs bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg hover:bg-gray-300 transition-colors"
+                  className="text-xs px-3 py-1.5 rounded-lg transition-colors"
+                  style={{ background: "rgba(255,255,255,0.06)", color: "var(--text2)", border: "1px solid var(--border)", cursor: "pointer" }}
                 >
                   Refuser
                 </button>
@@ -155,22 +162,22 @@ export default function ListeAmis({ userId }: ListeAmisProps) {
 
       {/* Liste d'amis */}
       <div className="space-y-2">
-        <h3 className="text-sm font-semibold text-gray-700">
+        <h3 style={{ fontSize: 14, fontWeight: 600, color: "var(--text2)" }}>
           Mes amis ({chargement ? "..." : amis.length})
         </h3>
         {!chargement && amis.length === 0 && (
-          <p className="text-sm text-gray-400 text-center py-4">
+          <p className="text-sm text-center py-4" style={{ color: "var(--text3)" }}>
             Tu n&apos;as pas encore d&apos;amis. Utilise la recherche ou partage ton lien !
           </p>
         )}
         {amis.map((a) => {
           const profil = a.profil as ProfilPublic | undefined;
           return (
-            <div key={a.id} className="flex items-center gap-3 px-4 py-3 bg-white border border-gray-100 rounded-xl">
+            <div key={a.id} className="flex items-center gap-3 px-4 py-3 rounded-xl" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
               <span className="text-lg">👤</span>
               <div className="flex-1">
-                <p className="text-sm font-medium">{profil?.pseudo ?? "Ami"}</p>
-                <p className="text-xs text-gray-400">{profil?.xp_total ?? 0} XP · Niveau {profil?.niveau ?? 1}</p>
+                <p style={{ fontSize: 14, fontWeight: 500, color: "var(--text)" }}>{profil?.pseudo ?? "Ami"}</p>
+                <p style={{ fontSize: 12, color: "var(--text3)" }}>{profil?.xp_total ?? 0} XP · Niveau {profil?.niveau ?? 1}</p>
               </div>
             </div>
           );

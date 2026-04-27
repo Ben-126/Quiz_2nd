@@ -32,43 +32,53 @@ export default function LanguesPage() {
   const [onglet, setOnglet] = useState<Onglet>("reconnaissance");
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", background: "var(--bg)" }}>
       <Header />
-      <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-6">
-        <div className="text-center mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+      <main style={{ flex: 1, maxWidth: 720, margin: "0 auto", width: "100%", padding: "24px 24px 48px" }}>
+        <div style={{ textAlign: "center", marginBottom: 32 }}>
+          <h1 style={{ fontSize: 28, fontWeight: 700, color: "var(--text)", marginBottom: 8 }}>
             🌍 Langues
           </h1>
-          <p className="text-gray-500 text-sm sm:text-base">
+          <p style={{ color: "var(--text3)", fontSize: 14 }}>
             Pratiquez l&apos;oral en langues étrangères avec l&apos;IA
           </p>
         </div>
 
         {/* Onglets */}
-        <div className="grid grid-cols-3 gap-2 mb-6">
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, marginBottom: 24 }}>
           {ONGLETS.map((o) => (
             <button
               key={o.id}
               onClick={() => setOnglet(o.id)}
-              className={`flex flex-col items-center gap-1 px-3 py-3 rounded-xl border-2 text-center transition-colors ${
-                onglet === o.id
-                  ? "bg-indigo-600 text-white border-indigo-600"
-                  : "bg-white text-gray-600 border-gray-200 hover:border-indigo-300"
-              }`}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 4,
+                padding: "12px",
+                borderRadius: "var(--r-md)",
+                border: "2px solid",
+                textAlign: "center",
+                cursor: "pointer",
+                transition: "all 0.15s",
+                ...(onglet === o.id
+                  ? { background: "var(--indigo)", color: "#fff", borderColor: "var(--indigo)" }
+                  : { background: "transparent", color: "var(--text2)", borderColor: "var(--border2)" })
+              }}
             >
-              <span className="text-xl">{o.emoji}</span>
-              <span className="text-xs font-medium leading-tight">{o.label}</span>
+              <span style={{ fontSize: 20 }}>{o.emoji}</span>
+              <span style={{ fontSize: 12, fontWeight: 500, lineHeight: 1.2 }}>{o.label}</span>
             </button>
           ))}
         </div>
 
         {/* Description de l'onglet */}
-        <p className="text-xs text-gray-400 text-center mb-6">
+        <p style={{ fontSize: 12, color: "var(--text3)", textAlign: "center", marginBottom: 24 }}>
           {ONGLETS.find((o) => o.id === onglet)?.description}
         </p>
 
         {/* Contenu */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+        <div style={{ background: "var(--card)", borderRadius: "var(--r-lg)", border: "1px solid var(--border)", padding: 24 }}>
           {onglet === "reconnaissance" && <ReconnaissanceVocale />}
           {onglet === "prononciation" && <CorrectionPrononciation />}
           {onglet === "dialogue" && <DialogueLangue />}

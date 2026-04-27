@@ -36,13 +36,13 @@ export default function TimerBar({ dureeSecondes, onExpire, reset = 0 }: TimerBa
 
   return (
     <div className="w-full space-y-1">
-      <div className="flex justify-between text-xs font-mono text-gray-500">
+      <div className="flex justify-between text-xs font-mono" style={{ color: "var(--text3)" }}>
         <span>⏱ Chrono</span>
-        <span className={restant <= 5 ? "text-red-600 font-bold" : ""}>
+        <span style={restant <= 5 ? { color: "var(--coral-l)", fontWeight: 700 } : {}}>
           {restant}s
         </span>
       </div>
-      <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+      <div className="w-full h-2 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.1)" }}>
         <div
           className={`h-full rounded-full transition-all duration-1000 ${couleur}`}
           style={{ width: `${pourcentage}%` }}

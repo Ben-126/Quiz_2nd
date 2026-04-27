@@ -24,12 +24,12 @@ const MOIS_NOMS = [
 
 const JOURS_SEMAINE = ["L", "M", "M", "J", "V", "S", "D"];
 
-const CLASSE_PAR_ETAT: Record<EtatJour, string> = {
-  joue:    "bg-orange-400 text-white font-bold",
-  gele:    "bg-blue-200 text-blue-700 font-medium",
-  manque:  "bg-gray-100 text-gray-400",
-  futur:   "bg-transparent text-gray-300",
-  aujourd: "bg-indigo-600 text-white font-bold ring-2 ring-indigo-300",
+const STYLE_PAR_ETAT: Record<EtatJour, React.CSSProperties> = {
+  joue:    { background: "#f97316", color: "#fff", fontWeight: 700 },
+  gele:    { background: "rgba(96,165,250,0.2)", color: "#93c5fd", fontWeight: 500 },
+  manque:  { background: "rgba(255,255,255,0.04)", color: "var(--text3)" },
+  futur:   { background: "transparent", color: "var(--text3)", opacity: 0.3 },
+  aujourd: { background: "var(--indigo)", color: "#fff", fontWeight: 700, boxShadow: "0 0 0 2px rgba(122,141,245,0.4)" },
 };
 
 const TITRE_PAR_ETAT: Record<EtatJour, string> = {
@@ -67,15 +67,17 @@ export default function CalendrierStreak({ profil }: CalendrierStreakProps) {
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-      <h3 className="text-sm font-semibold text-gray-700 mb-3">
+    <div
+      style={{ background: "var(--card)", borderRadius: "var(--r-md)", border: "1px solid var(--border)", boxShadow: "0 4px 16px rgba(0,0,0,0.3)", padding: 16 }}
+    >
+      <h3 className="text-sm font-semibold mb-3" style={{ color: "var(--text2)" }}>
         📅 {MOIS_NOMS[month]} {year}
       </h3>
 
       {/* En-têtes jours */}
       <div className="grid grid-cols-7 gap-1 mb-1">
         {JOURS_SEMAINE.map((j, i) => (
-          <div key={i} className="text-center text-xs font-semibold text-gray-400 py-1">
+          <div key={i} className="text-center text-xs font-semibold py-1" style={{ color: "var(--text3)" }}>
             {j}
           </div>
         ))}
@@ -89,7 +91,8 @@ export default function CalendrierStreak({ profil }: CalendrierStreakProps) {
           return (
             <div
               key={day}
-              className={`aspect-square flex items-center justify-center rounded-lg text-xs transition-all ${CLASSE_PAR_ETAT[etat]}`}
+              className="aspect-square flex items-center justify-center rounded-lg text-xs transition-all"
+              style={STYLE_PAR_ETAT[etat]}
               title={TITRE_PAR_ETAT[etat]}
             >
               {day}
@@ -100,20 +103,20 @@ export default function CalendrierStreak({ profil }: CalendrierStreakProps) {
 
       {/* Légende */}
       <div className="flex gap-3 mt-3 flex-wrap">
-        <LegendItem color="bg-orange-400" label="Quiz fait" />
-        <LegendItem color="bg-blue-200"   label="Gel utilisé" />
-        <LegendItem color="bg-gray-100"   label="Manqué" />
-        <LegendItem color="bg-indigo-600" label="Aujourd'hui" />
+        <LegendItem bgStyle={{ background: "#f97316" }} label="Quiz fait" />
+        <LegendItem bgStyle={{ background: "rgba(96,165,250,0.2)" }} label="Gel utilisé" />
+        <LegendItem bgStyle={{ background: "rgba(255,255,255,0.04)", border: "1px solid var(--border)" }} label="Manqué" />
+        <LegendItem bgStyle={{ background: "var(--indigo)" }} label="Aujourd'hui" />
       </div>
     </div>
   );
 }
 
-function LegendItem({ color, label }: { color: string; label: string }) {
+function LegendItem({ bgStyle, label }: { bgStyle: React.CSSProperties; label: string }) {
   return (
     <div className="flex items-center gap-1.5">
-      <div className={`w-3 h-3 rounded ${color}`} />
-      <span className="text-xs text-gray-500">{label}</span>
+      <div style={{ width: 12, height: 12, borderRadius: 3, ...bgStyle }} />
+      <span className="text-xs" style={{ color: "var(--text3)" }}>{label}</span>
     </div>
   );
 }

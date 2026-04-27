@@ -52,21 +52,26 @@ export default function AuthModal({ onFermer, onConnecte }: AuthModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ background: "rgba(0,0,0,0.7)" }}
       onClick={(e) => { if (e.target === e.currentTarget) onFermer(); }}
     >
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-6">
+      <div
+        className="w-full max-w-md p-6 space-y-6"
+        style={{ background: "var(--card)", borderRadius: "var(--r-lg)", border: "1px solid var(--border)", boxShadow: "0 4px 16px rgba(0,0,0,0.3)" }}
+      >
         {/* Onglets */}
-        <div className="flex border-b border-gray-200">
+        <div className="flex" style={{ borderBottom: "1px solid var(--border)" }}>
           {(["connexion", "inscription"] as Onglet[]).map((o) => (
             <button
               key={o}
               onClick={() => { setOnglet(o); setErreur(null); }}
-              className={`flex-1 py-2 text-sm font-semibold capitalize transition-colors ${
+              className="flex-1 py-2 text-sm font-semibold capitalize transition-colors"
+              style={
                 onglet === o
-                  ? "border-b-2 border-indigo-600 text-indigo-600"
-                  : "text-gray-500 hover:text-gray-700"
-              }`}
+                  ? { borderBottom: "2px solid var(--indigo)", color: "var(--indigo-l)", marginBottom: -1 }
+                  : { color: "var(--text3)" }
+              }
             >
               {o === "connexion" ? "Connexion" : "Créer un compte"}
             </button>
@@ -76,7 +81,7 @@ export default function AuthModal({ onFermer, onConnecte }: AuthModalProps) {
         <form onSubmit={handleSoumettre} className="space-y-4">
           {onglet === "inscription" && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium mb-1" style={{ color: "var(--text2)" }}>
                 Pseudo (visible publiquement)
               </label>
               <input
@@ -87,24 +92,26 @@ export default function AuthModal({ onFermer, onConnecte }: AuthModalProps) {
                 required
                 minLength={3}
                 maxLength={20}
-                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 py-2 rounded-xl focus:outline-none"
+                style={{ background: "rgba(255,255,255,0.05)", color: "var(--text)", border: "1px solid var(--border2)" }}
               />
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-medium mb-1" style={{ color: "var(--text2)" }}>Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2 rounded-xl focus:outline-none"
+              style={{ background: "rgba(255,255,255,0.05)", color: "var(--text)", border: "1px solid var(--border2)" }}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
+            <label className="block text-sm font-medium mb-1" style={{ color: "var(--text2)" }}>Mot de passe</label>
             <div className="relative">
               <input
                 type={voirMotDePasse ? "text" : "password"}
@@ -112,12 +119,14 @@ export default function AuthModal({ onFermer, onConnecte }: AuthModalProps) {
                 onChange={(e) => setMotDePasse(e.target.value)}
                 required
                 minLength={6}
-                className="w-full px-4 py-2 pr-11 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900"
+                className="w-full px-4 py-2 pr-11 rounded-xl focus:outline-none"
+                style={{ background: "rgba(255,255,255,0.05)", color: "var(--text)", border: "1px solid var(--border2)" }}
               />
               <button
                 type="button"
                 onClick={() => setVoirMotDePasse((v) => !v)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 transition-colors"
+                style={{ color: "var(--text3)" }}
                 aria-label={voirMotDePasse ? "Masquer le mot de passe" : "Voir le mot de passe"}
               >
                 {voirMotDePasse ? (
@@ -135,13 +144,19 @@ export default function AuthModal({ onFermer, onConnecte }: AuthModalProps) {
           </div>
 
           {erreur && (
-            <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">{erreur}</p>
+            <p
+              className="text-sm px-3 py-2 rounded-lg"
+              style={{ color: "var(--coral-l)", background: "rgba(239,110,90,0.1)" }}
+            >
+              {erreur}
+            </p>
           )}
 
           <button
             type="submit"
             disabled={chargement}
-            className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white font-semibold rounded-xl transition-colors"
+            className="w-full py-3 font-semibold rounded-xl transition-colors"
+            style={{ background: chargement ? "rgba(77,94,232,0.4)" : "var(--indigo)", color: "#fff" }}
           >
             {chargement ? "Chargement..." : onglet === "connexion" ? "Se connecter" : "Créer le compte"}
           </button>

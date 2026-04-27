@@ -158,19 +158,18 @@ export default function MathKeyboard({ onInsert }: MathKeyboardProps) {
   const [ongletActif, setOngletActif] = useState<TabId>("operations");
 
   return (
-    <div className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
+    <div className="rounded-xl overflow-hidden" style={{ border: "1px solid var(--border)", background: "var(--card)", boxShadow: "0 4px 16px rgba(0,0,0,0.3)" }}>
       {/* Barre des onglets */}
-      <div className="flex overflow-x-auto bg-blue-600 scrollbar-hide">
+      <div className="flex overflow-x-auto scrollbar-hide" style={{ background: "var(--indigo)" }}>
         {ONGLETS.map((onglet) => (
           <button
             key={onglet.id}
             type="button"
             onClick={() => setOngletActif(onglet.id)}
-            className={`flex-shrink-0 px-3 py-2 text-xs font-semibold tracking-wide transition-colors whitespace-nowrap ${
-              ongletActif === onglet.id
-                ? "bg-white text-blue-700"
-                : "text-blue-100 hover:bg-blue-500"
-            }`}
+            className="flex-shrink-0 px-3 py-2 text-xs font-semibold tracking-wide transition-colors whitespace-nowrap"
+            style={ongletActif === onglet.id
+              ? { background: "rgba(255,255,255,0.15)", color: "#fff" }
+              : { background: "transparent", color: "rgba(255,255,255,0.65)" }}
           >
             {onglet.label}
           </button>
@@ -178,7 +177,7 @@ export default function MathKeyboard({ onInsert }: MathKeyboardProps) {
       </div>
 
       {/* Grille de symboles */}
-      <div className="p-2 space-y-1 bg-gray-50">
+      <div className="p-2 space-y-1" style={{ background: "var(--bg2)" }}>
         {SYMBOLES[ongletActif].map((rangee, ri) => (
           <div key={ri} className="flex flex-wrap gap-1">
             {rangee.map((symbole, si) => (
@@ -186,7 +185,8 @@ export default function MathKeyboard({ onInsert }: MathKeyboardProps) {
                 key={si}
                 type="button"
                 onClick={() => onInsert(symbole.value)}
-                className="min-w-[2.5rem] h-10 px-2 border border-gray-300 rounded-lg bg-white hover:bg-blue-50 hover:border-blue-400 text-sm font-medium text-gray-800 transition-all duration-100 active:scale-95 shadow-sm"
+                className="min-w-[2.5rem] h-10 px-2 rounded-lg text-sm font-medium transition-all duration-100 active:scale-95"
+                style={{ border: "1px solid var(--border2)", background: "var(--card)", color: "var(--text)", boxShadow: "0 1px 4px rgba(0,0,0,0.2)" }}
               >
                 {symbole.label}
               </button>

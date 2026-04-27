@@ -71,32 +71,42 @@ export default function ParametresPage() {
 
   if (!mounted) {
     return (
-      <div className="flex flex-col min-h-screen">
+      <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", background: "var(--bg)" }}>
         <Header />
-        <main className="flex-1 flex items-center justify-center">
-          <div className="w-8 h-8 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin" />
+        <main style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ width: 32, height: 32, border: "4px solid rgba(77,94,232,0.3)", borderTopColor: "var(--indigo)", borderRadius: "50%" }} className="animate-spin" />
         </main>
       </div>
     );
   }
 
+  const sectionStyle = {
+    background: "var(--card)",
+    borderRadius: "var(--r-lg)",
+    border: "1px solid var(--border)",
+    padding: 20,
+    display: "flex",
+    flexDirection: "column" as const,
+    gap: 16,
+  };
+
   return (
-    <div className="flex flex-col min-h-screen">
+    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", background: "var(--bg)" }}>
       <Header />
-      <main className="max-w-2xl mx-auto w-full px-4 py-6 space-y-6">
+      <main style={{ maxWidth: 720, margin: "0 auto", width: "100%", padding: "24px 16px 48px", display: "flex", flexDirection: "column", gap: 24 }}>
 
         {sauvegarde && (
-          <div className="fixed top-16 right-4 z-50 bg-green-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-lg">
+          <div style={{ position: "fixed", top: 64, right: 16, zIndex: 50, background: "var(--teal)", color: "#fff", fontSize: 12, fontWeight: 600, padding: "6px 12px", borderRadius: "var(--r-sm)", boxShadow: "0 4px 16px rgba(0,0,0,0.3)" }}>
             ✓ Enregistré
           </div>
         )}
 
         {/* Objectif quotidien */}
-        <section className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm space-y-4">
-          <h2 className="font-bold text-gray-800">🎯 Objectif quotidien</h2>
+        <section style={sectionStyle}>
+          <h2 style={{ fontWeight: 700, color: "var(--text)" }}>🎯 Objectif quotidien</h2>
 
-          <div className="space-y-2">
-            <label className="flex items-center gap-3 cursor-pointer">
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <label style={{ display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }}>
               <input
                 type="radio"
                 name="objectifType"
@@ -104,9 +114,9 @@ export default function ParametresPage() {
                 onChange={() => handleChange("objectifType", "minimum")}
                 className="accent-indigo-600"
               />
-              <span className="text-sm text-gray-700">1 quiz minimum par jour</span>
+              <span style={{ fontSize: 14, color: "var(--text2)" }}>1 quiz minimum par jour</span>
             </label>
-            <label className="flex items-center gap-3 cursor-pointer">
+            <label style={{ display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }}>
               <input
                 type="radio"
                 name="objectifType"
@@ -114,51 +124,51 @@ export default function ParametresPage() {
                 onChange={() => handleChange("objectifType", "personnalise")}
                 className="accent-indigo-600"
               />
-              <span className="text-sm text-gray-700">Nombre personnalisé</span>
+              <span style={{ fontSize: 14, color: "var(--text2)" }}>Nombre personnalisé</span>
             </label>
           </div>
 
           {params.objectifType === "personnalise" && (
-            <div className="flex items-center gap-3 pl-6">
-              <span className="text-sm text-gray-600">Nombre de quiz :</span>
+            <div style={{ display: "flex", alignItems: "center", gap: 12, paddingLeft: 24 }}>
+              <span style={{ fontSize: 14, color: "var(--text2)" }}>Nombre de quiz :</span>
               <input
                 type="number"
                 min={1}
                 max={10}
                 value={params.objectifNombre}
                 onChange={(e) => handleChange("objectifNombre", Math.min(10, Math.max(1, Number(e.target.value))))}
-                className="w-16 border border-gray-300 rounded-lg px-2 py-1 text-sm text-center focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                style={{ width: 64, border: "1px solid var(--border2)", borderRadius: "var(--r-sm)", padding: "4px 8px", fontSize: 14, textAlign: "center", background: "var(--bg2)", color: "var(--text)", outline: "none" }}
               />
-              <span className="text-sm text-gray-500">/ jour</span>
+              <span style={{ fontSize: 14, color: "var(--text3)" }}>/ jour</span>
             </div>
           )}
 
-          <p className="text-xs text-gray-400 bg-gray-50 rounded-lg px-3 py-2">
+          <p style={{ fontSize: 12, color: "var(--text3)", background: "rgba(255,255,255,0.04)", borderRadius: "var(--r-sm)", padding: "8px 12px" }}>
             Seuls les quiz réussis à {params.seuilReussite}% ou plus comptent pour l&apos;objectif.
           </p>
         </section>
 
         {/* Notifications */}
-        <section className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm space-y-4">
-          <h2 className="font-bold text-gray-800">🔔 Notifications</h2>
-          <p className="text-sm text-gray-500">
-            Un rappel te sera envoyé à <strong>18h00</strong> si ton objectif du jour n&apos;est pas encore atteint.
+        <section style={sectionStyle}>
+          <h2 style={{ fontWeight: 700, color: "var(--text)" }}>🔔 Notifications</h2>
+          <p style={{ fontSize: 14, color: "var(--text3)" }}>
+            Un rappel te sera envoyé à <strong style={{ color: "var(--text2)" }}>18h00</strong> si ton objectif du jour n&apos;est pas encore atteint.
           </p>
 
           {notifStatut === "non-supporte" && (
-            <p className="text-xs text-orange-600 bg-orange-50 rounded-lg px-3 py-2">
+            <p style={{ fontSize: 12, color: "var(--amber)", background: "rgba(245,200,64,0.1)", borderRadius: "var(--r-sm)", padding: "8px 12px" }}>
               Les notifications ne sont pas supportées par ce navigateur.
             </p>
           )}
 
           {notifStatut === "refusee" && (
-            <p className="text-xs text-red-600 bg-red-50 rounded-lg px-3 py-2">
+            <p style={{ fontSize: 12, color: "var(--coral-l)", background: "rgba(239,110,90,0.1)", borderRadius: "var(--r-sm)", padding: "8px 12px" }}>
               Notifications bloquées. Autorise-les dans les paramètres de ton navigateur.
             </p>
           )}
 
           {notifStatut === "accordee" && (
-            <p className="text-xs text-green-600 bg-green-50 rounded-lg px-3 py-2 font-semibold">
+            <p style={{ fontSize: 12, color: "var(--teal)", background: "rgba(61,214,191,0.1)", borderRadius: "var(--r-sm)", padding: "8px 12px", fontWeight: 600 }}>
               ✓ Notifications activées
             </p>
           )}
@@ -166,7 +176,7 @@ export default function ParametresPage() {
           {notifStatut === "defaut" && (
             <button
               onClick={demanderPermissionNotifs}
-              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors"
+              style={{ padding: "8px 16px", background: "var(--indigo)", color: "#fff", fontSize: 14, fontWeight: 600, borderRadius: "var(--r-md)", border: "none", cursor: "pointer", alignSelf: "flex-start" }}
             >
               Activer les notifications
             </button>
@@ -174,15 +184,15 @@ export default function ParametresPage() {
         </section>
 
         {/* Autres paramètres */}
-        <section className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm space-y-5">
-          <h2 className="font-bold text-gray-800">⚙️ Préférences</h2>
+        <section style={sectionStyle}>
+          <h2 style={{ fontWeight: 700, color: "var(--text)" }}>⚙️ Préférences</h2>
 
           {/* Seuil de réussite */}
-          <div className="space-y-1.5">
-            <label className="text-sm font-medium text-gray-700">
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            <label style={{ fontSize: 14, fontWeight: 500, color: "var(--text2)" }}>
               Seuil de réussite minimum
             </label>
-            <div className="flex items-center gap-3">
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <input
                 type="range"
                 min={50}
@@ -190,32 +200,40 @@ export default function ParametresPage() {
                 step={5}
                 value={params.seuilReussite}
                 onChange={(e) => handleChange("seuilReussite", Number(e.target.value))}
-                className="flex-1 accent-indigo-600"
+                style={{ flex: 1 }}
+                className="accent-indigo-600"
               />
-              <span className="text-sm font-bold text-indigo-700 w-10 text-right">
+              <span style={{ fontSize: 14, fontWeight: 700, color: "var(--indigo-l)", width: 40, textAlign: "right" }}>
                 {params.seuilReussite}%
               </span>
             </div>
-            <p className="text-xs text-gray-400">
+            <p style={{ fontSize: 12, color: "var(--text3)" }}>
               Un quiz est considéré réussi si ton score atteint ce seuil.
             </p>
           </div>
 
           {/* Nombre de questions par quiz */}
-          <div className="space-y-1.5">
-            <label className="text-sm font-medium text-gray-700">
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            <label style={{ fontSize: 14, fontWeight: 500, color: "var(--text2)" }}>
               Nombre de questions par quiz
             </label>
-            <div className="flex gap-2">
+            <div style={{ display: "flex", gap: 8 }}>
               {([3, 5, 10] as QuestionsParQuiz[]).map((n) => (
                 <button
                   key={n}
                   onClick={() => handleChange("questionsParQuiz", n)}
-                  className={`px-4 py-1.5 rounded-full text-sm font-semibold border-2 transition-colors ${
-                    params.questionsParQuiz === n
-                      ? "bg-indigo-600 text-white border-indigo-600"
-                      : "bg-white text-indigo-600 border-indigo-300 hover:border-indigo-500"
-                  }`}
+                  style={{
+                    padding: "6px 16px",
+                    borderRadius: "var(--r-pill)",
+                    fontSize: 14,
+                    fontWeight: 600,
+                    border: "2px solid",
+                    cursor: "pointer",
+                    transition: "all 0.15s",
+                    ...(params.questionsParQuiz === n
+                      ? { background: "var(--indigo)", color: "#fff", borderColor: "var(--indigo)" }
+                      : { background: "transparent", color: "var(--indigo-l)", borderColor: "rgba(77,94,232,0.4)" })
+                  }}
                 >
                   {n}
                 </button>
@@ -224,18 +242,25 @@ export default function ParametresPage() {
           </div>
 
           {/* Niveau par défaut */}
-          <div className="space-y-1.5">
-            <label className="text-sm font-medium text-gray-700">Niveau par défaut</label>
-            <div className="flex gap-2 flex-wrap">
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            <label style={{ fontSize: 14, fontWeight: 500, color: "var(--text2)" }}>Niveau par défaut</label>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               {(["seconde", "premiere", "terminale"] as const).map((n) => (
                 <button
                   key={n}
                   onClick={() => handleChange("niveauDefaut", n)}
-                  className={`px-3 py-1.5 rounded-full text-sm font-semibold border-2 transition-colors capitalize ${
-                    params.niveauDefaut === n
-                      ? "bg-indigo-600 text-white border-indigo-600"
-                      : "bg-white text-indigo-600 border-indigo-300 hover:border-indigo-500"
-                  }`}
+                  style={{
+                    padding: "6px 12px",
+                    borderRadius: "var(--r-pill)",
+                    fontSize: 14,
+                    fontWeight: 600,
+                    border: "2px solid",
+                    cursor: "pointer",
+                    transition: "all 0.15s",
+                    ...(params.niveauDefaut === n
+                      ? { background: "var(--indigo)", color: "#fff", borderColor: "var(--indigo)" }
+                      : { background: "transparent", color: "var(--indigo-l)", borderColor: "rgba(77,94,232,0.4)" })
+                  }}
                 >
                   {n === "premiere" ? "Première" : n.charAt(0).toUpperCase() + n.slice(1)}
                 </button>
@@ -244,37 +269,53 @@ export default function ParametresPage() {
           </div>
 
           {/* Explications avancées ouvertes par défaut */}
-          <div className="flex items-center justify-between">
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <div>
-              <p className="text-sm font-medium text-gray-700">Explications avancées ouvertes</p>
-              <p className="text-xs text-gray-400">Afficher les détails dépliés après correction</p>
+              <p style={{ fontSize: 14, fontWeight: 500, color: "var(--text2)" }}>Explications avancées ouvertes</p>
+              <p style={{ fontSize: 12, color: "var(--text3)" }}>Afficher les détails dépliés après correction</p>
             </div>
             <button
               role="switch"
               aria-checked={params.explicationsAvanceesOuvertes}
               onClick={() => handleChange("explicationsAvanceesOuvertes", !params.explicationsAvanceesOuvertes)}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                params.explicationsAvanceesOuvertes ? "bg-indigo-600" : "bg-gray-300"
-              }`}
+              style={{
+                position: "relative",
+                display: "inline-flex",
+                height: 24,
+                width: 44,
+                alignItems: "center",
+                borderRadius: 999,
+                border: "none",
+                cursor: "pointer",
+                transition: "background 0.2s",
+                background: params.explicationsAvanceesOuvertes ? "var(--indigo)" : "rgba(255,255,255,0.15)",
+              }}
             >
               <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${
-                  params.explicationsAvanceesOuvertes ? "translate-x-6" : "translate-x-1"
-                }`}
+                style={{
+                  display: "inline-block",
+                  height: 16,
+                  width: 16,
+                  borderRadius: "50%",
+                  background: "#fff",
+                  boxShadow: "0 1px 4px rgba(0,0,0,0.3)",
+                  transition: "transform 0.2s",
+                  transform: params.explicationsAvanceesOuvertes ? "translateX(24px)" : "translateX(4px)",
+                }}
               />
             </button>
           </div>
         </section>
 
         {/* Danger Zone */}
-        <section className="bg-white rounded-2xl border border-red-100 p-5 shadow-sm space-y-3">
-          <h2 className="font-bold text-red-600">⚠️ Zone de danger</h2>
-          <p className="text-sm text-gray-500">
+        <section style={{ ...sectionStyle, border: "1px solid rgba(239,110,90,0.3)" }}>
+          <h2 style={{ fontWeight: 700, color: "var(--coral-l)" }}>⚠️ Zone de danger</h2>
+          <p style={{ fontSize: 14, color: "var(--text3)" }}>
             La réinitialisation supprime définitivement tous tes scores, ta progression et ton historique de quiz.
           </p>
           <button
             onClick={() => setConfirmEtape(1)}
-            className="text-sm text-red-500 hover:text-red-700 underline underline-offset-2 transition-colors"
+            style={{ fontSize: 14, color: "var(--coral-l)", background: "none", border: "none", cursor: "pointer", textDecoration: "underline", textUnderlineOffset: 2, padding: 0, alignSelf: "flex-start" }}
           >
             Réinitialiser toute la progression
           </button>
@@ -284,25 +325,25 @@ export default function ParametresPage() {
 
       {/* Modal confirmation étape 1 */}
       {confirmEtape === 1 && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
-          <div className="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full space-y-4">
-            <p className="text-2xl text-center">⚠️</p>
-            <h2 className="text-base font-bold text-gray-800 text-center">
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50, padding: "0 16px" }}>
+          <div style={{ background: "var(--bg2)", borderRadius: "var(--r-lg)", border: "1px solid var(--border)", boxShadow: "0 8px 32px rgba(0,0,0,0.5)", padding: 24, maxWidth: 360, width: "100%", display: "flex", flexDirection: "column", gap: 16 }}>
+            <p style={{ fontSize: 32, textAlign: "center" }}>⚠️</p>
+            <h2 style={{ fontSize: 16, fontWeight: 700, color: "var(--text)", textAlign: "center" }}>
               Réinitialiser la progression ?
             </h2>
-            <p className="text-sm text-gray-500 text-center">
+            <p style={{ fontSize: 14, color: "var(--text3)", textAlign: "center" }}>
               Tous tes scores, badges et l&apos;historique des quiz seront supprimés définitivement.
             </p>
-            <div className="flex gap-3 pt-1">
+            <div style={{ display: "flex", gap: 12, paddingTop: 4 }}>
               <button
                 onClick={() => setConfirmEtape(0)}
-                className="flex-1 py-2.5 rounded-xl border-2 border-gray-200 text-sm font-semibold text-gray-600 hover:border-gray-300 transition-colors"
+                style={{ flex: 1, padding: "10px 0", borderRadius: "var(--r-md)", border: "2px solid var(--border2)", fontSize: 14, fontWeight: 600, color: "var(--text2)", background: "transparent", cursor: "pointer" }}
               >
                 Annuler
               </button>
               <button
                 onClick={() => setConfirmEtape(2)}
-                className="flex-1 py-2.5 rounded-xl bg-red-500 hover:bg-red-600 text-sm font-semibold text-white transition-colors"
+                style={{ flex: 1, padding: "10px 0", borderRadius: "var(--r-md)", background: "var(--coral)", border: "none", fontSize: 14, fontWeight: 600, color: "#fff", cursor: "pointer" }}
               >
                 Oui, continuer
               </button>
@@ -313,25 +354,25 @@ export default function ParametresPage() {
 
       {/* Modal confirmation étape 2 */}
       {confirmEtape === 2 && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
-          <div className="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full space-y-4">
-            <p className="text-2xl text-center">🗑️</p>
-            <h2 className="text-base font-bold text-red-600 text-center">
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50, padding: "0 16px" }}>
+          <div style={{ background: "var(--bg2)", borderRadius: "var(--r-lg)", border: "1px solid var(--border)", boxShadow: "0 8px 32px rgba(0,0,0,0.5)", padding: 24, maxWidth: 360, width: "100%", display: "flex", flexDirection: "column", gap: 16 }}>
+            <p style={{ fontSize: 32, textAlign: "center" }}>🗑️</p>
+            <h2 style={{ fontSize: 16, fontWeight: 700, color: "var(--coral-l)", textAlign: "center" }}>
               Êtes-vous vraiment sûr ?
             </h2>
-            <p className="text-sm text-gray-500 text-center">
-              Cette action est <span className="font-semibold text-gray-700">irréversible</span>.
+            <p style={{ fontSize: 14, color: "var(--text3)", textAlign: "center" }}>
+              Cette action est <span style={{ fontWeight: 600, color: "var(--text2)" }}>irréversible</span>.
             </p>
-            <div className="flex gap-3 pt-1">
+            <div style={{ display: "flex", gap: 12, paddingTop: 4 }}>
               <button
                 onClick={() => setConfirmEtape(0)}
-                className="flex-1 py-2.5 rounded-xl border-2 border-gray-200 text-sm font-semibold text-gray-600 hover:border-gray-300 transition-colors"
+                style={{ flex: 1, padding: "10px 0", borderRadius: "var(--r-md)", border: "2px solid var(--border2)", fontSize: 14, fontWeight: 600, color: "var(--text2)", background: "transparent", cursor: "pointer" }}
               >
                 Annuler
               </button>
               <button
                 onClick={reinitialiserProgression}
-                className="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-sm font-semibold text-white transition-colors"
+                style={{ flex: 1, padding: "10px 0", borderRadius: "var(--r-md)", background: "#dc2626", border: "none", fontSize: 14, fontWeight: 600, color: "#fff", cursor: "pointer" }}
               >
                 Tout effacer
               </button>

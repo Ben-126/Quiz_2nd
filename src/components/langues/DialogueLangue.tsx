@@ -148,7 +148,7 @@ export default function DialogueLangue() {
 
   return (
     <div className="space-y-4">
-      <p className="text-sm text-gray-500 text-center">
+      <p className="text-sm text-center" style={{ color: "var(--text3)" }}>
         Conversez avec l&apos;IA dans la langue de votre choix — vos erreurs seront corrigées.
       </p>
 
@@ -159,11 +159,12 @@ export default function DialogueLangue() {
             <button
               key={l.code}
               onClick={() => changerLangue(l.code)}
-              className={`px-3 py-1.5 rounded-full text-sm font-medium border-2 transition-colors ${
+              className="px-3 py-1.5 text-sm font-medium transition-colors"
+              style={
                 langue === l.code
-                  ? "bg-indigo-600 text-white border-indigo-600"
-                  : "bg-white text-gray-600 border-gray-200 hover:border-indigo-300"
-              }`}
+                  ? { background: "var(--indigo)", color: "#fff", borderRadius: "var(--r-pill)", border: "2px solid var(--indigo)" }
+                  : { background: "transparent", color: "var(--text2)", borderRadius: "var(--r-pill)", border: "2px solid var(--border2)" }
+              }
             >
               {l.emoji} {l.nom}
             </button>
@@ -172,7 +173,8 @@ export default function DialogueLangue() {
         <select
           value={niveau}
           onChange={(e) => setNiveau(e.target.value)}
-          className="text-sm border border-gray-200 rounded-lg px-2 py-1.5 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          className="text-sm px-2 py-1.5 focus:outline-none"
+          style={{ background: "rgba(255,255,255,0.05)", color: "var(--text)", border: "1px solid var(--border2)", borderRadius: "var(--r-sm)" }}
         >
           {NIVEAUX.map((n) => (
             <option key={n.code} value={n.code}>{n.label}</option>
@@ -181,16 +183,22 @@ export default function DialogueLangue() {
       </div>
 
       {/* Zone de conversation */}
-      <div className="border border-gray-200 rounded-xl overflow-hidden flex flex-col" style={{ minHeight: "320px" }}>
+      <div
+        className="overflow-hidden flex flex-col"
+        style={{ minHeight: "320px", border: "1px solid var(--border)", borderRadius: "var(--r-md)" }}
+      >
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50" style={{ maxHeight: "360px" }}>
+        <div
+          className="flex-1 overflow-y-auto p-4 space-y-3"
+          style={{ maxHeight: "360px", background: "var(--bg2)" }}
+        >
           {messages.length === 0 && !reponseEnCours && (
             <div className="text-center py-8 space-y-2">
               <p className="text-3xl">{langueInfo.emoji}</p>
-              <p className="text-gray-600 text-sm font-medium">
+              <p className="text-sm font-medium" style={{ color: "var(--text2)" }}>
                 Commencez à écrire en {langueInfo.nom.toLowerCase()} !
               </p>
-              <p className="text-gray-400 text-xs">
+              <p className="text-xs" style={{ color: "var(--text3)" }}>
                 L&apos;IA répondra en {langueInfo.nom.toLowerCase()} et corrigera vos erreurs.
               </p>
             </div>
@@ -199,11 +207,12 @@ export default function DialogueLangue() {
           {messages.map((msg, i) => (
             <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
               <div
-                className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm leading-relaxed whitespace-pre-wrap ${
+                className="max-w-[85%] px-3 py-2 text-sm leading-relaxed whitespace-pre-wrap"
+                style={
                   msg.role === "user"
-                    ? "bg-indigo-600 text-white rounded-br-sm"
-                    : "bg-white text-gray-800 rounded-bl-sm border border-gray-200"
-                }`}
+                    ? { background: "var(--indigo)", color: "#fff", borderRadius: "16px 16px 4px 16px" }
+                    : { background: "var(--card)", color: "var(--text)", border: "1px solid var(--border)", borderRadius: "16px 16px 16px 4px" }
+                }
               >
                 {msg.content}
               </div>
@@ -212,20 +221,26 @@ export default function DialogueLangue() {
 
           {reponseEnCours && (
             <div className="flex justify-start">
-              <div className="max-w-[85%] rounded-2xl rounded-bl-sm px-3 py-2 text-sm leading-relaxed whitespace-pre-wrap bg-white text-gray-800 border border-gray-200">
+              <div
+                className="max-w-[85%] px-3 py-2 text-sm leading-relaxed whitespace-pre-wrap"
+                style={{ background: "var(--card)", color: "var(--text)", border: "1px solid var(--border)", borderRadius: "16px 16px 16px 4px" }}
+              >
                 {reponseEnCours}
-                <span className="inline-block w-1 h-4 ml-0.5 bg-gray-400 animate-pulse align-middle" />
+                <span className="inline-block w-1 h-4 ml-0.5 animate-pulse align-middle" style={{ background: "var(--text3)" }} />
               </div>
             </div>
           )}
 
           {enCours && !reponseEnCours && (
             <div className="flex justify-start">
-              <div className="bg-white border border-gray-200 rounded-2xl rounded-bl-sm px-3 py-2">
+              <div
+                className="px-3 py-2"
+                style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "16px 16px 16px 4px" }}
+              >
                 <div className="flex gap-1 items-center h-5">
-                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                  <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: "var(--text3)", animationDelay: "0ms" }} />
+                  <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: "var(--text3)", animationDelay: "150ms" }} />
+                  <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: "var(--text3)", animationDelay: "300ms" }} />
                 </div>
               </div>
             </div>
@@ -236,15 +251,21 @@ export default function DialogueLangue() {
 
         {/* Note mode local */}
         {modeLocal && (
-          <div className="px-3 py-1 bg-amber-50 border-t border-amber-100">
-            <p className="text-[10px] text-amber-600 text-center">
+          <div
+            className="px-3 py-1"
+            style={{ background: "rgba(245,200,64,0.1)", borderTop: "1px solid rgba(245,200,64,0.15)" }}
+          >
+            <p className="text-[10px] text-center" style={{ color: "var(--amber)" }}>
               Mode hors ligne — configurez OPENAI_API_KEY pour un dialogue IA complet
             </p>
           </div>
         )}
 
         {/* Zone de saisie */}
-        <div className="border-t border-gray-200 p-3 flex gap-2 items-end bg-white">
+        <div
+          className="p-3 flex gap-2 items-end"
+          style={{ borderTop: "1px solid var(--border)", background: "var(--card)" }}
+        >
           <textarea
             ref={inputRef}
             value={input}
@@ -253,18 +274,19 @@ export default function DialogueLangue() {
             placeholder={`Écrivez en ${langueInfo.nom.toLowerCase()}…`}
             rows={1}
             disabled={enCours}
-            className="flex-1 resize-none rounded-xl border border-gray-200 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-400 disabled:opacity-50 max-h-24 overflow-y-auto"
-            style={{ fieldSizing: "content" } as React.CSSProperties}
+            className="flex-1 resize-none px-3 py-2 text-sm focus:outline-none disabled:opacity-50 max-h-24 overflow-y-auto"
+            style={{ background: "rgba(255,255,255,0.05)", color: "var(--text)", border: "1px solid var(--border2)", borderRadius: "var(--r-sm)", fieldSizing: "content" } as React.CSSProperties}
           />
           {hasSpeechRecognition && (
             <button
               onClick={ecouteVocale ? arreterEcoute : demarrerEcoute}
               disabled={enCours}
-              className={`flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${
+              className="flex-shrink-0 w-9 h-9 flex items-center justify-center transition-colors disabled:opacity-40"
+              style={
                 ecouteVocale
-                  ? "bg-red-500 hover:bg-red-600 text-white"
-                  : "bg-gray-100 hover:bg-gray-200 text-gray-600"
-              } disabled:opacity-40`}
+                  ? { background: "rgba(239,110,90,0.9)", color: "#fff", borderRadius: "var(--r-sm)" }
+                  : { background: "rgba(255,255,255,0.07)", color: "var(--text2)", borderRadius: "var(--r-sm)" }
+              }
               aria-label={ecouteVocale ? "Arrêter la saisie vocale" : "Dicter"}
             >
               🎤
@@ -273,7 +295,12 @@ export default function DialogueLangue() {
           <button
             onClick={envoyerMessage}
             disabled={!input.trim() || enCours}
-            className="flex-shrink-0 w-9 h-9 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-200 text-white disabled:text-gray-400 transition-colors flex items-center justify-center"
+            className="flex-shrink-0 w-9 h-9 transition-colors flex items-center justify-center"
+            style={{
+              background: !input.trim() || enCours ? "rgba(255,255,255,0.07)" : "var(--indigo)",
+              color: !input.trim() || enCours ? "var(--text3)" : "#fff",
+              borderRadius: "var(--r-sm)",
+            }}
             aria-label="Envoyer"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
@@ -287,7 +314,8 @@ export default function DialogueLangue() {
         <div className="flex justify-end">
           <button
             onClick={() => { setMessages([]); setModeLocal(false); }}
-            className="text-xs text-gray-400 hover:text-red-500 underline transition-colors"
+            className="text-xs underline transition-colors"
+            style={{ color: "var(--text3)" }}
           >
             Effacer la conversation
           </button>

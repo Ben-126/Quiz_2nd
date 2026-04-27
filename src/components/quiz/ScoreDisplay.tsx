@@ -75,9 +75,9 @@ export default function ScoreDisplay({
     pourcentage >= 40 ? "bg-orange-500" : "bg-red-500";
 
   const couleurNote =
-    notesur20 >= 16 ? "text-green-600" :
-    notesur20 >= 12 ? "text-yellow-600" :
-    notesur20 >= 8 ? "text-orange-500" : "text-red-600";
+    notesur20 >= 16 ? "var(--teal)" :
+    notesur20 >= 12 ? "var(--amber)" :
+    notesur20 >= 8 ? "#f0a832" : "var(--coral-l)";
 
   return (
     <>
@@ -87,8 +87,8 @@ export default function ScoreDisplay({
       <div className="text-center space-y-6" data-testid="score-display">
       {/* En-tête mode contrôle */}
       {modeControle && (
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-100 border border-orange-200">
-          <span className="text-sm font-bold text-orange-700">📝 Contrôle terminé</span>
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: "rgba(245,200,64,0.1)", border: "1px solid rgba(245,200,64,0.3)" }}>
+          <span style={{ fontSize: 14, fontWeight: 700, color: "var(--amber)" }}>📝 Contrôle terminé</span>
         </div>
       )}
 
@@ -100,37 +100,37 @@ export default function ScoreDisplay({
       {modeControle ? (
         <div>
           <div className="flex items-baseline justify-center gap-1">
-            <span className={`text-6xl font-bold ${couleurNote}`} data-testid="note-controle">
+            <span className="text-6xl font-bold" style={{ color: couleurNote }} data-testid="note-controle">
               {notesur20 % 1 === 0 ? notesur20.toFixed(0) : notesur20.toFixed(1)}
             </span>
-            <span className="text-3xl text-gray-400">/20</span>
+            <span className="text-3xl" style={{ color: "var(--text3)" }}>/20</span>
           </div>
-          <p className="text-sm text-gray-400 mt-1">
+          <p style={{ fontSize: 14, color: "var(--text3)", marginTop: 4 }}>
             {nbCorrectes} bonne{nbCorrectes > 1 ? "s" : ""} réponse{nbCorrectes > 1 ? "s" : ""} sur {questions.length}
           </p>
         </div>
       ) : (
         <div>
-          <p className="text-5xl font-bold text-gray-800" data-testid="score-valeur">
-            {pourcentage}<span className="text-3xl text-gray-400">%</span>
+          <p className="text-5xl font-bold" style={{ color: "var(--text)" }} data-testid="score-valeur">
+            {pourcentage}<span className="text-3xl" style={{ color: "var(--text3)" }}>%</span>
           </p>
-          <p className="text-sm text-gray-400 mt-1" data-testid="score-points">{score} pts sur {maxScore}</p>
+          <p style={{ fontSize: 14, color: "var(--text3)", marginTop: 4 }} data-testid="score-points">{score} pts sur {maxScore}</p>
         </div>
       )}
 
-      <div className="w-full h-4 bg-gray-100 rounded-full overflow-hidden">
+      <div className="w-full h-4 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.08)" }}>
         <div
           className={`h-full ${couleurBarre} rounded-full transition-all duration-700`}
           style={{ width: `${pourcentage}%` }}
         />
       </div>
 
-      <p className="text-gray-600 font-medium">{texte}</p>
+      <p style={{ color: "var(--text2)", fontWeight: 500 }}>{texte}</p>
 
       {/* Révision détaillée question par question (mode contrôle) */}
       {modeControle && questions.length > 0 && (
         <div className="text-left space-y-3 mt-2">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+          <p style={{ fontSize: 12, fontWeight: 600, color: "var(--text3)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
             Corrigé du contrôle
           </p>
           {questions.map((q, i) => {
@@ -142,25 +142,25 @@ export default function ScoreDisplay({
             return (
               <div
                 key={i}
-                className={`rounded-xl border p-3.5 text-sm ${
-                  correcte
-                    ? "bg-green-50 border-green-200"
-                    : "bg-red-50 border-red-200"
-                }`}
+                className="rounded-xl p-3.5 text-sm"
+                style={{
+                  background: correcte ? "rgba(61,214,191,0.08)" : "rgba(239,110,90,0.08)",
+                  border: `1px solid ${correcte ? "rgba(61,214,191,0.3)" : "rgba(239,110,90,0.3)"}`,
+                }}
               >
                 <div className="flex items-start gap-2">
                   <span className="text-base mt-0.5 shrink-0">{correcte ? "✅" : "❌"}</span>
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-800 leading-snug mb-2">
-                      <span className="text-gray-400 mr-1">{i + 1}.</span>
+                    <p style={{ fontWeight: 500, color: "var(--text)", lineHeight: 1.4, marginBottom: 8 }}>
+                      <span style={{ color: "var(--text3)", marginRight: 4 }}>{i + 1}.</span>
                       {q.question}
                     </p>
                     <div className="space-y-1 text-xs">
-                      <p className={correcte ? "text-green-700" : "text-red-700"}>
+                      <p style={{ color: correcte ? "var(--teal)" : "var(--coral-l)" }}>
                         <span className="font-semibold">Ta réponse :</span> {userReponse}
                       </p>
                       {!correcte && (
-                        <p className="text-green-700">
+                        <p style={{ color: "var(--teal)" }}>
                           <span className="font-semibold">Bonne réponse :</span> {bonneReponse}
                         </p>
                       )}
@@ -175,15 +175,15 @@ export default function ScoreDisplay({
 
       {/* Compétences travaillées (mode entraînement) */}
       {!modeControle && competences.length > 0 && (
-        <div className="text-left bg-indigo-50 border border-indigo-100 rounded-xl p-4">
-          <p className="text-xs font-semibold text-indigo-700 mb-2 flex items-center gap-1.5">
+        <div className="text-left rounded-xl p-4" style={{ background: "rgba(77,94,232,0.08)", border: "1px solid rgba(77,94,232,0.2)" }}>
+          <p style={{ fontSize: 12, fontWeight: 600, color: "var(--indigo-l)", marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
             <span aria-hidden="true">📋</span>
             Compétences travaillées
           </p>
           <ul className="space-y-1.5">
             {competences.map((comp) => (
-              <li key={comp.id} className="flex items-center gap-2 text-sm text-indigo-800">
-                <span className="text-indigo-400 text-xs" aria-hidden="true">✓</span>
+              <li key={comp.id} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14, color: "var(--indigo-l)" }}>
+                <span style={{ color: "var(--indigo-l)", fontSize: 12 }} aria-hidden="true">✓</span>
                 {comp.titre}
               </li>
             ))}
@@ -192,7 +192,7 @@ export default function ScoreDisplay({
       )}
 
       {modeRevision && questionsRatees.length === 0 && (
-        <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-sm text-green-700 font-medium">
+        <div className="rounded-xl p-3 text-sm font-medium" style={{ background: "rgba(61,214,191,0.1)", border: "1px solid rgba(61,214,191,0.3)", color: "var(--teal)" }}>
           Bravo ! Tu as réussi toutes les questions de révision.
         </div>
       )}
@@ -204,7 +204,8 @@ export default function ScoreDisplay({
             <button
               onClick={onRecommencer}
               data-testid="btn-recommencer"
-              className="w-full py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-semibold transition-colors"
+              className="w-full py-3 rounded-xl font-semibold transition-colors"
+              style={{ background: "var(--amber)", color: "#000", border: "none", cursor: "pointer" }}
             >
               📝 Refaire le contrôle
             </button>
@@ -213,7 +214,8 @@ export default function ScoreDisplay({
                 <button
                   onClick={onChoisirMode}
                   data-testid="btn-choisir-mode"
-                  className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold transition-colors"
+                  className="flex-1 py-3 rounded-xl font-semibold transition-colors"
+                  style={{ background: "var(--indigo)", color: "#fff", border: "none", cursor: "pointer" }}
                 >
                   🎯 Mode entraînement
                 </button>
@@ -221,7 +223,8 @@ export default function ScoreDisplay({
               <Link
                 href={`/${niveauLycee}/${matiereSlug}`}
                 data-testid="btn-retour-chapitres"
-                className="flex-1 py-3 bg-white border-2 border-gray-200 hover:border-indigo-300 text-gray-700 hover:text-indigo-700 rounded-xl font-semibold transition-colors text-center"
+                className="flex-1 py-3 rounded-xl font-semibold transition-colors text-center"
+                style={{ background: "transparent", border: "2px solid var(--border2)", color: "var(--text2)" }}
               >
                 ← Retour aux chapitres
               </Link>
@@ -233,7 +236,8 @@ export default function ScoreDisplay({
               <button
                 onClick={onReviserErreurs}
                 data-testid="btn-reviser-erreurs"
-                className="w-full py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-semibold transition-colors"
+                className="w-full py-3 rounded-xl font-semibold transition-colors"
+                style={{ background: "var(--amber)", color: "#000", border: "none", cursor: "pointer" }}
               >
                 📝 Réviser mes erreurs ({questionsRatees.length})
               </button>
@@ -242,14 +246,16 @@ export default function ScoreDisplay({
               <button
                 onClick={onRecommencer}
                 data-testid="btn-recommencer"
-                className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold transition-colors"
+                className="flex-1 py-3 rounded-xl font-semibold transition-colors"
+                style={{ background: "var(--indigo)", color: "#fff", border: "none", cursor: "pointer" }}
               >
                 🔄 Refaire le quiz
               </button>
               <Link
                 href={`/${niveauLycee}/${matiereSlug}`}
                 data-testid="btn-retour-chapitres"
-                className="flex-1 py-3 bg-white border-2 border-gray-200 hover:border-indigo-300 text-gray-700 hover:text-indigo-700 rounded-xl font-semibold transition-colors text-center"
+                className="flex-1 py-3 rounded-xl font-semibold transition-colors text-center"
+                style={{ background: "transparent", border: "2px solid var(--border2)", color: "var(--text2)" }}
               >
                 ← Retour aux chapitres
               </Link>

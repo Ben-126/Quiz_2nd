@@ -124,30 +124,37 @@ export default function CoachIA({
       {/* Panneau de chat */}
       {ouvert && (
         <div
-          className="fixed bottom-20 right-4 z-50 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden"
-          style={{ maxHeight: "70vh" }}
+          className="fixed bottom-20 right-4 z-50 w-80 sm:w-96 flex flex-col overflow-hidden"
+          style={{ maxHeight: "70vh", background: "var(--card)", borderRadius: "var(--r-lg)", border: "1px solid var(--border)", boxShadow: "0 4px 16px rgba(0,0,0,0.3)" }}
         >
           {/* En-tête */}
-          <div className="flex items-center justify-between px-4 py-3 bg-indigo-600 text-white">
+          <div
+            className="flex items-center justify-between px-4 py-3"
+            style={{ background: "var(--indigo)", color: "#fff" }}
+          >
             <div className="flex items-center gap-2">
               <span className="text-lg" aria-hidden="true">🧠</span>
               <div>
                 <div className="flex items-center gap-1.5">
                   <p className="font-semibold text-sm leading-tight">Coach IA</p>
                   {modeLocal && (
-                    <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-indigo-500 text-indigo-100 font-medium leading-none">
+                    <span
+                      className="text-[10px] px-1.5 py-0.5 font-medium leading-none"
+                      style={{ background: "rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.8)", borderRadius: "var(--r-pill)" }}
+                    >
                       local
                     </span>
                   )}
                 </div>
                 {chapitre && (
-                  <p className="text-indigo-200 text-xs truncate max-w-[180px]">{chapitre}</p>
+                  <p className="text-xs truncate max-w-[180px]" style={{ color: "rgba(255,255,255,0.7)" }}>{chapitre}</p>
                 )}
               </div>
             </div>
             <button
               onClick={() => setOuvert(false)}
-              className="text-indigo-200 hover:text-white transition-colors p-1 rounded"
+              className="p-1 transition-colors"
+              style={{ color: "rgba(255,255,255,0.7)", borderRadius: 4 }}
               aria-label="Fermer le coach"
             >
               ✕
@@ -159,14 +166,15 @@ export default function CoachIA({
             {messages.length === 0 && !reponseEnCours && (
               <div className="text-center py-6 space-y-2">
                 <p className="text-3xl">👋</p>
-                <p className="text-gray-600 text-sm font-medium">Bonjour ! Je suis ton coach.</p>
-                <p className="text-gray-400 text-xs">
+                <p className="text-sm font-medium" style={{ color: "var(--text2)" }}>Bonjour ! Je suis ton coach.</p>
+                <p className="text-xs" style={{ color: "var(--text3)" }}>
                   Pose-moi une question sur le cours, demande une explication ou de l&apos;aide sur un exercice.
                 </p>
                 {questionCourante && (
                   <button
                     onClick={() => setInput(`Explique-moi cette question : "${questionCourante}"`)}
-                    className="mt-2 text-xs text-indigo-600 hover:text-indigo-700 underline"
+                    className="mt-2 text-xs underline"
+                    style={{ color: "var(--indigo-l)" }}
                   >
                     Aide-moi avec la question actuelle
                   </button>
@@ -176,7 +184,8 @@ export default function CoachIA({
                     {explication && (
                       <button
                         onClick={() => setInput("Explique-moi ce point du cours")}
-                        className="text-xs text-indigo-500 hover:text-indigo-700 underline"
+                        className="text-xs underline"
+                        style={{ color: "var(--indigo-l)" }}
                       >
                         Voir l'explication
                       </button>
@@ -184,7 +193,8 @@ export default function CoachIA({
                     {etapes && etapes.length > 0 && (
                       <button
                         onClick={() => setInput("Comment résoudre ce type de question ?")}
-                        className="text-xs text-indigo-500 hover:text-indigo-700 underline"
+                        className="text-xs underline"
+                        style={{ color: "var(--indigo-l)" }}
                       >
                         Voir les étapes
                       </button>
@@ -192,7 +202,8 @@ export default function CoachIA({
                     {erreursFrequentes && erreursFrequentes.length > 0 && (
                       <button
                         onClick={() => setInput("Quelles sont les erreurs à éviter ?")}
-                        className="text-xs text-indigo-500 hover:text-indigo-700 underline"
+                        className="text-xs underline"
+                        style={{ color: "var(--indigo-l)" }}
                       >
                         Erreurs fréquentes
                       </button>
@@ -205,11 +216,12 @@ export default function CoachIA({
             {messages.map((msg, i) => (
               <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div
-                  className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm leading-relaxed whitespace-pre-wrap ${
+                  className="max-w-[85%] px-3 py-2 text-sm leading-relaxed whitespace-pre-wrap"
+                  style={
                     msg.role === "user"
-                      ? "bg-indigo-600 text-white rounded-br-sm"
-                      : "bg-gray-100 text-gray-800 rounded-bl-sm"
-                  }`}
+                      ? { background: "var(--indigo)", color: "#fff", borderRadius: "16px 16px 4px 16px" }
+                      : { background: "rgba(255,255,255,0.06)", color: "var(--text)", borderRadius: "16px 16px 16px 4px" }
+                  }
                 >
                   {msg.content}
                 </div>
@@ -219,9 +231,12 @@ export default function CoachIA({
             {/* Réponse en cours (streaming) */}
             {reponseEnCours && (
               <div className="flex justify-start">
-                <div className="max-w-[85%] rounded-2xl rounded-bl-sm px-3 py-2 text-sm leading-relaxed whitespace-pre-wrap bg-gray-100 text-gray-800">
+                <div
+                  className="max-w-[85%] px-3 py-2 text-sm leading-relaxed whitespace-pre-wrap"
+                  style={{ background: "rgba(255,255,255,0.06)", color: "var(--text)", borderRadius: "16px 16px 16px 4px" }}
+                >
                   {reponseEnCours}
-                  <span className="inline-block w-1 h-4 ml-0.5 bg-gray-400 animate-pulse align-middle" />
+                  <span className="inline-block w-1 h-4 ml-0.5 animate-pulse align-middle" style={{ background: "var(--text3)" }} />
                 </div>
               </div>
             )}
@@ -229,11 +244,14 @@ export default function CoachIA({
             {/* Indicateur chargement */}
             {enCours && !reponseEnCours && (
               <div className="flex justify-start">
-                <div className="bg-gray-100 rounded-2xl rounded-bl-sm px-3 py-2">
+                <div
+                  className="px-3 py-2"
+                  style={{ background: "rgba(255,255,255,0.06)", borderRadius: "16px 16px 16px 4px" }}
+                >
                   <div className="flex gap-1 items-center h-5">
-                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                    <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: "var(--text3)", animationDelay: "0ms" }} />
+                    <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: "var(--text3)", animationDelay: "150ms" }} />
+                    <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: "var(--text3)", animationDelay: "300ms" }} />
                   </div>
                 </div>
               </div>
@@ -245,14 +263,17 @@ export default function CoachIA({
           {/* Note mode local */}
           {modeLocal && (
             <div className="px-3 pb-1">
-              <p className="text-[10px] text-gray-400 text-center">
+              <p className="text-[10px] text-center" style={{ color: "var(--text3)" }}>
                 Mode local · <a href="#" className="underline" onClick={(e) => e.preventDefault()}>Configurer une clé API</a> pour un coach IA complet
               </p>
             </div>
           )}
 
           {/* Zone de saisie */}
-          <div className="border-t border-gray-100 p-3 flex gap-2 items-end">
+          <div
+            className="p-3 flex gap-2 items-end"
+            style={{ borderTop: "1px solid var(--border)" }}
+          >
             <textarea
               ref={inputRef}
               value={input}
@@ -261,13 +282,18 @@ export default function CoachIA({
               placeholder="Pose ta question..."
               rows={1}
               disabled={enCours}
-              className="flex-1 resize-none rounded-xl border border-gray-200 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-400 disabled:opacity-50 max-h-24 overflow-y-auto"
-              style={{ fieldSizing: "content" } as React.CSSProperties}
+              className="flex-1 resize-none px-3 py-2 text-sm focus:outline-none disabled:opacity-50 max-h-24 overflow-y-auto"
+              style={{ background: "rgba(255,255,255,0.05)", color: "var(--text)", border: "1px solid var(--border2)", borderRadius: "var(--r-sm)", fieldSizing: "content" } as React.CSSProperties}
             />
             <button
               onClick={envoyerMessage}
               disabled={!input.trim() || enCours}
-              className="flex-shrink-0 w-9 h-9 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-200 text-white disabled:text-gray-400 transition-colors flex items-center justify-center"
+              className="flex-shrink-0 w-9 h-9 transition-colors flex items-center justify-center"
+              style={{
+                background: !input.trim() || enCours ? "rgba(255,255,255,0.07)" : "var(--indigo)",
+                color: !input.trim() || enCours ? "var(--text3)" : "#fff",
+                borderRadius: "var(--r-sm)",
+              }}
               aria-label="Envoyer"
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
@@ -281,9 +307,11 @@ export default function CoachIA({
       {/* Bouton flottant */}
       <button
         onClick={() => setOuvert((v) => !v)}
-        className={`fixed bottom-4 right-4 z-50 w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 ${
-          ouvert ? "bg-gray-600 hover:bg-gray-700" : "bg-indigo-600 hover:bg-indigo-700"
-        } text-white`}
+        className="fixed bottom-4 right-4 z-50 w-14 h-14 rounded-full flex items-center justify-center transition-all duration-200 text-white"
+        style={{
+          background: ouvert ? "rgba(255,255,255,0.15)" : "var(--indigo)",
+          boxShadow: "0 4px 16px rgba(0,0,0,0.3)",
+        }}
         aria-label={ouvert ? "Fermer le coach IA" : "Ouvrir le coach IA"}
         title="Coach IA"
       >

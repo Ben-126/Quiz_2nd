@@ -9,11 +9,11 @@ export const metadata: Metadata = {
 
 export default function PageRevision() {
   return (
-    <>
+    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", background: "var(--bg)" }}>
       <Header />
-      <main className="flex-1">
+      <main style={{ flex: 1 }}>
         <RevisionIntelligente />
       </main>
-    </>
+    </div>
   );
 }

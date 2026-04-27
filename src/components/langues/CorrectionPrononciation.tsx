@@ -136,10 +136,10 @@ export default function CorrectionPrononciation() {
     }
   };
 
-  const scoreClass = (similitude: number) => {
-    if (similitude >= 0.9) return "text-green-600";
-    if (similitude >= 0.65) return "text-yellow-600";
-    return "text-red-600";
+  const scoreStyle = (similitude: number): React.CSSProperties => {
+    if (similitude >= 0.9) return { color: "var(--teal)" };
+    if (similitude >= 0.65) return { color: "var(--amber)" };
+    return { color: "var(--coral-l)" };
   };
 
   const scoreLabel = (similitude: number) => {
@@ -151,7 +151,7 @@ export default function CorrectionPrononciation() {
 
   return (
     <div className="space-y-6">
-      <p className="text-sm text-gray-500 text-center">
+      <p className="text-sm text-center" style={{ color: "var(--text3)" }}>
         Lisez la phrase à voix haute — l&apos;IA analysera votre prononciation.
       </p>
 
@@ -161,11 +161,12 @@ export default function CorrectionPrononciation() {
           <button
             key={l.code}
             onClick={() => changerLangue(l.code)}
-            className={`px-3 py-1.5 rounded-full text-sm font-medium border-2 transition-colors ${
+            className="px-3 py-1.5 text-sm font-medium transition-colors"
+            style={
               langue === l.code
-                ? "bg-indigo-600 text-white border-indigo-600"
-                : "bg-white text-gray-600 border-gray-200 hover:border-indigo-300"
-            }`}
+                ? { background: "var(--indigo)", color: "#fff", borderRadius: "var(--r-pill)", border: "2px solid var(--indigo)" }
+                : { background: "transparent", color: "var(--text2)", borderRadius: "var(--r-pill)", border: "2px solid var(--border2)" }
+            }
           >
             {l.emoji} {l.nom}
           </button>
@@ -173,14 +174,18 @@ export default function CorrectionPrononciation() {
       </div>
 
       {/* Phrase à prononcer */}
-      <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-5 text-center space-y-3">
-        <p className="text-xs text-indigo-500 font-medium uppercase tracking-wide">
+      <div
+        className="p-5 text-center space-y-3"
+        style={{ background: "rgba(77,94,232,0.08)", border: "1px solid rgba(77,94,232,0.2)", borderRadius: "var(--r-md)" }}
+      >
+        <p className="text-xs font-medium uppercase tracking-wide" style={{ color: "var(--indigo-l)" }}>
           Phrase à prononcer
         </p>
-        <p className="text-xl font-semibold text-indigo-900">&ldquo;{phrase}&rdquo;</p>
+        <p className="text-xl font-semibold" style={{ color: "var(--text)" }}>&ldquo;{phrase}&rdquo;</p>
         <button
           onClick={phraseAleatoire}
-          className="text-xs text-indigo-500 hover:text-indigo-700 underline transition-colors"
+          className="text-xs underline transition-colors"
+          style={{ color: "var(--indigo-l)" }}
         >
           Autre phrase →
         </button>
@@ -192,16 +197,17 @@ export default function CorrectionPrononciation() {
           <>
             <button
               onClick={enregistrement ? arreterEnregistrement : demarrerEnregistrement}
-              className={`w-20 h-20 rounded-full flex items-center justify-center text-3xl shadow-lg transition-all duration-200 ${
-                enregistrement
-                  ? "bg-red-500 hover:bg-red-600 scale-110"
-                  : "bg-indigo-600 hover:bg-indigo-700"
-              } text-white`}
+              className={`w-20 h-20 rounded-full flex items-center justify-center text-3xl transition-all duration-200 ${enregistrement ? "scale-110" : ""}`}
+              style={{
+                background: enregistrement ? "rgba(239,110,90,0.9)" : "var(--indigo)",
+                color: "#fff",
+                boxShadow: "0 4px 16px rgba(0,0,0,0.3)",
+              }}
               aria-label={enregistrement ? "Arrêter l'enregistrement" : "Commencer l'enregistrement"}
             >
               {enregistrement ? "⏹" : "🎤"}
             </button>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm" style={{ color: "var(--text3)" }}>
               {enregistrement ? (
                 <span className="flex items-center gap-1.5">
                   <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse inline-block" />
@@ -214,15 +220,21 @@ export default function CorrectionPrononciation() {
           </>
         ) : (
           <div className="flex flex-col items-center gap-2">
-            <div className="w-10 h-10 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin" />
-            <p className="text-sm text-gray-500">Analyse en cours…</p>
+            <div
+              className="w-10 h-10 rounded-full animate-spin"
+              style={{ border: "4px solid rgba(77,94,232,0.2)", borderTopColor: "var(--indigo)" }}
+            />
+            <p className="text-sm" style={{ color: "var(--text3)" }}>Analyse en cours…</p>
           </div>
         )}
       </div>
 
       {/* Erreur */}
       {erreur && (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-700">
+        <div
+          className="p-4 text-sm rounded-xl"
+          style={{ background: "rgba(239,110,90,0.1)", border: "1px solid rgba(239,110,90,0.2)", color: "var(--coral-l)" }}
+        >
           {erreur}
         </div>
       )}
@@ -231,10 +243,13 @@ export default function CorrectionPrononciation() {
       {resultat && (
         <div className="space-y-4">
           {/* Score */}
-          <div className="flex items-center justify-between bg-white border border-gray-200 rounded-xl p-4">
+          <div
+            className="flex items-center justify-between p-4 rounded-xl"
+            style={{ background: "var(--card)", border: "1px solid var(--border)" }}
+          >
             <div>
-              <p className="text-xs text-gray-500 font-medium">Score de prononciation</p>
-              <p className={`text-2xl font-bold ${scoreClass(resultat.similitude)}`}>
+              <p className="text-xs font-medium" style={{ color: "var(--text3)" }}>Score de prononciation</p>
+              <p className="text-2xl font-bold" style={scoreStyle(resultat.similitude)}>
                 {Math.round(resultat.similitude * 100)}%
                 <span className="text-base font-medium ml-1">
                   — {scoreLabel(resultat.similitude)}
@@ -248,19 +263,23 @@ export default function CorrectionPrononciation() {
 
           {/* Mots mot-à-mot */}
           {resultat.mots.length > 0 && (
-            <div className="bg-gray-50 rounded-xl p-4 space-y-2">
-              <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">
+            <div
+              className="p-4 space-y-2 rounded-xl"
+              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid var(--border)" }}
+            >
+              <p className="text-xs font-medium uppercase tracking-wide" style={{ color: "var(--text3)" }}>
                 Analyse mot par mot
               </p>
               <div className="flex flex-wrap gap-2">
                 {resultat.mots.map((m, i) => (
                   <span
                     key={i}
-                    className={`px-2 py-1 rounded-lg text-sm font-medium ${
+                    className="px-2 py-1 rounded-lg text-sm font-medium"
+                    style={
                       m.correct
-                        ? "bg-green-100 text-green-700"
-                        : "bg-red-100 text-red-700"
-                    }`}
+                        ? { background: "rgba(61,214,191,0.1)", color: "var(--teal)" }
+                        : { background: "rgba(239,110,90,0.1)", color: "var(--coral-l)" }
+                    }
                     title={!m.correct && m.transcrit ? `Compris : "${m.transcrit}"` : undefined}
                   >
                     {m.mot}
@@ -273,24 +292,30 @@ export default function CorrectionPrononciation() {
 
           {/* Ce qui a été compris */}
           {resultat.transcrit && (
-            <div className="bg-gray-50 rounded-xl p-4 space-y-1">
-              <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">
+            <div
+              className="p-4 space-y-1 rounded-xl"
+              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid var(--border)" }}
+            >
+              <p className="text-xs font-medium uppercase tracking-wide" style={{ color: "var(--text3)" }}>
                 Ce qui a été compris
               </p>
-              <p className="text-gray-700 italic">&ldquo;{resultat.transcrit}&rdquo;</p>
+              <p className="italic" style={{ color: "var(--text2)" }}>&ldquo;{resultat.transcrit}&rdquo;</p>
             </div>
           )}
 
           {/* Feedback */}
-          <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-4 space-y-1">
-            <p className="text-xs text-indigo-500 font-medium uppercase tracking-wide">
+          <div
+            className="p-4 space-y-1 rounded-xl"
+            style={{ background: "rgba(77,94,232,0.08)", border: "1px solid rgba(77,94,232,0.2)" }}
+          >
+            <p className="text-xs font-medium uppercase tracking-wide" style={{ color: "var(--indigo-l)" }}>
               Feedback du coach
             </p>
-            <p className="text-gray-700 text-sm leading-relaxed">{resultat.feedback}</p>
+            <p className="text-sm leading-relaxed" style={{ color: "var(--text2)" }}>{resultat.feedback}</p>
           </div>
 
           {resultat.modeLocal && (
-            <p className="text-xs text-center text-gray-400">
+            <p className="text-xs text-center" style={{ color: "var(--text3)" }}>
               Mode hors ligne — configurez OPENAI_API_KEY pour une analyse réelle
             </p>
           )}

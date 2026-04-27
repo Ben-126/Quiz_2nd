@@ -20,6 +20,12 @@ export default function StreakDisplay({ profil }: StreakDisplayProps) {
     streakJours >= 7   ? "from-orange-400 to-orange-600" :
                          "from-orange-300 to-orange-500";
 
+  const flammeGradient =
+    streakJours >= 100 ? "linear-gradient(135deg, #F5C840, #f59e0b)" :
+    streakJours >= 30  ? "linear-gradient(135deg, #f97316, #ef4444)" :
+    streakJours >= 7   ? "linear-gradient(135deg, #fb923c, #ea580c)" :
+                         "linear-gradient(135deg, #fdba74, #f97316)";
+
   const messageMotivation =
     streakJours === 0   ? "Fais un quiz aujourd'hui pour commencer !" :
     streakJours >= 100  ? "Tu es une légende 👑" :
@@ -27,39 +33,42 @@ export default function StreakDisplay({ profil }: StreakDisplayProps) {
     streakJours >= 7    ? "Continue comme ça, tu cartonnes !" :
                           "Reviens demain pour continuer !";
 
+  // couleurFlamme kept to avoid unused var warning with a void reference
+  void couleurFlamme;
+
   return (
-    <div className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-orange-100 shadow-sm">
+    <div style={{ display: "flex", alignItems: "center", gap: 16, padding: 16, background: "rgba(249,115,22,0.06)", borderRadius: "var(--r-lg)", border: "1px solid rgba(249,115,22,0.2)" }}>
       {/* Flamme + compteur */}
       <div
-        className={`flex flex-col items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br ${couleurFlamme} shrink-0 shadow`}
+        style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: 64, height: 64, borderRadius: "var(--r-md)", background: flammeGradient, flexShrink: 0, boxShadow: "0 4px 12px rgba(249,115,22,0.3)" }}
       >
-        <span className="text-2xl leading-none">{flammeEmoji}</span>
-        <span className="text-xs font-bold text-white mt-0.5">
+        <span style={{ fontSize: 24, lineHeight: 1 }}>{flammeEmoji}</span>
+        <span style={{ fontSize: 11, fontWeight: 700, color: "#fff", marginTop: 2 }}>
           {streakJours}j
         </span>
       </div>
 
       {/* Infos streak */}
-      <div className="flex-1 min-w-0">
-        <p className="text-sm font-bold text-gray-800">
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <p style={{ fontSize: 14, fontWeight: 700, color: "var(--text)" }}>
           {streakJours === 0
             ? "Aucune série en cours"
             : `Série de ${streakJours} jour${streakJours > 1 ? "s" : ""}`}
         </p>
-        <p className="text-xs text-gray-400 mt-0.5">{messageMotivation}</p>
+        <p style={{ fontSize: 12, color: "var(--text3)", marginTop: 2 }}>{messageMotivation}</p>
 
         {/* Gels restants */}
-        <div className="flex items-center gap-1.5 mt-2">
+        <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8 }}>
           {Array.from({ length: GEL_PAR_MOIS }).map((_, i) => (
             <span
               key={i}
-              className={`text-sm ${i < gelsRestants ? "opacity-100" : "opacity-20"}`}
+              style={{ fontSize: 14, opacity: i < gelsRestants ? 1 : 0.2 }}
               title={i < gelsRestants ? "Gel disponible" : "Gel utilisé"}
             >
               ❄️
             </span>
           ))}
-          <span className="text-xs text-gray-400 ml-1">
+          <span style={{ fontSize: 12, color: "var(--text3)", marginLeft: 4 }}>
             {gelsRestants} gel{gelsRestants > 1 ? "s" : ""} restant{gelsRestants > 1 ? "s" : ""}
           </span>
         </div>

@@ -68,25 +68,25 @@ export default function RevisionIntelligente() {
   return (
     <div className="max-w-xl mx-auto px-4 py-8 space-y-6">
       {/* Barre de progression */}
-      <div className="flex items-center justify-between text-sm text-gray-500">
+      <div className="flex items-center justify-between text-sm" style={{ color: "var(--text3)" }}>
         <span>🧠 Révision intelligente</span>
         <span>{progression}</span>
       </div>
-      <div className="w-full bg-gray-100 rounded-full h-2">
+      <div className="w-full rounded-full h-2" style={{ background: "rgba(255,255,255,0.08)" }}>
         <div
-          className="bg-indigo-500 h-2 rounded-full transition-all duration-300"
-          style={{ width: `${((index) / cartes.length) * 100}%` }}
+          className="h-2 rounded-full transition-all duration-300"
+          style={{ width: `${((index) / cartes.length) * 100}%`, background: "var(--indigo)" }}
         />
       </div>
 
       {/* Contexte */}
-      <p className="text-xs text-gray-400 font-medium uppercase tracking-wide">
+      <p style={{ fontSize: 12, color: "var(--text3)", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.06em" }}>
         {carte.matiereName} · {carte.chapitreNom}
       </p>
 
       {/* Carte question */}
-      <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 space-y-4">
-        <p className="text-base font-semibold text-gray-800 leading-relaxed">
+      <div className="rounded-2xl p-6 space-y-4" style={{ background: "var(--card)", border: "1px solid var(--border)", boxShadow: "0 4px 16px rgba(0,0,0,0.3)" }}>
+        <p style={{ fontSize: 16, fontWeight: 600, color: "var(--text)", lineHeight: 1.6 }}>
           {carte.question}
         </p>
 
@@ -94,7 +94,7 @@ export default function RevisionIntelligente() {
         {carte.type === "qcm" && carte.options && !reponseVisible && (
           <ul className="space-y-2 mt-2">
             {carte.options.map((opt, i) => (
-              <li key={i} className="text-sm text-gray-700 bg-gray-50 rounded-lg px-4 py-2">
+              <li key={i} className="text-sm rounded-lg px-4 py-2" style={{ color: "var(--text2)", background: "rgba(255,255,255,0.04)" }}>
                 {opt}
               </li>
             ))}
@@ -103,23 +103,23 @@ export default function RevisionIntelligente() {
 
         {/* Vrai/Faux hint */}
         {carte.type === "vrai_faux" && !reponseVisible && (
-          <p className="text-sm text-gray-400 italic">Vrai ou Faux ?</p>
+          <p style={{ fontSize: 14, color: "var(--text3)", fontStyle: "italic" }}>Vrai ou Faux ?</p>
         )}
 
         {/* Réponse et explication (après révélation) */}
         {reponseVisible && (
-          <div className="border-t border-gray-100 pt-4 space-y-3">
-            <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-3">
-              <p className="text-xs font-semibold text-green-700 mb-1">Bonne réponse</p>
-              <p className="text-sm text-green-900 font-medium">
+          <div className="space-y-3" style={{ borderTop: "1px solid var(--border)", paddingTop: 16 }}>
+            <div className="rounded-xl px-4 py-3" style={{ background: "rgba(61,214,191,0.08)", border: "1px solid rgba(61,214,191,0.25)" }}>
+              <p style={{ fontSize: 12, fontWeight: 600, color: "var(--teal)", marginBottom: 4 }}>Bonne réponse</p>
+              <p style={{ fontSize: 14, color: "var(--teal)", fontWeight: 500 }}>
                 {typeof carte.reponseCorrecte === "boolean"
                   ? carte.reponseCorrecte ? "Vrai ✓" : "Faux ✗"
                   : carte.reponseCorrecte}
               </p>
             </div>
-            <div className="bg-blue-50 border border-blue-100 rounded-xl px-4 py-3">
-              <p className="text-xs font-semibold text-blue-700 mb-1">Explication</p>
-              <p className="text-sm text-blue-900">{carte.explication}</p>
+            <div className="rounded-xl px-4 py-3" style={{ background: "rgba(77,94,232,0.08)", border: "1px solid rgba(77,94,232,0.15)" }}>
+              <p style={{ fontSize: 12, fontWeight: 600, color: "var(--indigo-l)", marginBottom: 4 }}>Explication</p>
+              <p style={{ fontSize: 14, color: "var(--text2)" }}>{carte.explication}</p>
             </div>
           </div>
         )}
@@ -129,13 +129,14 @@ export default function RevisionIntelligente() {
       {!reponseVisible ? (
         <button
           onClick={() => setReponseVisible(true)}
-          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition-colors"
+          className="w-full font-semibold py-3 rounded-xl transition-colors"
+          style={{ background: "var(--indigo)", color: "#fff", border: "none", cursor: "pointer" }}
         >
           Voir la réponse
         </button>
       ) : (
         <div className="space-y-3">
-          <p className="text-sm text-center text-gray-500 font-medium">
+          <p className="text-sm text-center font-medium" style={{ color: "var(--text3)" }}>
             Comment ça s&apos;est passé ?
           </p>
           <div className="grid grid-cols-2 gap-3">
@@ -143,28 +144,36 @@ export default function RevisionIntelligente() {
               qualite="rate"
               label="Raté"
               emoji="😣"
-              couleur="bg-red-100 hover:bg-red-200 text-red-800"
+              bgColor="rgba(239,110,90,0.12)"
+              hoverBg="rgba(239,110,90,0.2)"
+              textColor="var(--coral-l)"
               onClick={evaluerCarte}
             />
             <BoutonQualite
               qualite="difficile"
               label="Difficile"
               emoji="😓"
-              couleur="bg-orange-100 hover:bg-orange-200 text-orange-800"
+              bgColor="rgba(245,200,64,0.1)"
+              hoverBg="rgba(245,200,64,0.18)"
+              textColor="var(--amber)"
               onClick={evaluerCarte}
             />
             <BoutonQualite
               qualite="bien"
               label="Bien"
               emoji="🙂"
-              couleur="bg-blue-100 hover:bg-blue-200 text-blue-800"
+              bgColor="rgba(77,94,232,0.1)"
+              hoverBg="rgba(77,94,232,0.18)"
+              textColor="var(--indigo-l)"
               onClick={evaluerCarte}
             />
             <BoutonQualite
               qualite="facile"
               label="Facile"
               emoji="😄"
-              couleur="bg-green-100 hover:bg-green-200 text-green-800"
+              bgColor="rgba(61,214,191,0.1)"
+              hoverBg="rgba(61,214,191,0.18)"
+              textColor="var(--teal)"
               onClick={evaluerCarte}
             />
           </div>
@@ -180,15 +189,18 @@ interface BoutonQualiteProps {
   qualite: QualiteRevision;
   label: string;
   emoji: string;
-  couleur: string;
+  bgColor: string;
+  hoverBg: string;
+  textColor: string;
   onClick: (q: QualiteRevision) => void;
 }
 
-function BoutonQualite({ qualite, label, emoji, couleur, onClick }: BoutonQualiteProps) {
+function BoutonQualite({ qualite, label, emoji, bgColor, textColor, onClick }: BoutonQualiteProps) {
   return (
     <button
       onClick={() => onClick(qualite)}
-      className={`flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm transition-colors ${couleur}`}
+      className="flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm transition-colors"
+      style={{ background: bgColor, color: textColor, border: "none", cursor: "pointer" }}
     >
       <span>{emoji}</span>
       <span>{label}</span>
@@ -209,8 +221,8 @@ function Accueil({ stats, onDemarrer }: AccueilProps) {
     <div className="max-w-xl mx-auto px-4 py-8 space-y-6">
       <div className="text-center space-y-2">
         <div className="text-4xl">🧠</div>
-        <h1 className="text-2xl font-bold text-gray-900">Révision intelligente</h1>
-        <p className="text-gray-500 text-sm">
+        <h1 style={{ fontSize: 24, fontWeight: 700, color: "var(--text)" }}>Révision intelligente</h1>
+        <p style={{ color: "var(--text3)", fontSize: 14 }}>
           Répétition espacée · Les questions difficiles reviennent plus souvent
         </p>
       </div>
@@ -226,9 +238,9 @@ function Accueil({ stats, onDemarrer }: AccueilProps) {
 
       {/* Message contextuel */}
       {aucuneCarte && (
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800">
-          <p className="font-semibold mb-1">Aucune carte pour l&apos;instant</p>
-          <p>
+        <div className="rounded-xl p-4 text-sm" style={{ background: "rgba(245,200,64,0.08)", border: "1px solid rgba(245,200,64,0.25)", color: "var(--amber)" }}>
+          <p style={{ fontWeight: 600, marginBottom: 4 }}>Aucune carte pour l&apos;instant</p>
+          <p style={{ color: "var(--text2)" }}>
             Fais des quiz d&apos;entraînement — les questions ratées seront automatiquement
             ajoutées ici pour révision espacée.
           </p>
@@ -236,10 +248,10 @@ function Accueil({ stats, onDemarrer }: AccueilProps) {
       )}
 
       {aJour && (
-        <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-sm text-green-800">
-          <p className="font-semibold mb-1">🎉 Tu es à jour !</p>
+        <div className="rounded-xl p-4 text-sm" style={{ background: "rgba(61,214,191,0.08)", border: "1px solid rgba(61,214,191,0.25)", color: "var(--teal)" }}>
+          <p style={{ fontWeight: 600, marginBottom: 4 }}>🎉 Tu es à jour !</p>
           {stats.prochaineSession && (
-            <p>Prochaine révision prévue le {formatDate(stats.prochaineSession)}.</p>
+            <p style={{ color: "var(--text2)" }}>Prochaine révision prévue le {formatDate(stats.prochaineSession)}.</p>
           )}
         </div>
       )}
@@ -247,7 +259,8 @@ function Accueil({ stats, onDemarrer }: AccueilProps) {
       <button
         onClick={onDemarrer}
         disabled={aucuneCarte || (aJour ?? false)}
-        className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors"
+        className="w-full font-semibold py-3 rounded-xl transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+        style={{ background: "var(--indigo)", color: "#fff", border: "none", cursor: "pointer" }}
       >
         {stats && stats.cartesAujourdhui > 0
           ? `Commencer (${stats.cartesAujourdhui} carte${stats.cartesAujourdhui > 1 ? "s" : ""})`
@@ -267,8 +280,8 @@ function SessionTerminee({ stats, totalRevise, onRecommencer }: SessionTermineeP
   return (
     <div className="max-w-xl mx-auto px-4 py-8 space-y-6 text-center">
       <div className="text-5xl">🎉</div>
-      <h2 className="text-2xl font-bold text-gray-900">Session terminée !</h2>
-      <p className="text-gray-500">
+      <h2 style={{ fontSize: 24, fontWeight: 700, color: "var(--text)" }}>Session terminée !</h2>
+      <p style={{ color: "var(--text2)" }}>
         Tu as révisé {totalRevise} carte{totalRevise > 1 ? "s" : ""} aujourd&apos;hui.
       </p>
 
@@ -279,20 +292,21 @@ function SessionTerminee({ stats, totalRevise, onRecommencer }: SessionTermineeP
       </div>
 
       {stats.prochaineSession && (
-        <p className="text-sm text-gray-500">
-          Prochaine session le <strong>{formatDate(stats.prochaineSession)}</strong>
+        <p style={{ fontSize: 14, color: "var(--text3)" }}>
+          Prochaine session le <strong style={{ color: "var(--text2)" }}>{formatDate(stats.prochaineSession)}</strong>
         </p>
       )}
 
       {stats.cartesAujourdhui > 0 ? (
         <button
           onClick={onRecommencer}
-          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition-colors"
+          className="w-full font-semibold py-3 rounded-xl transition-colors"
+          style={{ background: "var(--indigo)", color: "#fff", border: "none", cursor: "pointer" }}
         >
           Continuer ({stats.cartesAujourdhui} restante{stats.cartesAujourdhui > 1 ? "s" : ""})
         </button>
       ) : (
-        <p className="text-sm text-green-700 font-medium">
+        <p style={{ fontSize: 14, color: "var(--teal)", fontWeight: 500 }}>
           ✅ Toutes les cartes du jour sont révisées !
         </p>
       )}
@@ -309,10 +323,12 @@ interface StatCardProps {
 
 function StatCard({ valeur, label, emoji, accent }: StatCardProps) {
   return (
-    <div className={`rounded-xl p-3 text-center border ${accent ? "bg-indigo-50 border-indigo-200" : "bg-gray-50 border-gray-200"}`}>
+    <div className="rounded-xl p-3 text-center" style={accent
+      ? { background: "rgba(77,94,232,0.1)", border: "1px solid rgba(77,94,232,0.2)" }
+      : { background: "rgba(255,255,255,0.04)", border: "1px solid var(--border)" }}>
       <div className="text-lg">{emoji}</div>
-      <div className={`text-xl font-bold ${accent ? "text-indigo-700" : "text-gray-800"}`}>{valeur}</div>
-      <div className="text-xs text-gray-500">{label}</div>
+      <div style={{ fontSize: 20, fontWeight: 700, color: accent ? "var(--indigo-l)" : "var(--text)" }}>{valeur}</div>
+      <div style={{ fontSize: 12, color: "var(--text3)" }}>{label}</div>
     </div>
   );
 }

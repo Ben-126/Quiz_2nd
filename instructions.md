@@ -218,7 +218,7 @@ Créer une application mobile de révision basée sur des quiz générés par IA
 ### Landing page
 - à mettre a jour suivant ubdates style abonnement payant
 - infos importantes en générale 
-- aprobation des cookies
+- ne pas oublier aprobation des cookies
 
 ---
 

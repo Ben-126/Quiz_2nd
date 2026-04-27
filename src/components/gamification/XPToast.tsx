@@ -38,13 +38,19 @@ export default function XPToast({ resultat }: XPToastProps) {
       role="status"
       aria-live="polite"
     >
-      <div className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-2xl shadow-lg font-bold text-base">
+      <div
+        className="flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-base"
+        style={{ background: "var(--indigo)", color: "#fff", boxShadow: "0 4px 16px rgba(0,0,0,0.3)" }}
+      >
         <span>⚡</span>
         <span>+{resultat.xpGagne} XP</span>
       </div>
 
       {resultat.nouveauNiveau !== null && niveauInfo && (
-        <div className="flex items-center gap-2 px-3 py-1.5 bg-yellow-400 text-yellow-900 rounded-xl shadow-md font-semibold text-sm">
+        <div
+          className="flex items-center gap-2 px-3 py-1.5 rounded-xl font-semibold text-sm"
+          style={{ background: "rgba(245,200,64,0.1)", color: "var(--amber)", boxShadow: "0 4px 16px rgba(0,0,0,0.3)" }}
+        >
           <span>{niveauInfo.emoji}</span>
           <span>Niveau {resultat.nouveauNiveau} — {niveauInfo.nom} !</span>
         </div>
@@ -53,7 +59,8 @@ export default function XPToast({ resultat }: XPToastProps) {
       {resultat.nouveauxBadges.slice(0, 2).map((id) => (
         <div
           key={id}
-          className="flex items-center gap-2 px-3 py-1.5 bg-white border-2 border-indigo-200 text-indigo-700 rounded-xl shadow-sm font-medium text-sm"
+          className="flex items-center gap-2 px-3 py-1.5 rounded-xl font-medium text-sm"
+          style={{ background: "var(--card)", border: "1px solid rgba(77,94,232,0.2)", color: "var(--indigo-l)", boxShadow: "0 4px 16px rgba(0,0,0,0.3)" }}
         >
           <span>🏅</span>
           <span>Badge : {getBadgeNom(id)}</span>

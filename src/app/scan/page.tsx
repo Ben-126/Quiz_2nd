@@ -8,12 +8,12 @@ export const metadata = {
 
 export default function ScanPage() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", background: "var(--bg)" }}>
       <Header />
-      <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-6">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-1">Scan & Correction</h1>
-          <p className="text-gray-500 text-sm">
+      <main style={{ flex: 1, maxWidth: 720, margin: "0 auto", width: "100%", padding: "24px 24px 48px" }}>
+        <div style={{ marginBottom: 24 }}>
+          <h1 style={{ fontSize: 24, fontWeight: 700, color: "var(--text)", marginBottom: 4 }}>Scan & Correction</h1>
+          <p style={{ color: "var(--text3)", fontSize: 14 }}>
             Prends en photo un exercice et l&apos;IA te le corrige avec des explications détaillées.
           </p>
         </div>

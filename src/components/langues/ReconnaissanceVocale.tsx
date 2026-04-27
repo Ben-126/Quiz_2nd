@@ -93,9 +93,9 @@ export default function ReconnaissanceVocale() {
 
   if (!supporte) {
     return (
-      <div className="text-center py-10 text-gray-500 space-y-2">
+      <div className="text-center py-10 space-y-2" style={{ color: "var(--text3)" }}>
         <p className="text-4xl">⚠️</p>
-        <p className="font-medium">Navigateur non compatible</p>
+        <p className="font-medium" style={{ color: "var(--text2)" }}>Navigateur non compatible</p>
         <p className="text-sm">La reconnaissance vocale nécessite Chrome ou Edge.</p>
       </div>
     );
@@ -105,7 +105,7 @@ export default function ReconnaissanceVocale() {
 
   return (
     <div className="space-y-6">
-      <p className="text-sm text-gray-500 text-center">
+      <p className="text-sm text-center" style={{ color: "var(--text3)" }}>
         Sélectionnez une langue et parlez — votre discours sera transcrit en temps réel.
       </p>
 
@@ -115,11 +115,12 @@ export default function ReconnaissanceVocale() {
           <button
             key={l.code}
             onClick={() => changerLangue(l.code)}
-            className={`px-3 py-1.5 rounded-full text-sm font-medium border-2 transition-colors ${
+            className="px-3 py-1.5 text-sm font-medium transition-colors"
+            style={
               langue === l.code
-                ? "bg-indigo-600 text-white border-indigo-600"
-                : "bg-white text-gray-600 border-gray-200 hover:border-indigo-300"
-            }`}
+                ? { background: "var(--indigo)", color: "#fff", borderRadius: "var(--r-pill)", border: "2px solid var(--indigo)" }
+                : { background: "transparent", color: "var(--text2)", borderRadius: "var(--r-pill)", border: "2px solid var(--border2)" }
+            }
           >
             {l.emoji} {l.nom}
           </button>
@@ -130,16 +131,17 @@ export default function ReconnaissanceVocale() {
       <div className="flex flex-col items-center gap-3">
         <button
           onClick={enCours ? arreter : demarrer}
-          className={`w-20 h-20 rounded-full flex items-center justify-center text-3xl shadow-lg transition-all duration-200 ${
-            enCours
-              ? "bg-red-500 hover:bg-red-600 scale-110"
-              : "bg-indigo-600 hover:bg-indigo-700"
-          } text-white`}
+          className={`w-20 h-20 rounded-full flex items-center justify-center text-3xl transition-all duration-200 ${enCours ? "scale-110" : ""}`}
+          style={{
+            background: enCours ? "rgba(239,110,90,0.9)" : "var(--indigo)",
+            color: "#fff",
+            boxShadow: "0 4px 16px rgba(0,0,0,0.3)",
+          }}
           aria-label={enCours ? "Arrêter" : "Démarrer la reconnaissance vocale"}
         >
           {enCours ? "⏹" : "🎤"}
         </button>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm" style={{ color: "var(--text3)" }}>
           {enCours ? (
             <span className="flex items-center gap-1.5">
               <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse inline-block" />
@@ -152,16 +154,19 @@ export default function ReconnaissanceVocale() {
       </div>
 
       {/* Zone transcription */}
-      <div className="bg-gray-50 rounded-xl p-4 min-h-[100px] border border-gray-200">
+      <div
+        className="p-4 min-h-[100px]"
+        style={{ background: "rgba(255,255,255,0.03)", border: "1px solid var(--border)", borderRadius: "var(--r-md)" }}
+      >
         {texteComplet ? (
-          <p className="text-gray-800 leading-relaxed text-base">
+          <p className="leading-relaxed text-base" style={{ color: "var(--text)" }}>
             {transcriptionFinale}
             {transcriptionVive && (
-              <span className="text-gray-400 italic"> {transcriptionVive}</span>
+              <span className="italic" style={{ color: "var(--text3)" }}> {transcriptionVive}</span>
             )}
           </p>
         ) : (
-          <p className="text-gray-400 text-sm italic text-center pt-6">
+          <p className="text-sm italic text-center pt-6" style={{ color: "var(--text3)" }}>
             La transcription apparaîtra ici…
           </p>
         )}
@@ -169,7 +174,10 @@ export default function ReconnaissanceVocale() {
 
       {/* Erreur */}
       {erreur && (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700 text-center">
+        <div
+          className="p-3 text-sm text-center rounded-xl"
+          style={{ background: "rgba(239,110,90,0.1)", border: "1px solid rgba(239,110,90,0.2)", color: "var(--coral-l)" }}
+        >
           {erreur}
         </div>
       )}
@@ -178,7 +186,8 @@ export default function ReconnaissanceVocale() {
         <div className="flex justify-end">
           <button
             onClick={() => { setTranscriptionFinale(""); setTranscriptionVive(""); }}
-            className="text-sm text-gray-400 hover:text-red-500 underline transition-colors"
+            className="text-sm underline transition-colors"
+            style={{ color: "var(--text3)" }}
           >
             Effacer
           </button>

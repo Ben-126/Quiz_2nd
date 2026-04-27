@@ -36,11 +36,10 @@ export default function Classement({ userId }: ClassementProps) {
           <button
             key={o}
             onClick={() => setOnglet(o)}
-            className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
-              onglet === o
-                ? "bg-indigo-600 text-white"
-                : "bg-white text-indigo-600 border border-indigo-300 hover:border-indigo-500"
-            }`}
+            className="px-4 py-2 rounded-full text-sm font-semibold transition-colors"
+            style={onglet === o
+              ? { background: "var(--indigo)", color: "#fff", border: "none", cursor: "pointer" }
+              : { background: "transparent", color: "var(--indigo-l)", border: "1px solid rgba(77,94,232,0.4)", cursor: "pointer" }}
           >
             {o === "global" ? "🌍 Global" : "👥 Amis"}
           </button>
@@ -49,10 +48,10 @@ export default function Classement({ userId }: ClassementProps) {
 
       {chargement ? (
         <div className="flex justify-center py-8">
-          <div className="w-8 h-8 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin" />
+          <div className="w-8 h-8 border-4 rounded-full animate-spin" style={{ borderColor: "rgba(77,94,232,0.3)", borderTopColor: "var(--indigo)" }} />
         </div>
       ) : entrees.length === 0 ? (
-        <p className="text-center text-gray-400 py-8 text-sm">
+        <p className="text-center py-8 text-sm" style={{ color: "var(--text3)" }}>
           {onglet === "amis" ? "Ajoute des amis pour voir leur classement !" : "Aucun joueur pour l'instant."}
         </p>
       ) : (
@@ -63,16 +62,17 @@ export default function Classement({ userId }: ClassementProps) {
             return (
               <li
                 key={e.id}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl border ${
-                  estMoi ? "bg-indigo-50 border-indigo-300 font-semibold" : "bg-white border-gray-100"
-                }`}
+                className="flex items-center gap-3 px-4 py-3 rounded-xl"
+                style={estMoi
+                  ? { background: "rgba(77,94,232,0.1)", border: "1px solid rgba(77,94,232,0.3)", fontWeight: 600 }
+                  : { background: "var(--card)", border: "1px solid var(--border)" }}
               >
-                <span className="w-7 text-center font-bold text-gray-500 text-sm">
+                <span className="w-7 text-center font-bold text-sm" style={{ color: "var(--text3)" }}>
                   {e.rang === 1 ? "🥇" : e.rang === 2 ? "🥈" : e.rang === 3 ? "🥉" : `#${e.rang}`}
                 </span>
                 <span className="text-lg">{niveau.emoji}</span>
-                <span className="flex-1 text-sm truncate">{e.pseudo}{estMoi ? " (moi)" : ""}</span>
-                <span className="text-indigo-600 font-bold text-sm">{e.xp_total} XP</span>
+                <span className="flex-1 text-sm truncate" style={{ color: "var(--text)" }}>{e.pseudo}{estMoi ? " (moi)" : ""}</span>
+                <span style={{ color: "var(--indigo-l)", fontWeight: 700, fontSize: 14 }}>{e.xp_total} XP</span>
                 {e.streak_jours >= 3 && (
                   <span title={`Série de ${e.streak_jours} jours`} className="text-sm">🔥</span>
                 )}
