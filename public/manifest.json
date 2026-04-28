@@ -1,0 +1,24 @@
+{
+  "name": "Révioria — Révise avec l'IA",
+  "short_name": "Révioria",
+  "description": "Quiz IA pour réviser les programmes du lycée général et technologique.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f0f13",
+  "theme_color": "#4d5ee8",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/logo-revioria.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo-revioria.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

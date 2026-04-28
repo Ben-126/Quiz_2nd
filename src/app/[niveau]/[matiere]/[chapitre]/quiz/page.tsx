@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Header from "@/components/navigation/Header";
@@ -6,6 +7,19 @@ import { NIVEAUX, getMatiereBySlugAndNiveau, type Niveau } from "@/data/programm
 
 interface Props {
   params: Promise<{ niveau: string; matiere: string; chapitre: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { niveau: niveauSlug, matiere: matiereSlug, chapitre: chapitreSlug } = await params;
+  const niveauInfo = NIVEAUX.find((n) => n.slug === niveauSlug);
+  const matiere = getMatiereBySlugAndNiveau(niveauSlug as Niveau, matiereSlug);
+  if (!niveauInfo || !matiere) return {};
+  const chapitre = matiere.chapitres.find((c) => c.slug === chapitreSlug);
+  if (!chapitre) return {};
+  return {
+    title: `Quiz — ${chapitre.titre} · ${matiere.nom} ${niveauInfo.label} | Révioria`,
+    description: `Lance un quiz IA sur "${chapitre.titre}" en ${matiere.nom}, classe de ${niveauInfo.label}.`,
+  };
 }
 
 export async function generateStaticParams() {
