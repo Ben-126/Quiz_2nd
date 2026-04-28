@@ -385,7 +385,7 @@ export const MATIERES: Matiere[] = [
   {
     slug: "anglais",
     nom: "Anglais",
-    emoji: "🇬🇧",
+    emoji: "🔤",
     couleur: "bg-rose-500",
     chapitres: [
       {
@@ -430,7 +430,7 @@ export const MATIERES: Matiere[] = [
   {
     slug: "espagnol",
     nom: "Espagnol",
-    emoji: "🇪🇸",
+    emoji: "🌺",
     couleur: "bg-yellow-500",
     chapitres: [
       {
@@ -464,7 +464,7 @@ export const MATIERES: Matiere[] = [
   {
     slug: "allemand",
     nom: "Allemand",
-    emoji: "🇩🇪",
+    emoji: "📜",
     couleur: "bg-gray-600",
     chapitres: [
       {

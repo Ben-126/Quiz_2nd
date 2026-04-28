@@ -129,8 +129,11 @@ export default function CorrectionDisplay({
           )}
           {niveauCorrection === "incorrect" && (
             <p style={{ fontSize: 14, color: "var(--text2)", marginTop: 2 }}>
-              Ta réponse : <span style={{ fontWeight: 500, color: "var(--coral-l)" }}>{libelleUser}</span>
-              {" · "}
+              {libelleUser ? (
+                <>Ta réponse : <span style={{ fontWeight: 500, color: "var(--coral-l)" }}>{libelleUser}</span>{" · "}</>
+              ) : (
+                <>Temps écoulé{" · "}</>
+              )}
               Bonne réponse : <span style={{ fontWeight: 500, color: "var(--teal)" }}>{libelleBonne}</span>
             </p>
           )}

@@ -295,7 +295,7 @@ export const MATIERES_TERMINALE: Matiere[] = [
   {
     slug: "anglais",
     nom: "Anglais",
-    emoji: "🇬🇧",
+    emoji: "🔤",
     couleur: "bg-rose-500",
     chapitres: [
       {

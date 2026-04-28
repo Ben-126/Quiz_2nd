@@ -68,7 +68,7 @@ export default function AuthModal({ onFermer, onConnecte }: AuthModalProps) {
       onClick={(e) => { if (e.target === e.currentTarget) onFermer(); }}
     >
       <div
-        className="w-full max-w-md p-6 space-y-6"
+        className="w-full max-w-md p-6 space-y-6 overflow-y-auto max-h-[90vh]"
         style={{ background: "var(--card)", borderRadius: "var(--r-lg)", border: "1px solid var(--border)", boxShadow: "0 4px 16px rgba(0,0,0,0.3)" }}
       >
         {/* Onglets */}

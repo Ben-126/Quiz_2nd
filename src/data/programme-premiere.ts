@@ -266,7 +266,7 @@ export const MATIERES_PREMIERE: Matiere[] = [
   {
     slug: "anglais",
     nom: "Anglais",
-    emoji: "🇬🇧",
+    emoji: "🔤",
     couleur: "bg-rose-500",
     chapitres: [
       {
