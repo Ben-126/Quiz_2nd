@@ -18,6 +18,8 @@ import {
   type ProgressionObjectifNote,
 } from "@/lib/objectifs-personnalises";
 import { NIVEAUX } from "@/data/programmes";
+import { supprimerCompte } from "@/lib/auth";
+import { useRouter } from "next/navigation";
 
 // Liste de toutes les matières uniques (sans doublons) de tous les niveaux
 const TOUTES_MATIERES = Array.from(
@@ -27,12 +29,28 @@ const TOUTES_MATIERES = Array.from(
 );
 
 export default function ParametresPage() {
+  const router = useRouter();
   const [params, setParams] = useState<Parametres>(PARAMETRES_DEFAUT);
   const [mounted, setMounted] = useState(false);
   const [notifStatut, setNotifStatut] = useState<"defaut" | "accordee" | "refusee" | "non-supporte">("defaut");
   const [confirmEtape, setConfirmEtape] = useState<0 | 1 | 2>(0);
+  const [confirmSuppression, setConfirmSuppression] = useState<0 | 1 | 2>(0);
+  const [suppressionEnCours, setSuppressionEnCours] = useState(false);
+  const [erreurSuppression, setErreurSuppression] = useState<string | null>(null);
   const [sauvegarde, setSauvegarde] = useState(false);
   const timerSauvegarde = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  async function handleSupprimerCompte() {
+    setSuppressionEnCours(true);
+    setErreurSuppression(null);
+    const { erreur } = await supprimerCompte();
+    if (erreur) {
+      setErreurSuppression(erreur);
+      setSuppressionEnCours(false);
+    } else {
+      router.push("/");
+    }
+  }
 
   // Objectifs personnalisés
   const [progressionsObjectifs, setProgressionsObjectifs] = useState<ProgressionObjectifNote[]>([]);
@@ -437,9 +455,80 @@ export default function ParametresPage() {
           >
             Réinitialiser toute la progression
           </button>
+          <button
+            onClick={() => setConfirmSuppression(1)}
+            style={{ fontSize: 14, color: "#dc2626", background: "none", border: "none", cursor: "pointer", textDecoration: "underline", textUnderlineOffset: 2, padding: 0, alignSelf: "flex-start", marginTop: 4 }}
+          >
+            Supprimer mon compte
+          </button>
         </section>
 
       </main>
+
+      {/* Modal suppression compte étape 1 */}
+      {confirmSuppression === 1 && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50, padding: "0 16px" }}>
+          <div style={{ background: "var(--bg2)", borderRadius: "var(--r-lg)", border: "1px solid var(--border)", boxShadow: "0 8px 32px rgba(0,0,0,0.5)", padding: 24, maxWidth: 360, width: "100%", display: "flex", flexDirection: "column", gap: 16 }}>
+            <p style={{ fontSize: 32, textAlign: "center" }}>⚠️</p>
+            <h2 style={{ fontSize: 16, fontWeight: 700, color: "var(--text)", textAlign: "center" }}>
+              Supprimer ton compte ?
+            </h2>
+            <p style={{ fontSize: 14, color: "var(--text3)", textAlign: "center" }}>
+              Toutes tes données (progression, badges, amis, défis) seront définitivement supprimées.
+            </p>
+            <div style={{ display: "flex", gap: 12, paddingTop: 4 }}>
+              <button
+                onClick={() => setConfirmSuppression(0)}
+                style={{ flex: 1, padding: "10px 0", borderRadius: "var(--r-md)", border: "2px solid var(--border2)", fontSize: 14, fontWeight: 600, color: "var(--text2)", background: "transparent", cursor: "pointer" }}
+              >
+                Annuler
+              </button>
+              <button
+                onClick={() => setConfirmSuppression(2)}
+                style={{ flex: 1, padding: "10px 0", borderRadius: "var(--r-md)", background: "var(--coral)", border: "none", fontSize: 14, fontWeight: 600, color: "#fff", cursor: "pointer" }}
+              >
+                Oui, continuer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal suppression compte étape 2 */}
+      {confirmSuppression === 2 && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50, padding: "0 16px" }}>
+          <div style={{ background: "var(--bg2)", borderRadius: "var(--r-lg)", border: "1px solid var(--border)", boxShadow: "0 8px 32px rgba(0,0,0,0.5)", padding: 24, maxWidth: 360, width: "100%", display: "flex", flexDirection: "column", gap: 16 }}>
+            <p style={{ fontSize: 32, textAlign: "center" }}>🗑️</p>
+            <h2 style={{ fontSize: 16, fontWeight: 700, color: "#dc2626", textAlign: "center" }}>
+              Vraiment supprimer ton compte ?
+            </h2>
+            <p style={{ fontSize: 14, color: "var(--text3)", textAlign: "center" }}>
+              Cette action est <span style={{ fontWeight: 600, color: "var(--text2)" }}>irréversible</span>. Ton compte sera définitivement effacé.
+            </p>
+            {erreurSuppression && (
+              <p style={{ fontSize: 13, color: "#dc2626", textAlign: "center" }}>
+                Une erreur est survenue. Réessaie dans quelques instants.
+              </p>
+            )}
+            <div style={{ display: "flex", gap: 12, paddingTop: 4 }}>
+              <button
+                onClick={() => { setConfirmSuppression(0); setErreurSuppression(null); }}
+                disabled={suppressionEnCours}
+                style={{ flex: 1, padding: "10px 0", borderRadius: "var(--r-md)", border: "2px solid var(--border2)", fontSize: 14, fontWeight: 600, color: "var(--text2)", background: "transparent", cursor: suppressionEnCours ? "not-allowed" : "pointer", opacity: suppressionEnCours ? 0.5 : 1 }}
+              >
+                Annuler
+              </button>
+              <button
+                onClick={handleSupprimerCompte}
+                disabled={suppressionEnCours}
+                style={{ flex: 1, padding: "10px 0", borderRadius: "var(--r-md)", background: "#dc2626", border: "none", fontSize: 14, fontWeight: 600, color: "#fff", cursor: suppressionEnCours ? "not-allowed" : "pointer", opacity: suppressionEnCours ? 0.7 : 1 }}
+              >
+                {suppressionEnCours ? "Suppression…" : "Supprimer définitivement"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal confirmation étape 1 */}
       {confirmEtape === 1 && (

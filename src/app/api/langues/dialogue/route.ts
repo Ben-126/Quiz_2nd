@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { z } from "zod";
+import { checkRateLimit } from "@/lib/ratelimit";
 
 const LANGUES_SUPPORTEES = ["en", "es", "de", "it", "pt"] as const;
 type CodeLangue = (typeof LANGUES_SUPPORTEES)[number];
@@ -51,19 +52,6 @@ const RequestSchema = z.object({
   niveau: z.enum(["debutant", "intermediaire", "avance"]).default("intermediaire"),
 });
 
-const rateLimit = new Map<string, { count: number; resetAt: number }>();
-
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimit.get(ip);
-  if (!entry || now > entry.resetAt) {
-    rateLimit.set(ip, { count: 1, resetAt: now + 60_000 });
-    return true;
-  }
-  if (entry.count >= 15) return false;
-  entry.count++;
-  return true;
-}
 
 function repondreLocalement(
   messages: Array<{ role: string; content: string }>,
@@ -83,7 +71,8 @@ export async function POST(req: NextRequest) {
     req.headers.get("x-real-ip") ??
     "unknown";
 
-  if (!checkRateLimit(ip)) {
+  const { autorise } = await checkRateLimit(ip, "dialogue");
+  if (!autorise) {
     return new Response("Trop de requêtes. Attendez une minute.", { status: 429 });
   }
 

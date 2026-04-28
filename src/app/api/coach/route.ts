@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { repondreLocalement } from "@/lib/coach-local";
+import { checkRateLimit } from "@/lib/ratelimit";
 
 const MessageSchema = z.object({
   role: z.enum(["user", "assistant"]),
@@ -22,29 +23,14 @@ const RequestSchema = z.object({
   }),
 });
 
-const rateLimit = new Map<string, { count: number; resetAt: number }>();
-const MAX_REQ = 20;
-const WINDOW_MS = 60_000;
-
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimit.get(ip);
-  if (!entry || now > entry.resetAt) {
-    rateLimit.set(ip, { count: 1, resetAt: now + WINDOW_MS });
-    return true;
-  }
-  if (entry.count >= MAX_REQ) return false;
-  entry.count++;
-  return true;
-}
-
 export async function POST(req: NextRequest) {
   const ip =
     req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
     req.headers.get("x-real-ip") ??
     "unknown";
 
-  if (!checkRateLimit(ip)) {
+  const { autorise } = await checkRateLimit(ip, "coach");
+  if (!autorise) {
     return new Response("Trop de requêtes. Attendez une minute avant de réessayer.", { status: 429 });
   }
 

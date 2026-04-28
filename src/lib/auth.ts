@@ -74,6 +74,16 @@ export async function getProfilConnecte(): Promise<ProfilPublic | null> {
   return data ?? null;
 }
 
+export async function connexionGoogle(): Promise<ResultatAuth> {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: `${window.location.origin}/app`,
+    },
+  });
+  return { erreur: error ? error.message : null };
+}
+
 export async function supprimerCompte(): Promise<ResultatAuth> {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { erreur: "Non connecté." };

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { genererQuizMock } from "@/lib/mock-quiz";
+import { checkRateLimit } from "@/lib/ratelimit";
 import { getMatiereBySlugAndNiveau, type Niveau } from "@/data/programmes";
 import { QuizSchema } from "@/lib/quiz-schema";
 import { MAX_TOKENS_GENERATION } from "@/lib/constants";
@@ -14,31 +15,14 @@ const RequestSchema = z.object({
   questionsParQuiz: z.union([z.literal(3), z.literal(5), z.literal(10)]).optional().default(5),
 });
 
-const rateLimit = new Map<string, { count: number; resetAt: number }>();
-const MAX_REQ = 10;
-const WINDOW_MS = 60_000;
-
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimit.get(ip);
-
-  if (!entry || now > entry.resetAt) {
-    rateLimit.set(ip, { count: 1, resetAt: now + WINDOW_MS });
-    return true;
-  }
-
-  if (entry.count >= MAX_REQ) return false;
-  entry.count++;
-  return true;
-}
-
 export async function POST(req: NextRequest) {
   const ip =
     req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
     req.headers.get("x-real-ip") ??
     "unknown";
 
-  if (!checkRateLimit(ip)) {
+  const { autorise } = await checkRateLimit(ip, "generate");
+  if (!autorise) {
     return NextResponse.json(
       { error: "Trop de requêtes. Attendez une minute avant de réessayer." },
       { status: 429 }

@@ -231,7 +231,7 @@ Créer une application mobile de révision basée sur des quiz générés par IA
 
 ###  Quiz rapide
 - Format court (5 questions)
-- Durée rapide (~2 minutes)
+- Durée rapide (~1 minutes)
 
 ---
 
@@ -240,10 +240,8 @@ Créer une application mobile de révision basée sur des quiz générés par IA
 - Exemple :
   - “Avoir 15/20 en mathématiques”
 
-
-  ### Post dévellopement: 
-  - systeme de cookies, 
-  - système de comptes, 
+---
+ 
   - ne pas oublier de faire du contenu sur les résaux sociaux, 
   - systeme d abonnements payants suivant usage, 
   - système de bêta testeurs (canneaux Discorde)

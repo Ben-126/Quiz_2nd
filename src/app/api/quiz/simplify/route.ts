@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { checkRateLimit } from "@/lib/ratelimit";
 
 const SimplifySchema = z.object({
   question: z.string().min(1).max(500),
@@ -8,21 +9,6 @@ const SimplifySchema = z.object({
   matiere: z.string().max(100).optional(),
 });
 
-const rateLimit = new Map<string, { count: number; resetAt: number }>();
-const MAX_REQ = 10;
-const WINDOW_MS = 60_000;
-
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimit.get(ip);
-  if (!entry || now > entry.resetAt) {
-    rateLimit.set(ip, { count: 1, resetAt: now + WINDOW_MS });
-    return true;
-  }
-  if (entry.count >= MAX_REQ) return false;
-  entry.count++;
-  return true;
-}
 
 function sanitize(input: string): string {
   return input.replace(/[<>]/g, "").trim();
@@ -36,7 +22,8 @@ export async function POST(req: NextRequest) {
     req.headers.get("x-real-ip") ??
     "unknown";
 
-  if (!checkRateLimit(ip)) {
+  const { autorise } = await checkRateLimit(ip, "simplify");
+  if (!autorise) {
     return NextResponse.json(
       { error: "Trop de requêtes. Attendez une minute." },
       { status: 429, headers: NO_STORE }

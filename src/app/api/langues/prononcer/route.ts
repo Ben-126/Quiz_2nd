@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { checkRateLimit } from "@/lib/ratelimit";
 
 const LANGUES_WHISPER: Record<string, string> = {
   en: "en",
@@ -37,6 +38,10 @@ interface MotResultat {
   transcrit: string;
 }
 
+function sanitizeForPrompt(input: string): string {
+  return input.replace(/[<>]/g, "").slice(0, 500).trim();
+}
+
 function comparerMots(attendu: string, transcrit: string): MotResultat[] {
   const motsAttendus = attendu.split(/\s+/).filter(Boolean);
   const motsTranscrits = transcrit.split(/\s+/).map(normaliserMot).filter(Boolean);
@@ -49,6 +54,16 @@ function comparerMots(attendu: string, transcrit: string): MotResultat[] {
 }
 
 export async function POST(req: NextRequest) {
+  const ip =
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    req.headers.get("x-real-ip") ??
+    "unknown";
+
+  const { autorise } = await checkRateLimit(ip, "prononcer");
+  if (!autorise) {
+    return Response.json({ error: "Trop de requêtes. Attendez une minute." }, { status: 429 });
+  }
+
   let formData: FormData;
   try {
     formData = await req.formData();
@@ -62,6 +77,10 @@ export async function POST(req: NextRequest) {
 
   if (!(audio instanceof Blob) || typeof texte !== "string" || typeof langue !== "string") {
     return Response.json({ error: "Paramètres manquants." }, { status: 400 });
+  }
+
+  if (audio.size === 0 || audio.size > 10 * 1024 * 1024) {
+    return Response.json({ error: "Fichier audio invalide (max 10 Mo)." }, { status: 400 });
   }
 
   if (texte.length > 500 || texte.length === 0) {
@@ -115,9 +134,11 @@ export async function POST(req: NextRequest) {
         .slice(0, 3)
         .join(", ");
 
+      const safeTexte = sanitizeForPrompt(texte);
+      const safeTranscrit = sanitizeForPrompt(transcrit);
       const prompt = `Un élève français apprend ${NOMS_LANGUES[langue] ?? "une langue étrangère"}.
-Il devait lire : "${texte}"
-On a compris : "${transcrit}"
+Il devait lire : "${safeTexte}"
+On a compris : "${safeTranscrit}"
 Légères différences : ${erreurs || "minimes"}
 Donne un feedback de prononciation bienveillant et court (2-3 phrases en français) avec des conseils concrets.`;
 
@@ -134,9 +155,11 @@ Donne un feedback de prononciation bienveillant et court (2-3 phrases en frança
         .slice(0, 5)
         .join(", ");
 
+      const safeTexte2 = sanitizeForPrompt(texte);
+      const safeTranscrit2 = sanitizeForPrompt(transcrit);
       const prompt = `Un élève français apprend ${NOMS_LANGUES[langue] ?? "une langue étrangère"}.
-Il devait lire : "${texte}"
-On a compris : "${transcrit}"
+Il devait lire : "${safeTexte2}"
+On a compris : "${safeTranscrit2}"
 Erreurs de prononciation : ${erreurs || "nombreuses"}
 Donne un feedback constructif (3-4 phrases en français), identifie les principales erreurs et donne des conseils pratiques.`;
 

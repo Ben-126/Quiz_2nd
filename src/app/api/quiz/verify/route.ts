@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { checkRateLimit } from "@/lib/ratelimit";
 
 const VerifySchema = z.object({
   question: z.string().min(1).max(500),
@@ -20,21 +21,6 @@ const AiResponseSchema = z.object({
     .optional(),
 });
 
-const rateLimit = new Map<string, { count: number; resetAt: number }>();
-const MAX_REQ = 20;
-const WINDOW_MS = 60_000;
-
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimit.get(ip);
-  if (!entry || now > entry.resetAt) {
-    rateLimit.set(ip, { count: 1, resetAt: now + WINDOW_MS });
-    return true;
-  }
-  if (entry.count >= MAX_REQ) return false;
-  entry.count++;
-  return true;
-}
 
 function sanitizeForPrompt(input: string): string {
   return input.replace(/[<>]/g, "").trim();
@@ -64,7 +50,8 @@ export async function POST(req: NextRequest) {
     req.headers.get("x-real-ip") ??
     "unknown";
 
-  if (!checkRateLimit(ip)) {
+  const { autorise } = await checkRateLimit(ip, "verify");
+  if (!autorise) {
     return NextResponse.json(
       { error: "Trop de requêtes. Attendez une minute avant de réessayer." },
       { status: 429, headers: NO_STORE }

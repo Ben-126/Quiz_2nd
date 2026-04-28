@@ -47,7 +47,7 @@ export async function getClassementAmis(userId: string): Promise<EntreeClassemen
 export async function rechercherParPseudo(pseudo: string): Promise<ProfilPublic[]> {
   const { data, error } = await supabase
     .from("profiles")
-    .select("*")
+    .select("id, pseudo, xp_total, niveau, streak_jours, dernier_quiz_date, created_at")
     .ilike("pseudo", `%${pseudo}%`)
     .limit(10);
 
