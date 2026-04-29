@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { CONSENT_KEY, getConsentement, effacerDonneesNonEssentielles } from "@/lib/consent";
+import { getConsentement, enregistrerConsentement, effacerDonneesNonEssentielles } from "@/lib/consent";
 
 export default function BandeauCookies() {
   const [visible, setVisible] = useState(false);
@@ -12,12 +12,12 @@ export default function BandeauCookies() {
   }, []);
 
   const accepter = () => {
-    localStorage.setItem(CONSENT_KEY, "accepted");
+    enregistrerConsentement("accepted");
     setVisible(false);
   };
 
   const refuser = () => {
-    localStorage.setItem(CONSENT_KEY, "refused");
+    enregistrerConsentement("refused");
     // RGPD : supprimer immédiatement toutes les données non-essentielles déjà collectées
     effacerDonneesNonEssentielles();
     setVisible(false);

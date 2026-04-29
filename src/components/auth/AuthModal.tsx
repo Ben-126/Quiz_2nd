@@ -19,6 +19,7 @@ export default function AuthModal({ onFermer, onConnecte }: AuthModalProps) {
   const [chargement, setChargement] = useState(false);
   const [chargementGoogle, setChargementGoogle] = useState(false);
   const [voirMotDePasse, setVoirMotDePasse] = useState(false);
+  const [ageCoche, setAgeCoche] = useState(false);
 
   const handleGoogle = async () => {
     setChargementGoogle(true);
@@ -46,6 +47,11 @@ export default function AuthModal({ onFermer, onConnecte }: AuthModalProps) {
     } else {
       if (pseudo.trim().length < 3) {
         setErreur("Le pseudo doit faire au moins 3 caractères.");
+        setChargement(false);
+        return;
+      }
+      if (!ageCoche) {
+        setErreur("Tu dois confirmer avoir 15 ans ou plus (ou avoir l'accord d'un parent).");
         setChargement(false);
         return;
       }
@@ -178,6 +184,24 @@ export default function AuthModal({ onFermer, onConnecte }: AuthModalProps) {
               </button>
             </div>
           </div>
+
+          {onglet === "inscription" && (
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={ageCoche}
+                onChange={(e) => setAgeCoche(e.target.checked)}
+                className="mt-0.5 h-4 w-4 shrink-0 accent-indigo-500"
+              />
+              <span className="text-xs" style={{ color: "var(--text3)", lineHeight: 1.5 }}>
+                J&apos;ai 15 ans ou plus, ou j&apos;ai l&apos;accord d&apos;un parent ou tuteur légal.
+                En créant un compte, j&apos;accepte les{" "}
+                <a href="/cgu" target="_blank" rel="noopener noreferrer" style={{ color: "var(--indigo-l)" }}>CGU</a>
+                {" "}et la{" "}
+                <a href="/confidentialite" target="_blank" rel="noopener noreferrer" style={{ color: "var(--indigo-l)" }}>politique de confidentialité</a>.
+              </span>
+            </label>
+          )}
 
           {erreur && (
             <p
