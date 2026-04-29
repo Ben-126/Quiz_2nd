@@ -2,6 +2,7 @@ import { z } from "zod";
 import { getToutesPerformances } from "./performance";
 import { getHistorique } from "./history";
 import { ajouterALaQueue } from "./sync";
+import { aAccepte } from "./consent";
 import type { ProfilGamification, BadgeDebloque, ResultatGamification } from "@/types";
 
 // ─── Constantes niveaux ────────────────────────────────────────────────────────
@@ -109,6 +110,7 @@ export function getProfilGamification(): ProfilGamification {
 }
 
 function saveProfilGamification(profil: ProfilGamification): void {
+  if (!aAccepte()) return;
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(profil));
     window.dispatchEvent(new CustomEvent("gamification-updated"));

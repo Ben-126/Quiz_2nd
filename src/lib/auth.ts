@@ -1,6 +1,7 @@
 "use client";
 
 import { supabase } from "./supabase";
+import { effacerToutesLesDonnees } from "./consent";
 import type { ProfilPublic } from "@/types";
 
 export interface ResultatAuth {
@@ -91,6 +92,9 @@ export async function supprimerCompte(): Promise<ResultatAuth> {
   // Supprimer le profil (cascade supprime tout le reste via FK)
   const { error } = await supabase.from("profiles").delete().eq("id", user.id);
   if (error) return { erreur: error.message };
+
+  // RGPD : vider TOUTES les données locales de l'appareil
+  effacerToutesLesDonnees();
 
   await supabase.auth.signOut();
   return { erreur: null };

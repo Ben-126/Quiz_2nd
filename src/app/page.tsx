@@ -466,7 +466,7 @@ export default function LandingPage() {
           <FeatureCard color="indigo" icon="🤖" title="Quiz IA personnalisés" desc="Des questions générées par intelligence artificielle sur les chapitres de ton programme. Chaque révision est unique." />
           <FeatureCard color="coral" icon="🧠" title="Révision espacée" desc="Flashcards avec l'algorithme de répétition espacée pour ancrer les notions dans la mémoire à long terme." />
           <FeatureCard color="amber" icon="🔥" title="Streaks & progression" desc="Maintiens ta série de jours de révision et suis ta progression matière par matière en temps réel." />
-          <FeatureCard color="teal" icon="📷" title="Scan de cours" desc="Prends une photo de tes notes ou de ton manuel — Révioria en extrait le contenu et génère un quiz instantanément." />
+          <FeatureCard color="teal" icon="📷" title="Scan de cours" desc="Prends une photo de ton exercice — Révioria te génère instantanément des expliquations pour réussir et comprendre ton exercice." />
           <FeatureCard color="indigo" icon="🌍" title="Langues vivantes" desc="Pratique l'anglais, l'espagnol et d'autres langues avec des exercices de conversation et de vocabulaire." />
           <FeatureCard color="coral" icon="👥" title="Mode social" desc="Compare tes scores avec tes amis, lance des défis et motive-toi en groupe pour réviser ensemble." />
         </div>
@@ -629,9 +629,9 @@ export default function LandingPage() {
                 <PricingItem included>Toutes les matières</PricingItem>
                 <PricingItem included>Suivi de progression</PricingItem>
                 <PricingItem included>Streaks & gamification</PricingItem>
-                <PricingItem included={false}>Révision espacée avancée</PricingItem>
-                <PricingItem included={false}>Scan de cours (OCR)</PricingItem>
-                <PricingItem included={false}>Mode social & défis</PricingItem>
+                <PricingItem included>Révision espacée avancée</PricingItem>
+                <PricingItem included>Scan de cours (OCR)</PricingItem>
+                <PricingItem included>Mode social & défis</PricingItem>
               </div>
               <Link href="/app" style={{
                 display: "block", textAlign: "center",
@@ -777,6 +777,7 @@ export default function LandingPage() {
 
           <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
             {[
+              { label: "CGU", href: "/cgu" },
               { label: "Confidentialité", href: "/confidentialite" },
               { label: "Mentions légales", href: "/mentions-legales" },
               { label: "Discord", href: "https://discord.gg/8JavmWyV" },

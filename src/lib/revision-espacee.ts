@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { Question } from "@/types";
+import { aAccepte } from "./consent";
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
@@ -99,6 +100,7 @@ function getStorage(): Record<string, CarteRevision> {
 }
 
 function saveStorage(data: Record<string, CarteRevision>): void {
+  if (!aAccepte()) return;
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   } catch {

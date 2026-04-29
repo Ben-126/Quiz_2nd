@@ -1,6 +1,7 @@
 "use client";
 
 import { supabase } from "./supabase";
+import { aAccepte } from "./consent";
 
 const SYNC_QUEUE_KEY = "sync-queue";
 
@@ -20,6 +21,7 @@ function getSyncQueue(): SyncEntry[] {
 }
 
 function saveSyncQueue(queue: SyncEntry[]): void {
+  if (!aAccepte()) return;
   try {
     localStorage.setItem(SYNC_QUEUE_KEY, JSON.stringify(queue));
   } catch {}

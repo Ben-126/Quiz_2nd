@@ -1,4 +1,5 @@
 import type { ProfilGamification, TypeNotification } from "@/types";
+import { aAccepte } from "./consent";
 
 const NOTIF_STORAGE_KEY = "streak-notif-derniere-date";
 
@@ -65,6 +66,7 @@ export function getNotificationsStreak(
  */
 export function marquerNotifsStreakLues(): void {
   if (typeof window === "undefined") return;
+  if (!aAccepte()) return;
   localStorage.setItem(NOTIF_STORAGE_KEY, getDateAujourdhuiISO());
 }
 

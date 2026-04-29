@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { ajouterHistorique } from "./history";
+import { aAccepte } from "./consent";
 
 export type NiveauDifficulte = "debutant" | "intermediaire" | "avance";
 
@@ -35,6 +36,7 @@ function getStorage(): Record<string, PerformanceChapitre> {
 }
 
 function saveStorage(data: Record<string, PerformanceChapitre>): void {
+  if (!aAccepte()) return;
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   } catch {

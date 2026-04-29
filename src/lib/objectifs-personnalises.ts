@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { getHistorique } from "./history";
+import { aAccepte } from "./consent";
 
 const STORAGE_KEY = "objectifs-personnalises";
 
@@ -35,6 +36,7 @@ function load(): ObjectifNote[] {
 }
 
 function save(objectifs: ObjectifNote[]): void {
+  if (!aAccepte()) return;
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(objectifs));
   } catch {}

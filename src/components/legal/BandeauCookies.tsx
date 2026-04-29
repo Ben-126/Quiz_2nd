@@ -2,16 +2,13 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-
-const CONSENT_KEY = "cookie-consent";
+import { CONSENT_KEY, getConsentement, effacerDonneesNonEssentielles } from "@/lib/consent";
 
 export default function BandeauCookies() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const consentement = localStorage.getItem(CONSENT_KEY);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (!consentement) setVisible(true);
+    if (!getConsentement()) setVisible(true);
   }, []);
 
   const accepter = () => {
@@ -21,6 +18,8 @@ export default function BandeauCookies() {
 
   const refuser = () => {
     localStorage.setItem(CONSENT_KEY, "refused");
+    // RGPD : supprimer immédiatement toutes les données non-essentielles déjà collectées
+    effacerDonneesNonEssentielles();
     setVisible(false);
   };
 
@@ -29,12 +28,18 @@ export default function BandeauCookies() {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg p-4">
       <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-start sm:items-center gap-4">
-        <p className="text-sm text-gray-700 flex-1">
-          Révioria utilise un stockage local (localStorage) pour gérer ta session de connexion et tes préférences. Aucun cookie publicitaire.{" "}
-          <Link href="/confidentialite" className="text-indigo-600 hover:underline">
-            Politique de confidentialité
-          </Link>
-        </p>
+        <div className="flex-1 text-sm text-gray-700 space-y-1">
+          <p>
+            Révioria sauvegarde ta progression, tes résultats et tes préférences <strong>localement sur ton appareil</strong> pour
+            faire fonctionner le service. Ces données ne sont pas transmises à des tiers à des fins publicitaires.{" "}
+            <Link href="/confidentialite" className="text-indigo-600 hover:underline">
+              En savoir plus
+            </Link>
+          </p>
+          <p className="text-xs text-gray-400">
+            Si tu refuses, ta progression et tes résultats ne seront pas sauvegardés.
+          </p>
+        </div>
         <div className="flex gap-2 shrink-0">
           <button
             onClick={refuser}

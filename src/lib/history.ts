@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { aAccepte } from "./consent";
 
 const EntreeHistoriqueSchema = z.object({
   date: z.string(),
@@ -30,6 +31,7 @@ export function getHistorique(): EntreeHistorique[] {
 }
 
 export function ajouterHistorique(entree: EntreeHistorique): void {
+  if (!aAccepte()) return;
   try {
     const history = getHistorique();
     const updated = [entree, ...history].slice(0, MAX_ENTRIES);
